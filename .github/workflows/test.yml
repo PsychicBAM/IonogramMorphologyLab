@@ -3,12 +3,25 @@ on: [push, pull_request]
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      QT_QPA_PLATFORM: offscreen
     steps:
       - uses: actions/checkout@v4
+
+      - name: Install Qt/offscreen system libraries
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libegl1 libgl1 libxkbcommon-x11-0 libxcb-cursor0
+
       - uses: actions/setup-python@v5
-        with: {python-version: '3.11'}
+        with:
+          python-version: "3.11"
+
       - run: python -m pip install -e ".[dev]"
-      - run: python -m pytest
+
+      - name: Pytest
+        run: python -m pytest
+
       - run: python scripts/check_repository_hygiene.py
       - run: python scripts/validate_readme.py
       - run: python scripts/validate_version_consistency.py

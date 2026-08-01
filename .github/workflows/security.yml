@@ -30,8 +30,8 @@ jobs:
 
       - name: Bandit (High/Critical fail the job)
         run: |
-          # Bandit installation failure already fails the previous step.
-          # Exit codes: 0 = clean, 1 = findings. Treat High/Critical as failure via -ll.
+          # Installation failures fail the previous step (no || true).
+          # Exit codes: 0 = clean under -ll, non-zero = High/Critical findings or crash.
           python -m bandit -r src -x tests -ll -iii -f txt -o bandit-report.txt
           echo "Bandit completed with no High/Critical findings."
 
@@ -43,21 +43,12 @@ jobs:
           path: bandit-report.txt
           if-no-files-found: ignore
 
-      - name: pip-audit (report artifact; advisory triage)
+      - name: pip-audit
         id: pip_audit
-        continue-on-error: true
         run: |
-          set +e
           python -m pip_audit -r requirements/requirements-base.txt -f json -o pip-audit.json
-          code=$?
-          python -m pip_audit -r requirements/requirements-base.txt -f columns -o pip-audit.txt || true
-          echo "pip_audit_exit=$code" >> "$GITHUB_OUTPUT"
-          if [ "$code" -eq 0 ]; then
-            echo "pip-audit: no known vulnerabilities reported for pinned requirements."
-          else
-            echo "::warning::pip-audit reported advisories or tool error (exit $code). See artifact; triage in DEPENDENCY_AUDIT_V1_1_1.md — this step is non-blocking for advisory presence but tool crash should be reviewed."
-          fi
-          exit 0
+          python -m pip_audit -r requirements/requirements-base.txt -f columns -o pip-audit.txt
+          echo "pip-audit: no known vulnerabilities reported for pinned requirements."
 
       - name: Upload pip-audit reports
         if: always()
@@ -69,11 +60,12 @@ jobs:
             pip-audit.txt
           if-no-files-found: warn
 
-      - name: Distinguish Bandit findings vs tool failure
+      # Informational only: do not exit 1 (preserves the original failing step as the job cause).
+      - name: Security job failure summary
         if: failure()
         run: |
-          echo "A security job step failed."
-          echo "- If Bandit step failed: High/Critical findings OR Bandit crashed after install."
-          echo "- Installation failures fail the 'Install security tools' step (no || true)."
-          echo "- pip-audit advisories are uploaded as artifacts and triaged in docs/DEPENDENCY_AUDIT_V1_1_1.md."
-          exit 1
+          echo "A security job step failed. Inspect the first red step above for the original error."
+          echo "- Bandit: High/Critical findings or Bandit crash after install."
+          echo "- Install security tools: Bandit/pip-audit installation failed."
+          echo "- Repository hygiene / Unsafe API grep: repository policy violation."
+          echo "- pip-audit: known vulnerabilities or tool failure (see artifacts)."

@@ -1,6 +1,6 @@
 {
   "general": {
-    "language": "en",
+    "language": "ru",
     "theme": "system",
     "workspace_dir": "E:\\ionog\\conference_presentation\\IonogramMorphologyLab\\workspaces\\_evidence_qa_v111\\projects",
     "restore_last_project": true,
@@ -36,7 +36,7 @@
   },
   "performance": {
     "worker_count": 1,
-    "max_ram_mb": 4096,
+    "max_ram_mb": 128,
     "cache_location": "E:\\ionog\\conference_presentation\\IonogramMorphologyLab\\workspaces\\_evidence_qa_v111\\cache",
     "max_cache_mb": 8192,
     "automatic_cache_creation": true,
@@ -67,7 +67,7 @@
     "working_directory": "",
     "startup_script": "",
     "default_timeout_s": 120,
-    "max_execution_s": 600,
+    "max_execution_s": 128,
     "max_output_mb": 512,
     "reuse_engine_session": true,
     "extra_paths": [],
@@ -101,7 +101,7 @@
     "protected_study_config_path": ""
   },
   "ux": {
-    "interface_mode": "guided",
+    "interface_mode": "expert",
     "show_intros": true,
     "dismissed_intros": {},
     "show_workflow_on_home": true
