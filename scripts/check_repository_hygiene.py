@@ -27,20 +27,38 @@ SECRET = re.compile(r"(?i)(?:api[_-]?key|secret|token|password)\s*[:=]\s*['\"][^
 ABS = re.compile(r"(?i)(?:[A-Z]:\\(?:Users|ionog|home)|/(?:home|Users)/)")
 
 
-def tracked_files(root: Path | None = None):
-    """Yield absolute Paths for tracked files using NUL-delimited git output."""
+def _git_ls_paths(base: Path, *extra_args: str) -> list[str]:
+    out = subprocess.check_output(
+        ["git", "ls-files", "-z", *extra_args],
+        cwd=base,
+        stderr=subprocess.DEVNULL,
+    )
+    return [os.fsdecode(raw) for raw in out.split(b"\0") if raw]
+
+
+def tracked_files(root: Path | None = None, *, include_untracked: bool = True):
+    """Yield absolute Paths for hygiene scanning.
+
+    Default inventory:
+    1. Tracked / index paths (`git ls-files -z`)
+    2. Untracked, non-ignored paths (`git ls-files -z -o --exclude-standard`)
+       so local validation catches new files before `git add`.
+
+    On a clean CI checkout the untracked set is empty. Ignored paths
+    (``.venv``, ``dist``, etc.) remain excluded via ``.gitignore``.
+    """
     base = Path(root) if root is not None else ROOT
     try:
-        out = subprocess.check_output(
-            ["git", "ls-files", "-z"],
-            cwd=base,
-            stderr=subprocess.DEVNULL,
-        )
-        for raw in out.split(b"\0"):
-            if not raw:
-                continue
-            rel = os.fsdecode(raw)
+        seen: set[str] = set()
+        for rel in _git_ls_paths(base):
+            seen.add(rel)
             yield base / rel
+        if include_untracked:
+            for rel in _git_ls_paths(base, "-o", "--exclude-standard"):
+                if rel in seen:
+                    continue
+                seen.add(rel)
+                yield base / rel
         return
     except (OSError, subprocess.CalledProcessError):
         pass
@@ -124,6 +142,11 @@ def scan_repository(root: Path | None = None) -> tuple[int, list[str], dict[str,
 
 def main(root: Path | None = None) -> int:
     code, errors, counts = scan_repository(root)
+    print(
+        "Scan scope: tracked git paths plus untracked non-ignored paths "
+        "(ignored trees stay excluded). Stage with `git add` before release gates "
+        "if you want the index snapshot to match CI."
+    )
     print("Repository hygiene summary:")
     for key, value in counts.items():
         print(f"  {key}: {value}")

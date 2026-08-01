@@ -119,6 +119,7 @@ tests/test_model_lab.py
 tests/test_project_pipeline.py
 tests/test_project_portability.py
 tests/test_rendering_features_rules.py
+tests/test_repository_hygiene_paths.py
 tests/test_v111_matlab_trust.py
 tests/test_v111_model_trust.py
 tests/test_v111_usability_security.py
