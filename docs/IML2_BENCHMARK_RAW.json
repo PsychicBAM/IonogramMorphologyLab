@@ -1,0 +1,30 @@
+{
+  "mat": "E:\\ionog\\conference_presentation\\IonogramMorphologyLab\\synthetic_data\\demo_mixed_diffuse.mat",
+  "file_size_mb": 0.774,
+  "note": "Synthetic fallback used",
+  "article3_blinded": false,
+  "metadata_audit_s": 0.0051,
+  "inventory_status": "valid",
+  "audit_s": 0.0187,
+  "first_cache_build_s": 0.5235,
+  "cache_valid": true,
+  "cache_path": "E:\\ionog\\conference_presentation\\IonogramMorphologyLab\\workspaces\\_bench_cache\\fc6b8b0354126b9d28d324e6",
+  "matrix_shape": [
+    768,
+    400
+  ],
+  "cache_format": "iml2-zarr-frame-v1",
+  "frame_retrieval_after_clear_lru_s": 0.005,
+  "cached_lru_frame_retrieval_s": 0.0,
+  "first_render_s": 1.0915,
+  "cached_render_path_rewrite_s": 0.3462,
+  "contact_sheet_frames": 3,
+  "contact_sheet_s": 0.4277,
+  "batch_12_frame_access_s": 0.0,
+  "batch_12_count": 3,
+  "batch_144_frame_access_s": 0.0,
+  "batch_144_count": 3,
+  "cache_hits": 11,
+  "cache_misses": 1,
+  "hardware_note": "See host OS; script does not claim acceleration without these timings."
+}

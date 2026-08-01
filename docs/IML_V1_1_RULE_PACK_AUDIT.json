@@ -1,0 +1,171 @@
+[
+  {
+    "pack_id": "iml-core-branch-ambiguity",
+    "version": "1.1.0",
+    "rule_count": 1,
+    "active": 1,
+    "disabled": 0,
+    "source_verified": 1,
+    "development": 0,
+    "missing_source": 0,
+    "features": [
+      "parallel_branch_count",
+      "possible_ox_compatibility"
+    ],
+    "matlab_dependencies": [],
+    "tests": 0,
+    "changelog": [
+      "1.1.0: initial source-traceable pack."
+    ]
+  },
+  {
+    "pack_id": "iml-core-interference",
+    "version": "1.1.0",
+    "rule_count": 1,
+    "active": 1,
+    "disabled": 0,
+    "source_verified": 0,
+    "development": 1,
+    "missing_source": 0,
+    "features": [
+      "interference_dominance",
+      "vertical_stripe_density"
+    ],
+    "matlab_dependencies": [],
+    "tests": 0,
+    "changelog": [
+      "1.1.0: initial source-traceable pack."
+    ]
+  },
+  {
+    "pack_id": "iml-core-layer-e",
+    "version": "1.1.0",
+    "rule_count": 1,
+    "active": 0,
+    "disabled": 1,
+    "source_verified": 0,
+    "development": 0,
+    "missing_source": 1,
+    "features": [
+      "trace_pixel_fraction"
+    ],
+    "matlab_dependencies": [],
+    "tests": 0,
+    "changelog": [
+      "1.1.0: initial source-traceable pack."
+    ]
+  },
+  {
+    "pack_id": "iml-core-layer-es",
+    "version": "1.1.0",
+    "rule_count": 1,
+    "active": 0,
+    "disabled": 1,
+    "source_verified": 0,
+    "development": 0,
+    "missing_source": 0,
+    "features": [
+      "trace_pixel_fraction"
+    ],
+    "matlab_dependencies": [],
+    "tests": 0,
+    "changelog": [
+      "1.1.0: initial source-traceable pack."
+    ]
+  },
+  {
+    "pack_id": "iml-core-layer-f",
+    "version": "1.1.0",
+    "rule_count": 1,
+    "active": 0,
+    "disabled": 1,
+    "source_verified": 0,
+    "development": 0,
+    "missing_source": 0,
+    "features": [
+      "trace_pixel_fraction"
+    ],
+    "matlab_dependencies": [],
+    "tests": 0,
+    "changelog": [
+      "1.1.0: initial source-traceable pack."
+    ]
+  },
+  {
+    "pack_id": "iml-core-quality",
+    "version": "1.1.0",
+    "rule_count": 1,
+    "active": 1,
+    "disabled": 0,
+    "source_verified": 0,
+    "development": 1,
+    "missing_source": 0,
+    "features": [
+      "interference_dominance"
+    ],
+    "matlab_dependencies": [],
+    "tests": 0,
+    "changelog": [
+      "1.1.0: initial source-traceable pack."
+    ]
+  },
+  {
+    "pack_id": "iml-core-spread-f",
+    "version": "1.1.0",
+    "rule_count": 3,
+    "active": 3,
+    "disabled": 0,
+    "source_verified": 3,
+    "development": 2,
+    "missing_source": 0,
+    "features": [
+      "horizontal_broadening_persistence",
+      "median_horizontal_width",
+      "median_vertical_width",
+      "mixed_coverage",
+      "mixed_width_score",
+      "vertical_broadening_persistence"
+    ],
+    "matlab_dependencies": [],
+    "tests": 0,
+    "changelog": [
+      "1.1.0: initial source-traceable pack."
+    ]
+  },
+  {
+    "pack_id": "iml-core-temporal",
+    "version": "1.1.0",
+    "rule_count": 1,
+    "active": 1,
+    "disabled": 0,
+    "source_verified": 0,
+    "development": 1,
+    "missing_source": 1,
+    "features": [
+      "temporal_persistence"
+    ],
+    "matlab_dependencies": [],
+    "tests": 0,
+    "changelog": [
+      "1.1.0: initial source-traceable pack."
+    ]
+  },
+  {
+    "pack_id": "iml-kfu-cyclone-profile",
+    "version": "1.1.0",
+    "rule_count": 1,
+    "active": 1,
+    "disabled": 0,
+    "source_verified": 1,
+    "development": 0,
+    "missing_source": 0,
+    "features": [
+      "possible_ox_compatibility"
+    ],
+    "matlab_dependencies": [],
+    "tests": 0,
+    "changelog": [
+      "1.1.0: initial source-traceable pack."
+    ]
+  }
+]

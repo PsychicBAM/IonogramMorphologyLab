@@ -1,0 +1,38 @@
+{
+  "rule_id": "T001",
+  "name_en": "Temporal persistence marker",
+  "name_ru": "?????? ????????? ????????????",
+  "category": "temporal",
+  "conditions": [
+    {
+      "feature": "temporal_persistence",
+      "operator": "gte",
+      "value": 0.5
+    }
+  ],
+  "outputs": {
+    "temporal": "persistent"
+  },
+  "status": "proposed",
+  "enabled": true,
+  "source_ids": [],
+  "source_pages": [],
+  "source_wording_en": "Source-traceable candidate rule.",
+  "source_wording_ru": "?????????????? ?? ????????? ??????????? ???????.",
+  "feature_names": [
+    "temporal_persistence"
+  ],
+  "threshold_origin": "provisional",
+  "applicable_domain": "midlatitude_vertical_sounding",
+  "exclusions": [],
+  "assumptions": [],
+  "limitations": [
+    "Not a causal or layer rule."
+  ],
+  "verification_status": "proposed",
+  "implementation_status": "disabled",
+  "version": "1.1.0",
+  "tags": [
+    "v1.1"
+  ]
+}

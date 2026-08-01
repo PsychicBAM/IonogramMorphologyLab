@@ -1,0 +1,48 @@
+{
+  "rule_id": "R002",
+  "name_en": "Range-compatible broadening",
+  "name_ru": "???????-??????????? ????????",
+  "category": "morphology",
+  "conditions": [
+    {
+      "feature": "median_vertical_width",
+      "operator": "gte",
+      "value": 8.0
+    },
+    {
+      "feature": "vertical_broadening_persistence",
+      "operator": "gte",
+      "value": 0.25
+    }
+  ],
+  "outputs": {
+    "morphology": "range"
+  },
+  "status": "source_verified",
+  "enabled": true,
+  "source_ids": [
+    "A3L018"
+  ],
+  "source_pages": [
+    "241"
+  ],
+  "source_wording_en": "Source-traceable candidate rule.",
+  "source_wording_ru": "?????????????? ?? ????????? ??????????? ???????.",
+  "feature_names": [
+    "median_vertical_width",
+    "vertical_broadening_persistence"
+  ],
+  "threshold_origin": "development_calibration",
+  "applicable_domain": "midlatitude_vertical_sounding",
+  "exclusions": [],
+  "assumptions": [],
+  "limitations": [
+    "Nominal virtual height only; interference may mimic range spread."
+  ],
+  "verification_status": "source_verified",
+  "implementation_status": "active",
+  "version": "1.1.0",
+  "tags": [
+    "v1.1"
+  ]
+}

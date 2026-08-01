@@ -1,0 +1,37 @@
+# Python environments and bytecode
+.venv/
+.venv-sec/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+# Build and runtime outputs
+build/
+dist/
+logs/
+workspaces/
+workspaces/_*/
+model_lab/outputs/
+model_lab/runs/
+user_library/outputs/
+*.zarr/
+*.zarr.zip
+# Data: synthetic teaching data is versioned; external MAT files are not
+*.mat
+!synthetic_data/**/*.mat
+# Local secrets and machine state
+.env
+.env.*
+secrets/
+*.key
+*.pem
+# IDE and operating-system files
+.vscode/
+.idea/
+*.code-workspace
+.DS_Store
+Thumbs.db
+# Installer binaries only; retain installer sources
+installer/*.exe

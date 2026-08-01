@@ -1,0 +1,115 @@
+{
+  "general": {
+    "language": "en",
+    "theme": "system",
+    "workspace_dir": "E:\\ionog\\conference_presentation\\IonogramMorphologyLab\\workspaces\\_evidence_qa_v111\\projects",
+    "restore_last_project": true,
+    "confirm_before_closing": true,
+    "autosave_interval_sec": 120,
+    "show_onboarding": false,
+    "first_launch_done": true,
+    "nav_collapsed": false,
+    "window_geometry": "",
+    "splitter_states": {}
+  },
+  "data": {
+    "default_profile_id": "kfu_cyclone_2013_2014",
+    "default_adapter": "auto",
+    "recursive_folder_scan": true,
+    "duplicate_detection": true,
+    "calculate_source_sha": true,
+    "strict_source_readonly": true
+  },
+  "viewer": {
+    "default_frame_step_minutes": 10,
+    "navigation_jump_minutes": 10,
+    "playback_speed": 2.0,
+    "contact_layout": "5x5",
+    "contact_interval_minutes": 10,
+    "colormap": "jet",
+    "amplitude_scale_mode": "percentile_display",
+    "show_grid": false,
+    "show_colorbar": true,
+    "show_technical_frame_id": true,
+    "preview_mode": "auto",
+    "prefetch_count": 2
+  },
+  "performance": {
+    "worker_count": 1,
+    "max_ram_mb": 4096,
+    "cache_location": "E:\\ionog\\conference_presentation\\IonogramMorphologyLab\\workspaces\\_evidence_qa_v111\\cache",
+    "max_cache_mb": 8192,
+    "automatic_cache_creation": true,
+    "cache_compression": true,
+    "rendered_image_cache": true,
+    "background_prefetch": true,
+    "lru_capacity": 16
+  },
+  "analysis": {
+    "mode": "scientific_strict",
+    "data_quality_audit": true,
+    "trace_segmentation": true,
+    "interference_diagnostics": true,
+    "feature_extraction": true,
+    "rule_engine": true,
+    "reference_comparison": true,
+    "ml_models_enabled": false,
+    "abstention": true,
+    "temporal_context": true,
+    "disagreement": true,
+    "ensemble": true
+  },
+  "matlab": {
+    "active_backend": "auto",
+    "auto_detect": true,
+    "matlab_executable": "",
+    "octave_executable": "",
+    "working_directory": "",
+    "startup_script": "",
+    "default_timeout_s": 120,
+    "max_execution_s": 600,
+    "max_output_mb": 512,
+    "reuse_engine_session": true,
+    "extra_paths": [],
+    "env_vars": {},
+    "first_trust_warning_ack": false,
+    "builtin_trust_acknowledged": false
+  },
+  "models": {
+    "enabled_model_ids": [],
+    "default_split": "by_date",
+    "abstention_threshold": 0.45
+  },
+  "reports": {
+    "language": "both",
+    "formats": [
+      "csv",
+      "json",
+      "html",
+      "markdown"
+    ],
+    "include_technical_json": true,
+    "include_diagnostic_figures": true,
+    "include_bibliography": true,
+    "include_reproducibility_manifest": true
+  },
+  "privacy": {
+    "telemetry_disabled": true,
+    "network_disabled_by_default": true,
+    "source_readonly": true,
+    "protected_study_enabled": false,
+    "protected_study_config_path": ""
+  },
+  "ux": {
+    "interface_mode": "guided",
+    "show_intros": true,
+    "dismissed_intros": {},
+    "show_workflow_on_home": true
+  },
+  "advanced": {
+    "show_developer_logs": false,
+    "rule_pack_version": "IML1-0.1.0",
+    "reference_pack_version": "IML1-0.1.0",
+    "app_version": "1.1.1"
+  }
+}

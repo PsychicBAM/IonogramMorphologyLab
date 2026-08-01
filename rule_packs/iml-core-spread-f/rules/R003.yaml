@@ -1,0 +1,48 @@
+{
+  "rule_id": "R003",
+  "name_en": "Mixed compatible broadening",
+  "name_ru": "????????? ??????????? ????????",
+  "category": "morphology",
+  "conditions": [
+    {
+      "feature": "mixed_width_score",
+      "operator": "gte",
+      "value": 0.8
+    },
+    {
+      "feature": "mixed_coverage",
+      "operator": "gte",
+      "value": 0.5
+    }
+  ],
+  "outputs": {
+    "morphology": "mixed"
+  },
+  "status": "project_approved",
+  "enabled": true,
+  "source_ids": [
+    "A2_PROTOCOL"
+  ],
+  "source_pages": [
+    "n/a"
+  ],
+  "source_wording_en": "Source-traceable candidate rule.",
+  "source_wording_ru": "?????????????? ?? ????????? ??????????? ???????.",
+  "feature_names": [
+    "mixed_width_score",
+    "mixed_coverage"
+  ],
+  "threshold_origin": "derived_from_verified_definition",
+  "applicable_domain": "midlatitude_vertical_sounding",
+  "exclusions": [],
+  "assumptions": [],
+  "limitations": [
+    "Development aggregation of compatible features."
+  ],
+  "verification_status": "project_approved",
+  "implementation_status": "active",
+  "version": "1.1.0",
+  "tags": [
+    "v1.1"
+  ]
+}

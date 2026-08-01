@@ -1,0 +1,27 @@
+plugin_id: main
+name_ru: main
+name_en: main
+description_ru: ''
+description_en: ''
+version: 0.1.0
+author: user
+institution: ''
+entrypoint: main.m
+script_type: frame_analysis
+supported_profiles:
+- '*'
+supported_matrix_shapes: []
+required_variables: []
+optional_variables: []
+parameters: []
+expected_outputs: []
+output_plots: []
+MATLAB_release: ''
+required_toolboxes: []
+Octave_compatible: false
+timeout: 120
+rights: user
+citation: ''
+scientific_status: teaching
+limitations_ru: Пользовательский код не считается автоматически научно верифицированным.
+limitations_en: Imported user code is not automatically scientifically verified.

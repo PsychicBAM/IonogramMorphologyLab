@@ -1,0 +1,38 @@
+{
+  "rule_id": "E001",
+  "name_en": "E layer source placeholder",
+  "name_ru": "????????? ????????? ???? E",
+  "category": "layer",
+  "conditions": [
+    {
+      "feature": "trace_pixel_fraction",
+      "operator": "gte",
+      "value": 0.0
+    }
+  ],
+  "outputs": {
+    "layer": "E"
+  },
+  "status": "source_metadata_incomplete",
+  "enabled": false,
+  "source_ids": [],
+  "source_pages": [],
+  "source_wording_en": "Source-traceable candidate rule.",
+  "source_wording_ru": "?????????????? ?? ????????? ??????????? ???????.",
+  "feature_names": [
+    "trace_pixel_fraction"
+  ],
+  "threshold_origin": "unsupported",
+  "applicable_domain": "midlatitude_vertical_sounding",
+  "exclusions": [],
+  "assumptions": [],
+  "limitations": [
+    "Disabled: no source-verified E criterion in project materials."
+  ],
+  "verification_status": "source_metadata_incomplete",
+  "implementation_status": "disabled",
+  "version": "1.1.0",
+  "tags": [
+    "v1.1"
+  ]
+}

@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+message: "If you use Ionogram Morphology Lab, please cite this software."
+title: "Ionogram Morphology Lab"
+version: "1.1.1"
+date-released: 2026-08-01
+type: software
+authors:
+  - name: "Ionogram Morphology Lab contributors"
+repository-code: "https://github.com/ORG/REPOSITORY"
+url: "https://github.com/ORG/REPOSITORY"
+license: MIT
+abstract: "Bilingual desktop research software for source-traceable ionogram morphology analysis."

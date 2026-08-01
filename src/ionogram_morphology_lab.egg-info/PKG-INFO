@@ -1,0 +1,254 @@
+Metadata-Version: 2.4
+Name: ionogram-morphology-lab
+Version: 1.1.1
+Summary: Ionogram Morphology Lab — bilingual desktop research tool for source-traceable ionogram morphology analysis
+Author: Ionogram Morphology Lab contributors
+License: Proprietary — research use; see LICENSE_STATUS.md
+Keywords: ionogram,morphology,Spread-F,ionosphere,radiophysics
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+License-File: LICENSE_STATUS.md
+Requires-Dist: numpy>=1.24
+Requires-Dist: scipy>=1.11
+Requires-Dist: h5py>=3.10
+Requires-Dist: matplotlib>=3.8
+Requires-Dist: PySide6>=6.6
+Requires-Dist: PyYAML>=6.0
+Requires-Dist: Pillow>=10.0
+Requires-Dist: scikit-image>=0.22
+Requires-Dist: zarr>=2.16
+Requires-Dist: numcodecs>=0.12
+Requires-Dist: Jinja2>=3.1
+Requires-Dist: scikit-learn>=1.3
+Requires-Dist: joblib>=1.3
+Provides-Extra: dev
+Requires-Dist: pytest>=7.4; extra == "dev"
+Requires-Dist: pytest-qt>=4.2; extra == "dev"
+Requires-Dist: ruff>=0.4; extra == "dev"
+Provides-Extra: matlab
+Requires-Dist: matlabengine; platform_system == "Windows" and extra == "matlab"
+Dynamic: license-file
+
+# Ionogram Morphology Lab
+
+[English](README.md) | [Русский](README_RU.md) · **Release 1.1.1**
+
+Ionogram Morphology Lab (IML) is a bilingual (EN/RU) desktop research application for **source-traceable ionogram morphology analysis**, expert review, rule testing, and report export. It imports user-selected MATLAB (`.mat`) data, preserves provenance, and keeps morphology, ambiguity, quality, and parameter proposals on **separate scientific axes**.
+
+> **Scientific status:** Output is a **candidate** morphology or parameter proposal compatible with image evidence. It does **not** establish a physical mechanism, replace expert scaling, or validate a model. Development models and custom rules require independent, domain-appropriate validation before operational use.
+
+![Home dashboard (English)](docs/assets/screenshots/home_en.png)
+
+*Alt: Home dashboard with recommended workflow steps and UX mode selector (English).*
+
+![Home dashboard (Russian)](docs/assets/screenshots/home_ru.png)
+
+*Alt: Home dashboard with recommended workflow steps and UX mode selector (Russian).*
+
+Teaching PNG captures use synthetic projects only. Schematic layout mocks live under [`docs/assets/schematics/`](docs/assets/schematics/).
+
+## Purpose
+
+IML supports ionospheric radio-physics workflows where analysts must:
+
+- inspect ionogram frames with documented instrument context;
+- record candidate morphology labels with uncertainty and alternatives;
+- apply versioned, source-linked rules in a testable way;
+- export bilingual reports and portable project packages without silently rewriting source data.
+
+The application is **local-first**: core analysis does not require MATLAB, Octave, or network access.
+
+## Capabilities
+
+| Area | What IML provides |
+|------|-------------------|
+| **Import & audit** | MAT v5/v7 (SciPy) and v7.3/HDF5 (h5py) import, Data Audit, instrument profiles |
+| **Viewer & cache** | Frame navigation, read-only source MAT, derived Zarr cache built on demand |
+| **Analysis** | Batch morphology proposals, separate quality/ambiguity/interference axes |
+| **Expert review** | Accept / Change / Indeterminate / N/A with required rationale |
+| **Rules** | No-code Rule Builder wizard, Rule Testing Lab, installable rule packs |
+| **Reports** | CSV, JSON, HTML, Markdown exports with provenance fields |
+| **MATLAB Studio** | Optional local script library, manifests, and controlled backend execution |
+| **Model Lab** | Development-only interpretable classifiers (not production-validated ML) |
+| **Portability** | Project packages excluding source MAT by default; optional relink on import |
+
+## Platforms
+
+- **Primary:** Windows 10/11 (portable release and PySide6 GUI).
+- **Development:** Python 3.10+ on Windows, Linux, or macOS with project dependencies installed from source.
+- **Optional:** MATLAB or Octave when explicitly configured for MATLAB Studio backends.
+
+CI runs on Ubuntu with Python 3.11; it does **not** require MATLAB or a display.
+
+## Installation
+
+See [Installation (EN)](docs/INSTALLATION_EN.md) or [Установка (RU)](docs/INSTALLATION_RU.md).
+
+**Portable release:** unpack the release directory, keep bundled files together, and use a **writable workspace** outside the install folder.
+
+**From source:**
+
+```bash
+python -m venv .venv
+.venv\Scripts\activate          # Windows
+pip install -e ".[dev]"
+python -m ionogram_morphology_lab.app.main
+```
+
+Verify with `python -m pytest` and `python scripts/validate_version_consistency.py`.
+
+## Quick start
+
+1. Read [Quick Start (EN)](docs/QUICK_START_EN.md) or [Быстрый старт (RU)](docs/QUICK_START_RU.md).
+2. On first launch, choose **English** or **Русский** (change later in **Settings → General → Interface language**).
+3. On **Home**, create **New Project** in a writable workspace folder.
+4. Start with [`synthetic_data/`](synthetic_data/) teaching files before importing research data.
+5. Follow the recommended workflow on Home (**Continue recommended step**) instead of guessing menu order.
+
+## MAT workflow
+
+1. **Import Data** — select `.mat` file or folder; review **Data Audit** (dimensions, timestamps, variable choice).
+2. **Instrument Profile** — pick or complete a profile; mark provisional metadata as provisional.
+3. **Viewer** — select a frame; use **Build cache** only for derived Zarr storage (source MAT stays read-only).
+4. **Batch Analysis** — run analysis; open **Results** (proposals are not final classifications).
+5. **Expert Review** — record decisions and rationale; **Save expert edits**.
+6. **Reports → Export** — generate EN/RU artifacts; keep project manifest and provenance with the report.
+
+Details: [Data formats](docs/DATA_FORMATS.md), [Complete user manual (EN)](docs/COMPLETE_USER_MANUAL_EN.md) · [RU](docs/COMPLETE_USER_MANUAL_RU.md).
+
+## Scientific axes
+
+IML keeps these outputs distinct (they must not be collapsed into a single “diagnosis”):
+
+| Axis | Role |
+|------|------|
+| **Data quality** | Usability of the frame for analysis |
+| **Visible morphology** | Candidate pattern label from image evidence |
+| **Ambiguity / alternatives** | Competing interpretations and disagreement flags |
+| **Interference** | Contamination or masking signals |
+| **Parameters** | Method-dependent estimates with stated units |
+| **Expert decision** | Human override with audit trail |
+
+Read [Scientific limitations (EN)](docs/SCIENTIFIC_LIMITATIONS_EN.md) · [RU](docs/SCIENTIFIC_LIMITATIONS_RU.md) before treating outputs as evidence.
+
+## MATLAB Studio
+
+Optional workspace for importing, documenting, versioning, and **optionally executing** `.m` scripts against derived inputs. Imported code is **unverified** until you assess it. Execution uses explicit backends (MATLAB Engine, external MATLAB/Octave via argument-list `subprocess`, never `shell=True`). See [Plugin architecture](docs/PLUGIN_ARCHITECTURE.md).
+
+## Rule Builder (no-code)
+
+**Creating a custom rule requires no programming.** The **Rule Builder** wizard walks through:
+
+**Purpose → Conditions → Result → Source → Test → Save**
+
+| Step | What you define |
+|------|-----------------|
+| **Purpose** | Rule ID, bilingual names, target scientific axis |
+| **Conditions** | Features, operators, thresholds with units, abstention |
+| **Result** | Candidate token emitted when the rule fires |
+| **Source** | Bibliographic IDs, assumptions, limitations, verification status |
+| **Test** | Rule Testing Lab on a labelled development set |
+| **Save** | Versioned YAML snapshot in the project or user library |
+
+Generated code is a **preview** for inspection — not a scientific endorsement. Test rules in **Rule Testing Lab** before enabling them in strict workflows. Guide: [Custom Rule Builder (EN)](docs/CUSTOM_RULE_BUILDER_EN.md) · [RU](docs/CUSTOM_RULE_BUILDER_RU.md).
+
+## Model Lab status
+
+**Model Lab** trains interpretable scikit-learn models from labelled development data inside the project. Default model cards state **development / research use only** unless externally validated. Models are stored as `joblib` artifacts in the project tree — treat them as **untrusted** if copied from elsewhere. This is **not** validated production ML.
+
+## Limitations
+
+- Morphology from images alone is often **non-unique**; similar patterns can arise from propagation, scaling, interference, or incomplete metadata.
+- Synthetic data exercises the interface and code paths; it does **not** prove geophysical validity.
+- Rule tests and internal train/test splits do **not** establish transfer across stations, epochs, or populations.
+- Supported MAT layouts are those exercised in development and your own audit — do not assume universal format coverage.
+- IML does not enforce institutional authorization, encrypt data at rest, or sign scientific records cryptographically.
+
+## Privacy
+
+- No telemetry is enabled by default.
+- Source MAT files are read-only in normal workflows.
+- Reports and logs may contain **local file paths** you selected — review exports before sharing.
+- Do not attach restricted ionograms, participant identifiers, or credentials to public issues.
+
+## Screenshots
+
+Captured UI PNGs (synthetic teaching data only) live under [`docs/assets/screenshots/`](docs/assets/screenshots/). Regenerate with [`scripts/capture_release_screenshots.py`](scripts/capture_release_screenshots.py). Schematic SVG layout mocks are under [`docs/assets/schematics/`](docs/assets/schematics/) — they are **not** screenshots.
+
+| Screen | PNG (EN) | PNG (RU) |
+|--------|----------|----------|
+| Home | [home_en.png](docs/assets/screenshots/home_en.png) | [home_ru.png](docs/assets/screenshots/home_ru.png) |
+| Import MAT | [mat_import_en.png](docs/assets/screenshots/mat_import_en.png) | [mat_import_ru.png](docs/assets/screenshots/mat_import_ru.png) |
+| Data Audit | [data_audit_en.png](docs/assets/screenshots/data_audit_en.png) | [data_audit_ru.png](docs/assets/screenshots/data_audit_ru.png) |
+| Instrument Profile | [instrument_profile_en.png](docs/assets/screenshots/instrument_profile_en.png) | [instrument_profile_ru.png](docs/assets/screenshots/instrument_profile_ru.png) |
+| Viewer | [ionogram_viewer_en.png](docs/assets/screenshots/ionogram_viewer_en.png) | [ionogram_viewer_ru.png](docs/assets/screenshots/ionogram_viewer_ru.png) |
+| Results | [results_en.png](docs/assets/screenshots/results_en.png) | [results_ru.png](docs/assets/screenshots/results_ru.png) |
+| Rule Builder | [rule_builder_en.png](docs/assets/screenshots/rule_builder_en.png) | [rule_builder_ru.png](docs/assets/screenshots/rule_builder_ru.png) |
+| Rule Testing Lab | [rule_testing_en.png](docs/assets/screenshots/rule_testing_en.png) | [rule_testing_ru.png](docs/assets/screenshots/rule_testing_ru.png) |
+| MATLAB Studio | [matlab_studio_en.png](docs/assets/screenshots/matlab_studio_en.png) | [matlab_studio_ru.png](docs/assets/screenshots/matlab_studio_ru.png) |
+| Settings | [settings_en.png](docs/assets/screenshots/settings_en.png) | [settings_ru.png](docs/assets/screenshots/settings_ru.png) |
+| Help | [help_en.png](docs/assets/screenshots/help_en.png) | [help_ru.png](docs/assets/screenshots/help_ru.png) |
+
+## Documentation
+
+| Topic | English | Russian |
+|-------|---------|---------|
+| Quick start | [QUICK_START_EN.md](docs/QUICK_START_EN.md) | [QUICK_START_RU.md](docs/QUICK_START_RU.md) |
+| Installation | [INSTALLATION_EN.md](docs/INSTALLATION_EN.md) | [INSTALLATION_RU.md](docs/INSTALLATION_RU.md) |
+| User manual | [COMPLETE_USER_MANUAL_EN.md](docs/COMPLETE_USER_MANUAL_EN.md) | [COMPLETE_USER_MANUAL_RU.md](docs/COMPLETE_USER_MANUAL_RU.md) |
+| Morphology methods | [MORPHOLOGY_METHODS_EN.md](docs/MORPHOLOGY_METHODS_EN.md) | [MORPHOLOGY_METHODS_RU.md](docs/MORPHOLOGY_METHODS_RU.md) |
+| Parameter estimation | [PARAMETER_ESTIMATION_EN.md](docs/PARAMETER_ESTIMATION_EN.md) | [PARAMETER_ESTIMATION_RU.md](docs/PARAMETER_ESTIMATION_RU.md) |
+| Rule Builder | [CUSTOM_RULE_BUILDER_EN.md](docs/CUSTOM_RULE_BUILDER_EN.md) | [CUSTOM_RULE_BUILDER_RU.md](docs/CUSTOM_RULE_BUILDER_RU.md) |
+| Rule testing | [RULE_TESTING_GUIDE_EN.md](docs/RULE_TESTING_GUIDE_EN.md) | [RULE_TESTING_GUIDE_RU.md](docs/RULE_TESTING_GUIDE_RU.md) |
+| Troubleshooting | [TROUBLESHOOTING_EN.md](docs/TROUBLESHOOTING_EN.md) | [TROUBLESHOOTING_RU.md](docs/TROUBLESHOOTING_RU.md) |
+| FAQ | [FAQ_EN.md](docs/FAQ_EN.md) | [FAQ_RU.md](docs/FAQ_RU.md) |
+| Security | [SECURITY.md](SECURITY.md) · [Threat model](docs/THREAT_MODEL.md) · [Audit v1.1.1](docs/SECURITY_AUDIT_V1_1_1.md) |
+| Release / testing | [RELEASE_PROCESS.md](docs/RELEASE_PROCESS.md) · [TESTING.md](docs/TESTING.md) |
+| Usability QA | [IML1_VISUAL_QA_EN.md](docs/IML1_VISUAL_QA_EN.md) · [IML1_VISUAL_QA_RU.md](docs/IML1_VISUAL_QA_RU.md) |
+
+Architecture and development: [ARCHITECTURE.md](docs/ARCHITECTURE.md) · [DEVELOPER_SETUP.md](docs/DEVELOPER_SETUP.md) · [SECURITY_ARCHITECTURE.md](docs/SECURITY_ARCHITECTURE.md).
+
+## Development setup
+
+1. Python 3.10+, virtual environment, `pip install -e ".[dev]"`.
+2. Run tests: `python -m pytest`.
+3. Pre-PR checks:
+   - `python scripts/check_repository_hygiene.py`
+   - `python scripts/validate_readme.py`
+   - `python scripts/validate_version_consistency.py`
+   - `python scripts/validate_docs.py`
+4. Optional security workflow mirrors [`.github/workflows/security.yml`](.github/workflows/security.yml) (Bandit when installed, grep for unsafe APIs).
+
+MATLAB is optional for contributors; CI does not require it.
+
+## Tests
+
+- **Unit / integration:** `tests/` — import, provenance, rule packs, portability, pipeline axes.
+- **Security regressions:** unsafe ZIP member rejection, safe YAML loading paths, project package traversal checks.
+- **Headless CI:** screenshot capture script documents requirements without failing when Qt/display is absent.
+
+A passing test suite does **not** substitute for domain validation of rules or models.
+
+## Contributing
+
+Read [CONTRIBUTING.md](CONTRIBUTING.md) and [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md). Open an issue before large changes. Update EN and RU docs together for user-visible behavior. Never commit secrets, private MAT files, workspaces, or generated build artifacts.
+
+## Citation
+
+If you use this software in published work, cite [CITATION.cff](CITATION.cff) (version **1.1.1**, date-released 2026-08-01). Update the repository URL in `CITATION.cff` to match your fork or official GitHub remote before publication.
+
+## License
+
+Licensed under the [MIT License](LICENSE). Third-party components retain their own terms — see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) and [LICENSE_STATUS.md](LICENSE_STATUS.md).
+
+## Release information
+
+| Item | Value |
+|------|-------|
+| **Current version** | 1.1.1 |
+| **Release date** | 2026-08-01 |
+| **Changelog** | [CHANGELOG.md](CHANGELOG.md) |
+| **Focus of 1.1.1** | Usability (Home workflow, UX modes, Rule Builder wizard, Help synonyms), documentation completeness, repository hygiene CI, security hardening for imports and reports |
+
+Report vulnerabilities privately per [SECURITY.md](SECURITY.md) — not via public issues with sample data.

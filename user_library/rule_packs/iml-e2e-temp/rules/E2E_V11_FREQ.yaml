@@ -1,0 +1,52 @@
+rule_id: E2E_V11_FREQ
+name_en: E2E frequency-compatible draft
+name_ru: E2E черновик частотной совместимости
+category: morphology
+conditions:
+- feature: median_horizontal_width
+  operator: gte
+  value: 5.0
+- feature: horizontal_broadening_persistence
+  operator: gte
+  value: 0.25
+outputs:
+  morphology: frequency_spread
+proposed_result: frequency_spread
+status: draft
+enabled: true
+source_ids:
+- A3L018
+source_pages:
+- '241'
+source_wording_en: ''
+source_wording_ru: ''
+feature_names:
+- median_horizontal_width
+- horizontal_broadening_persistence
+threshold_origin: provisional
+applicable_domain: ''
+applicable_profiles: []
+applicable_instruments: []
+frequency_range: []
+height_range: []
+exclusions: []
+alternatives: []
+contradicting_evidence: []
+abstention_condition: ''
+score: 0.75
+minimum_evidence: 0.0
+assumptions: []
+limitations:
+- Development-calibrated thresholds; not scientific validation.
+verification_status: draft
+implementation_status: active
+version: 1.1.0+20260801T095742Z
+authors: IML hardening
+year: '2026'
+title: Internal e2e rule
+printed_page: '241'
+pdf_page: n/a
+quotation: ''
+rights_note: ''
+tags: []
+metadata: {}

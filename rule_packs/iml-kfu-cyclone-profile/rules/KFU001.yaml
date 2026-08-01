@@ -1,0 +1,44 @@
+{
+  "rule_id": "KFU001",
+  "name_en": "Amp_all O/X abstention profile",
+  "name_ru": "??????? Amp_all: ??????????? O/X",
+  "category": "ambiguity",
+  "conditions": [
+    {
+      "feature": "possible_ox_compatibility",
+      "operator": "gte",
+      "value": 0.5
+    }
+  ],
+  "outputs": {
+    "ambiguity": "possible_ox"
+  },
+  "status": "project_approved",
+  "enabled": true,
+  "source_ids": [
+    "CALSTAT",
+    "A3L007"
+  ],
+  "source_pages": [
+    "n/a",
+    "15-17"
+  ],
+  "source_wording_en": "Source-traceable candidate rule.",
+  "source_wording_ru": "?????????????? ?? ????????? ??????????? ???????.",
+  "feature_names": [
+    "possible_ox_compatibility"
+  ],
+  "threshold_origin": "derived_from_verified_definition",
+  "applicable_domain": "midlatitude_vertical_sounding",
+  "exclusions": [],
+  "assumptions": [],
+  "limitations": [
+    "Amp_all calibration does not establish polarization or URSI metrology."
+  ],
+  "verification_status": "project_approved",
+  "implementation_status": "active",
+  "version": "1.1.0",
+  "tags": [
+    "v1.1"
+  ]
+}

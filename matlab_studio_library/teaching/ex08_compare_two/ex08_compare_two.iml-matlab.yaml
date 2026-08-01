@@ -1,0 +1,12 @@
+plugin_id: ex08_compare_two
+name_en: ex08_compare_two
+name_ru: ex08_compare_two
+description_en: Teaching example — not scientifically validated
+description_ru: Учебный пример — не является научной валидацией
+version: 1.0.0
+entrypoint: main.m
+script_type: teaching_demo
+scientific_status: teaching
+Octave_compatible: true
+limitations_en: Example/teaching only
+limitations_ru: Только учебный пример

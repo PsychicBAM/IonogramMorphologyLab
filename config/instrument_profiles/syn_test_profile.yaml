@@ -1,0 +1,38 @@
+profile_id: syn_test_profile
+profile_name: Synthetic test
+institution: ''
+instrument: ''
+station_name: ''
+latitude: null
+longitude: null
+altitude: null
+mat_version: v5_or_v7
+amplitude_variable_name: Amp_all
+phase_variable_name: null
+frequency_variable_name: ff
+time_variable_name: null
+matrix_layout: frames_stacked_rows
+row_major: true
+frames_per_file: 3
+height_bins: 256
+frequency_bins: 400
+frequency_values: []
+frequency_start_mhz: 1.5
+frequency_step_mhz: 0.019
+frequency_end_mhz: null
+nominal_range_km_per_bin: 2.5
+range_axis_label_en: Nominal virtual height
+range_axis_label_ru: Номинальная виртуальная высота
+time_mapping: matlab_index_minus_1_minute
+timezone: Europe/Moscow
+missing_data_representation: NaN_or_zero
+amplitude_units: unknown
+scaling: raw
+source_documentation: []
+profile_verification_status: user-defined-unverified
+expected_amplitude_shape:
+- 768
+- 400
+warnings:
+- synthetic test profile
+notes: ''

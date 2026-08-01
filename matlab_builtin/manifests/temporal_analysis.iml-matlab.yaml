@@ -1,0 +1,21 @@
+plugin_id: builtin_temporal_analysis_v11
+name_en: Built-in candidate library: temporal_analysis
+name_ru: Встроенная кандидатная библиотека: temporal_analysis
+description_en: Development and teaching heuristics; not causal or scientifically verified.
+description_ru: Эвристики для разработки и обучения; не причинные и не научно верифицированные.
+version: 11.0.0
+author: IonogramMorphologyLab
+entrypoint: iml_temporal_frame_difference.m
+script_type: frame_analysis
+supported_profiles:
+  - "*"
+MATLAB_release: R2019a
+Octave_compatible: true
+required_toolboxes: []
+scientific_status: teaching
+limitations_en: Profile-dependent candidate methods only; no true-height or causal claims.
+limitations_ru: Только профиль-зависимые кандидатные методы; без утверждений об истинной высоте или причинности.
+methods:
+  - iml_temporal_frame_difference
+  - iml_temporal_echo_persistence
+  - iml_temporal_candidate_summary

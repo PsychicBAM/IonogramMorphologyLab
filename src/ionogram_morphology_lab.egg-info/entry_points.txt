@@ -1,0 +1,5 @@
+[console_scripts]
+ionogram-morphology-lab = ionogram_morphology_lab.app.main:main
+
+[gui_scripts]
+IonogramMorphologyLab = ionogram_morphology_lab.app.main:main

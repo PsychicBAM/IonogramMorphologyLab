@@ -1,0 +1,37 @@
+profile_id: generic_user_template
+profile_name: Generic user-defined template
+institution: ""
+instrument: ""
+station_name: ""
+latitude: null
+longitude: null
+altitude: null
+mat_version: unknown
+amplitude_variable_name: Amp_all
+phase_variable_name: null
+frequency_variable_name: null
+time_variable_name: null
+matrix_layout: unknown
+row_major: true
+frames_per_file: 1
+height_bins: 256
+frequency_bins: 400
+frequency_values: []
+frequency_start_mhz: null
+frequency_step_mhz: null
+frequency_end_mhz: null
+nominal_range_km_per_bin: null
+range_axis_label_en: Range / height index
+range_axis_label_ru: Индекс дальности / высоты
+time_mapping: unknown
+timezone: UTC
+missing_data_representation: unknown
+amplitude_units: unknown
+scaling: raw
+source_documentation: []
+profile_verification_status: user-defined-unverified
+expected_amplitude_shape: []
+warnings:
+  - user-defined profile — not instrument-verified
+  - axes must be configured in the Instrument Profile Wizard
+notes: Template only. Complete the wizard before scientific interpretation.

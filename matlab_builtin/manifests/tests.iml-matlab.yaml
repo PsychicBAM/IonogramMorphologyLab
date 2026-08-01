@@ -1,0 +1,20 @@
+plugin_id: builtin_tests_v11
+name_en: Built-in candidate library: tests
+name_ru: Встроенная кандидатная библиотека: tests
+description_en: Development and teaching heuristics; not causal or scientifically verified.
+description_ru: Эвристики для разработки и обучения; не причинные и не научно верифицированные.
+version: 11.0.0
+author: IonogramMorphologyLab
+entrypoint: iml_test_synthetic_trace.m
+script_type: frame_analysis
+supported_profiles:
+  - "*"
+MATLAB_release: R2019a
+Octave_compatible: true
+required_toolboxes: []
+scientific_status: teaching
+limitations_en: Profile-dependent candidate methods only; no true-height or causal claims.
+limitations_ru: Только профиль-зависимые кандидатные методы; без утверждений об истинной высоте или причинности.
+methods:
+  - iml_test_synthetic_trace
+  - iml_test_synthetic_layers

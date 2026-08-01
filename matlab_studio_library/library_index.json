@@ -1,0 +1,25 @@
+{
+  "main": {
+    "script_id": "main",
+    "name": "main",
+    "author": "user",
+    "institution": "",
+    "description_ru": "",
+    "description_en": "",
+    "version": "0.1.0",
+    "created_at": "2026-08-01T00:22:37.703738+00:00",
+    "modified_at": "2026-08-01T00:22:37.703738+00:00",
+    "matlab_release": "",
+    "octave_compatible": false,
+    "required_variables": [],
+    "required_toolboxes": [],
+    "entry_point": "main.m",
+    "source_file": "E:\\ionog\\conference_presentation\\IonogramMorphologyLab\\matlab_studio_library\\teaching\\main\\main.m",
+    "sha256": "1e6d966673b39b8c17bccdf42e4fed4431da6ee202a3b6d4ac03dde80dfa245a",
+    "license": "",
+    "citation": "",
+    "verification_status": "teaching",
+    "category": "teaching",
+    "manifest_path": "E:\\ionog\\conference_presentation\\IonogramMorphologyLab\\matlab_studio_library\\teaching\\main\\main.iml-matlab.yaml"
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "rule_id": "ES001",
+  "name_en": "Es subtype verification placeholder",
+  "name_ru": "????????? ???????? ??????? Es",
+  "category": "layer",
+  "conditions": [
+    {
+      "feature": "trace_pixel_fraction",
+      "operator": "gte",
+      "value": 0.0
+    }
+  ],
+  "outputs": {
+    "layer": "Es"
+  },
+  "status": "source_metadata_incomplete",
+  "enabled": false,
+  "source_ids": [
+    "URSI_Piggott"
+  ],
+  "source_pages": [
+    "?2.81"
+  ],
+  "source_wording_en": "Source-traceable candidate rule.",
+  "source_wording_ru": "?????????????? ?? ????????? ??????????? ???????.",
+  "feature_names": [
+    "trace_pixel_fraction"
+  ],
+  "threshold_origin": "unsupported",
+  "applicable_domain": "midlatitude_vertical_sounding",
+  "exclusions": [],
+  "assumptions": [],
+  "limitations": [
+    "No verified subtype definition or Amp_all metrology."
+  ],
+  "verification_status": "source_metadata_incomplete",
+  "implementation_status": "disabled",
+  "version": "1.1.0",
+  "tags": [
+    "v1.1"
+  ]
+}

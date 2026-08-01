@@ -1,0 +1,27 @@
+plugin_id: builtin_spread_f_analysis_v11
+name_en: Built-in candidate library: spread_f_analysis
+name_ru: Встроенная кандидатная библиотека: spread_f_analysis
+description_en: Development and teaching heuristics; not causal or scientifically verified.
+description_ru: Эвристики для разработки и обучения; не причинные и не научно верифицированные.
+version: 11.0.0
+author: IonogramMorphologyLab
+entrypoint: iml_detect_frequency_spread_candidate.m
+script_type: frame_analysis
+supported_profiles:
+  - "*"
+MATLAB_release: R2019a
+Octave_compatible: true
+required_toolboxes: []
+scientific_status: teaching
+limitations_en: Profile-dependent candidate methods only; no true-height or causal claims.
+limitations_ru: Только профиль-зависимые кандидатные методы; без утверждений об истинной высоте или причинности.
+methods:
+  - iml_detect_frequency_spread_candidate
+  - iml_detect_range_spread_candidate
+  - iml_detect_mixed_spread_candidate
+  - iml_detect_unspecified_spread_f_candidate
+  - iml_compare_clean_and_diffuse_trace
+  - iml_spread_f_temporal_persistence
+  - iml_spread_f_onset_candidate
+  - iml_spread_f_termination_candidate
+  - iml_spread_f_transition_candidate

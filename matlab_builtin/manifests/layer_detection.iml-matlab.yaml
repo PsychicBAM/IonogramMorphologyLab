@@ -1,0 +1,31 @@
+plugin_id: builtin_layer_detection_v11
+name_en: Built-in candidate library: layer_detection
+name_ru: Встроенная кандидатная библиотека: layer_detection
+description_en: Development and teaching heuristics; not causal or scientifically verified.
+description_ru: Эвристики для разработки и обучения; не причинные и не научно верифицированные.
+version: 11.0.0
+author: IonogramMorphologyLab
+entrypoint: iml_detect_e_layer_candidate.m
+script_type: frame_analysis
+supported_profiles:
+  - "*"
+MATLAB_release: R2019a
+Octave_compatible: true
+required_toolboxes: []
+scientific_status: teaching
+limitations_en: Profile-dependent candidate methods only; no true-height or causal claims.
+limitations_ru: Только профиль-зависимые кандидатные методы; без утверждений об истинной высоте или причинности.
+methods:
+  - iml_detect_e_layer_candidate
+  - iml_estimate_foE_candidate
+  - iml_estimate_hE_prime_candidate
+  - iml_detect_e_es_overlap
+  - iml_detect_multiple_hop_candidate
+  - iml_detect_multiple_reflection_candidate
+  - iml_detect_overlapping_layers
+  - iml_detect_spread_e_candidate
+  - iml_detect_no_echo_condition
+  - iml_detect_low_signal
+  - iml_detect_saturation
+  - iml_detect_equipment_artifact
+  - iml_detect_unclassified_structure

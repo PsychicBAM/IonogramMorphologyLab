@@ -1,0 +1,8 @@
+{
+  "import": true,
+  "profile": true,
+  "cache": true,
+  "trace": true,
+  "custom_rules": true,
+  "report": true
+}

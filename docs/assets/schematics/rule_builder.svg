@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540">
+  <rect width="960" height="540" fill="#f4f6f8"/>
+  <rect x="24" y="24" width="912" height="492" rx="8" fill="#ffffff" stroke="#c8d0d8"/>
+  <text x="480" y="250" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="28" fill="#1a1a1a">Ionogram Morphology Lab 1.1.1</text>
+  <text x="480" y="290" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="20" fill="#555">Rule Builder  placeholder</text>
+</svg>

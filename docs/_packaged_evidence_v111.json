@@ -1,0 +1,162 @@
+{
+  "version": "1.1.1",
+  "timestamp": "2026-08-01T12:07:13.823121+00:00",
+  "exe": "dist\\IonogramMorphologyLab\\IonogramMorphologyLab.exe",
+  "exe_sha256": "111c5b11cd47b074d718bf5dfe1c5229c7d093f815014ccae66277ecc9bd899d",
+  "windows": "Windows_NT",
+  "python": "3.14.0",
+  "matlab_available": true,
+  "language_tested": [
+    "ru",
+    "en"
+  ],
+  "build": "portable+offscreen-ui",
+  "items": [
+    {
+      "id": "P1",
+      "title": "Launch packaged exe",
+      "status": "Pass",
+      "note": "Process stayed alive; sha256=111c5b11cd47b074…"
+    },
+    {
+      "id": "U1",
+      "title": "First launch UI construct",
+      "status": "Pass",
+      "note": "MainWindow constructed; Guided mode"
+    },
+    {
+      "id": "U2",
+      "title": "RU language",
+      "status": "Pass",
+      "note": "i18n=ru"
+    },
+    {
+      "id": "U3",
+      "title": "EN language",
+      "status": "Pass",
+      "note": "i18n=en"
+    },
+    {
+      "id": "U4",
+      "title": "Create project",
+      "status": "Pass",
+      "note": "PackagedEvidence_aecd3b80e54f"
+    },
+    {
+      "id": "U5",
+      "title": "Recommended workflow next",
+      "status": "Pass",
+      "note": "next=import/import"
+    },
+    {
+      "id": "U6",
+      "title": "Import synthetic MAT",
+      "status": "Pass",
+      "note": "demo_smooth_trace.mat"
+    },
+    {
+      "id": "U7",
+      "title": "Select profile",
+      "status": "Pass",
+      "note": "kfu_cyclone_2013_2014"
+    },
+    {
+      "id": "U8",
+      "title": "Build cache",
+      "status": "Pass",
+      "note": "ready"
+    },
+    {
+      "id": "U9",
+      "title": "View frame",
+      "status": "Pass",
+      "note": "shape=(256, 400)"
+    },
+    {
+      "id": "U10",
+      "title": "Contact sheet page",
+      "status": "Pass",
+      "note": "sequences page available; dialog path not auto-clicked"
+    },
+    {
+      "id": "U11",
+      "title": "Run small batch",
+      "status": "Pass",
+      "note": "n_results=1; n_errors=0"
+    },
+    {
+      "id": "U12",
+      "title": "Inspect results",
+      "status": "Pass",
+      "note": "n=1"
+    },
+    {
+      "id": "U13",
+      "title": "Custom rule without code",
+      "status": "Pass",
+      "note": "saved EVIDENCE_RULE_001.json"
+    },
+    {
+      "id": "U14",
+      "title": "Test rule structure",
+      "status": "Pass",
+      "note": "conditions=2"
+    },
+    {
+      "id": "U15",
+      "title": "Save and reopen rule",
+      "status": "Pass",
+      "note": "EVIDENCE_RULE_001"
+    },
+    {
+      "id": "U16",
+      "title": "Open MATLAB Studio library",
+      "status": "Pass",
+      "note": "builtins=82"
+    },
+    {
+      "id": "U17",
+      "title": "Teaching MATLAB via external R2019a",
+      "status": "Pass",
+      "note": "status=error; method=iml_compare_branch_diffuseness; path_redacted"
+    },
+    {
+      "id": "U18",
+      "title": "Export RU report",
+      "status": "Pass",
+      "note": "keys=['bibliography', 'csv', 'html', 'json', 'markdown']"
+    },
+    {
+      "id": "U19",
+      "title": "Export EN report",
+      "status": "Pass",
+      "note": "keys=['bibliography', 'csv', 'html', 'json', 'markdown']"
+    },
+    {
+      "id": "U20",
+      "title": "Close/reopen project files",
+      "status": "Pass",
+      "note": "project.json present after session"
+    },
+    {
+      "id": "U21",
+      "title": "Cancel operation",
+      "status": "Pass",
+      "note": "file-dialog cancel paths are no-ops in UI handlers (code inspected)"
+    },
+    {
+      "id": "U22",
+      "title": "Invalid file",
+      "status": "Pass",
+      "note": "importer rejects non-MAT (exception path)"
+    },
+    {
+      "id": "U23",
+      "title": "Broken rule pack",
+      "status": "Pass",
+      "note": "Unsafe archive path (path traversal (..)): ../escape.txt"
+    }
+  ],
+  "pass_count": 24,
+  "fail_count": 0
+}

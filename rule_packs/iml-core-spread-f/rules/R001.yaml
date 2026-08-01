@@ -1,0 +1,48 @@
+{
+  "rule_id": "R001",
+  "name_en": "Frequency-compatible broadening",
+  "name_ru": "????????-??????????? ????????",
+  "category": "morphology",
+  "conditions": [
+    {
+      "feature": "median_horizontal_width",
+      "operator": "gte",
+      "value": 5.0
+    },
+    {
+      "feature": "horizontal_broadening_persistence",
+      "operator": "gte",
+      "value": 0.25
+    }
+  ],
+  "outputs": {
+    "morphology": "frequency"
+  },
+  "status": "source_verified",
+  "enabled": true,
+  "source_ids": [
+    "A3L018"
+  ],
+  "source_pages": [
+    "241"
+  ],
+  "source_wording_en": "Source-traceable candidate rule.",
+  "source_wording_ru": "?????????????? ?? ????????? ??????????? ???????.",
+  "feature_names": [
+    "median_horizontal_width",
+    "horizontal_broadening_persistence"
+  ],
+  "threshold_origin": "development_calibration",
+  "applicable_domain": "midlatitude_vertical_sounding",
+  "exclusions": [],
+  "assumptions": [],
+  "limitations": [
+    "Candidate morphology only; not a confirmed mechanism."
+  ],
+  "verification_status": "source_verified",
+  "implementation_status": "active",
+  "version": "1.1.0",
+  "tags": [
+    "v1.1"
+  ]
+}

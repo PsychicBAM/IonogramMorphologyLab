@@ -1,0 +1,79 @@
+name: Security checks
+
+on: [push, pull_request, workflow_dispatch]
+
+jobs:
+  static:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install security tools
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install "bandit[toml]" pip-audit
+
+      - name: Unsafe API grep (fail on match)
+        run: |
+          if rg -n 'shell\s*=\s*True|yaml\.load\(|pickle\.' src scripts; then
+            echo "::error::Unsafe API pattern detected"
+            exit 1
+          fi
+          echo "Unsafe API grep: clean"
+
+      - name: Repository hygiene
+        run: python scripts/check_repository_hygiene.py
+
+      - name: Bandit (High/Critical fail the job)
+        run: |
+          # Bandit installation failure already fails the previous step.
+          # Exit codes: 0 = clean, 1 = findings. Treat High/Critical as failure via -ll.
+          python -m bandit -r src -x tests -ll -iii -f txt -o bandit-report.txt
+          echo "Bandit completed with no High/Critical findings."
+
+      - name: Upload Bandit report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bandit-report
+          path: bandit-report.txt
+          if-no-files-found: ignore
+
+      - name: pip-audit (report artifact; advisory triage)
+        id: pip_audit
+        continue-on-error: true
+        run: |
+          set +e
+          python -m pip_audit -r requirements/requirements-base.txt -f json -o pip-audit.json
+          code=$?
+          python -m pip_audit -r requirements/requirements-base.txt -f columns -o pip-audit.txt || true
+          echo "pip_audit_exit=$code" >> "$GITHUB_OUTPUT"
+          if [ "$code" -eq 0 ]; then
+            echo "pip-audit: no known vulnerabilities reported for pinned requirements."
+          else
+            echo "::warning::pip-audit reported advisories or tool error (exit $code). See artifact; triage in DEPENDENCY_AUDIT_V1_1_1.md — this step is non-blocking for advisory presence but tool crash should be reviewed."
+          fi
+          exit 0
+
+      - name: Upload pip-audit reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pip-audit-report
+          path: |
+            pip-audit.json
+            pip-audit.txt
+          if-no-files-found: warn
+
+      - name: Distinguish Bandit findings vs tool failure
+        if: failure()
+        run: |
+          echo "A security job step failed."
+          echo "- If Bandit step failed: High/Critical findings OR Bandit crashed after install."
+          echo "- Installation failures fail the 'Install security tools' step (no || true)."
+          echo "- pip-audit advisories are uploaded as artifacts and triaged in docs/DEPENDENCY_AUDIT_V1_1_1.md."
+          exit 1

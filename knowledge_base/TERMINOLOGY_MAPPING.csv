@@ -1,0 +1,16 @@
+source_id,source_term,canonical_term,source_page,exact_equivalence,definition_difference,geographic_regime,instrument_regime,recommended_display,caution_ru,caution_en
+A2_PROTOCOL,частотное рассеяние,frequency,n/a,true,Article 2 human-review frame label,midlatitude,Cyclone/Amp_all,Frequency spread / Частотное рассеяние,Не подтверждает физический механизм,Does not confirm physical mechanism
+A2_PROTOCOL,высотное рассеяние,range,n/a,true,Also called range spread in EN project docs,midlatitude,Cyclone/Amp_all,Range spread / virtual-height spread,Номинальная виртуальная высота,Nominal virtual height only
+A2_PROTOCOL,смешанное рассеяние,mixed,n/a,true,Priority when both frequency and range,midlatitude,Cyclone/Amp_all,Mixed spread,Кандидатная категория,Candidate category
+A2_PROTOCOL,без визуально подтверждённых признаков,none,n/a,true,Not the same as indeterminate,midlatitude,Cyclone/Amp_all,No confirmed compatible feature,Отсутствие видимого признака ≠ доказательство спокойной ионосферы,No visible feature ≠ proof of quiet ionosphere
+A2_PROTOCOL,неопределённый морфотип,indeterminate,n/a,true,≠ none,midlatitude,Cyclone/Amp_all,Indeterminate,Не сливать с none,Do not merge with none
+A2_PROTOCOL,artifact / interference_or_artifact,artifact,n/a,true,Review status,midlatitude,Cyclone/Amp_all,Artifact / interference-dominated,Помехи не есть range spread автоматически,Interference is not automatically range spread
+A2_PROTOCOL,not_assessable,not_assessable,n/a,true,Missing/unreadable,midlatitude,Cyclone/Amp_all,Not assessable,,
+A3L018,F-рассеяние по частоте,frequency,241,false,Panchenko observational intensity context; DPS-4,midlatitude,DPS-4,Frequency spread (source term),Не применять dFs МГц как метрологию Amp_all,Do not apply dFs MHz as Amp_all metrology
+A3L018,диффузный по дистанции / рассеяние по высоте,range,241,false,Observational definition component,midlatitude,DPS-4,Range spread (source term),Другой прибор/режим,Different instrument/regime
+A3L006,FSF,frequency,Fig.1,false,Benchawattananon ML taxonomy,mixed/low-latitude bias possible,ionogram images,FSF→frequency (mapped with caution),Таксономия источника не идентична Article 2,Source taxonomy not identical to Article 2
+A3L006,RSF,range,Fig.1,false,Benchawattananon ML taxonomy,mixed/low-latitude bias possible,ionogram images,RSF→range (mapped with caution),Таксономия источника не идентична Article 2,Source taxonomy not identical to Article 2
+A3L006,MSF,mixed,Fig.1,false,Benchawattananon ML taxonomy,mixed/low-latitude bias possible,ionogram images,MSF→mixed (mapped with caution),Таксономия источника не идентична Article 2,Source taxonomy not identical to Article 2
+A3L006,SSF,other,Fig.1,false,No exact Article 2 equivalent,mixed,ionogram images,other / requires expert mapping,Нет точного эквивалента Article 2,No exact Article 2 equivalent
+A3L015,Equatorial Spread F types,other,1,false,Equatorial catalog,equatorial,historical,Do not map to Kazan classes,Запрет прямого переноса (C04),Direct transfer forbidden (C04)
+URSI_Piggott,F/Q/L/P descriptive letters,indeterminate,§2.81,false,Classic qualitative letters; numeric thresholds not usable on Amp_all,global handbook,handbook,Display source letters separately,Пороги МГц/км на Amp_all не применять,MHz/km thresholds not usable on Amp_all

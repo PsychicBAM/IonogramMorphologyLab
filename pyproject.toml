@@ -1,0 +1,59 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ionogram-morphology-lab"
+version = "1.1.1"
+description = "Ionogram Morphology Lab — bilingual desktop research tool for source-traceable ionogram morphology analysis"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "Proprietary — research use; see LICENSE_STATUS.md" }
+authors = [{ name = "Ionogram Morphology Lab contributors" }]
+keywords = ["ionogram", "morphology", "Spread-F", "ionosphere", "radiophysics"]
+dependencies = [
+  "numpy>=1.24",
+  "scipy>=1.11",
+  "h5py>=3.10",
+  "matplotlib>=3.8",
+  "PySide6>=6.6",
+  "PyYAML>=6.0",
+  "Pillow>=10.0",
+  "scikit-image>=0.22",
+  "zarr>=2.16",
+  "numcodecs>=0.12",
+  "Jinja2>=3.1",
+  "scikit-learn>=1.3",
+  "joblib>=1.3",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=7.4",
+  "pytest-qt>=4.2",
+  "ruff>=0.4",
+]
+matlab = [
+  "matlabengine; platform_system=='Windows'",
+]
+
+[project.scripts]
+ionogram-morphology-lab = "ionogram_morphology_lab.app.main:main"
+
+[project.gui-scripts]
+IonogramMorphologyLab = "ionogram_morphology_lab.app.main:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+ionogram_morphology_lab = ["i18n/*.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+filterwarnings = ["ignore::DeprecationWarning"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"

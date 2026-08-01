@@ -1,0 +1,42 @@
+{
+  "rule_id": "Q001",
+  "name_en": "Interference-dominated quality gate",
+  "name_ru": "???? ????????????? ?????",
+  "category": "quality",
+  "conditions": [
+    {
+      "feature": "interference_dominance",
+      "operator": "gte",
+      "value": 0.55
+    }
+  ],
+  "outputs": {
+    "quality": "interference_dominated"
+  },
+  "status": "proposed",
+  "enabled": true,
+  "source_ids": [
+    "A2_PROTOCOL"
+  ],
+  "source_pages": [
+    "n/a"
+  ],
+  "source_wording_en": "Source-traceable candidate rule.",
+  "source_wording_ru": "?????????????? ?? ????????? ??????????? ???????.",
+  "feature_names": [
+    "interference_dominance"
+  ],
+  "threshold_origin": "engineering_default",
+  "applicable_domain": "midlatitude_vertical_sounding",
+  "exclusions": [],
+  "assumptions": [],
+  "limitations": [
+    "Heuristic interference indicator; not a physical diagnosis."
+  ],
+  "verification_status": "proposed",
+  "implementation_status": "disabled",
+  "version": "1.1.0",
+  "tags": [
+    "v1.1"
+  ]
+}

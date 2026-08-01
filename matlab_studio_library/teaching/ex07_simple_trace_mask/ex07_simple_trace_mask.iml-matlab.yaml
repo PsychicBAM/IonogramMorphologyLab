@@ -1,0 +1,12 @@
+plugin_id: ex07_simple_trace_mask
+name_en: ex07_simple_trace_mask
+name_ru: ex07_simple_trace_mask
+description_en: Teaching example — not scientifically validated
+description_ru: Учебный пример — не является научной валидацией
+version: 1.0.0
+entrypoint: main.m
+script_type: teaching_demo
+scientific_status: teaching
+Octave_compatible: true
+limitations_en: Example/teaching only
+limitations_ru: Только учебный пример

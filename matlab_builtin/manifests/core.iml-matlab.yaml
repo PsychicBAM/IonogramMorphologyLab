@@ -1,0 +1,22 @@
+plugin_id: builtin_core_v11
+name_en: Built-in candidate library: core
+name_ru: Встроенная кандидатная библиотека: core
+description_en: Development and teaching heuristics; not causal or scientifically verified.
+description_ru: Эвристики для разработки и обучения; не причинные и не научно верифицированные.
+version: 11.0.0
+author: IonogramMorphologyLab
+entrypoint: iml_load_frame.m
+script_type: frame_analysis
+supported_profiles:
+  - "*"
+MATLAB_release: R2019a
+Octave_compatible: true
+required_toolboxes: []
+scientific_status: teaching
+limitations_en: Profile-dependent candidate methods only; no true-height or causal claims.
+limitations_ru: Только профиль-зависимые кандидатные методы; без утверждений об истинной высоте или причинности.
+methods:
+  - iml_load_frame
+  - iml_load_sequence
+  - iml_validate_frame
+  - iml_export_result

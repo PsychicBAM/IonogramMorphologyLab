@@ -1,0 +1,48 @@
+{
+  "rule_id": "R006",
+  "name_en": "Possible O/X ambiguity",
+  "name_ru": "????????? O/X-???????????????",
+  "category": "ambiguity",
+  "conditions": [
+    {
+      "feature": "possible_ox_compatibility",
+      "operator": "gte",
+      "value": 0.5
+    },
+    {
+      "feature": "parallel_branch_count",
+      "operator": "gte",
+      "value": 2.0
+    }
+  ],
+  "outputs": {
+    "ambiguity": "possible_ox"
+  },
+  "status": "source_verified",
+  "enabled": true,
+  "source_ids": [
+    "A3L007"
+  ],
+  "source_pages": [
+    "15-17"
+  ],
+  "source_wording_en": "Source-traceable candidate rule.",
+  "source_wording_ru": "?????????????? ?? ????????? ??????????? ???????.",
+  "feature_names": [
+    "possible_ox_compatibility",
+    "parallel_branch_count"
+  ],
+  "threshold_origin": "derived_from_verified_definition",
+  "applicable_domain": "midlatitude_vertical_sounding",
+  "exclusions": [],
+  "assumptions": [],
+  "limitations": [
+    "No polarimetry in Amp_all; never claim O/X automatically."
+  ],
+  "verification_status": "source_verified",
+  "implementation_status": "active",
+  "version": "1.1.0",
+  "tags": [
+    "v1.1"
+  ]
+}

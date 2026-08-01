@@ -1,0 +1,6 @@
+pack_id: iml-e2e-temp
+version: 1.1.0
+verification_status: draft
+compatibility: [iml-1.1]
+limitations: [e2e only]
+changelog: [{version: 1.1.0, notes: e2e}]

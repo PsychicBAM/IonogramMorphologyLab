@@ -1,0 +1,24 @@
+plugin_id: builtin_branch_analysis_v11
+name_en: Built-in candidate library: branch_analysis
+name_ru: Встроенная кандидатная библиотека: branch_analysis
+description_en: Development and teaching heuristics; not causal or scientifically verified.
+description_ru: Эвристики для разработки и обучения; не причинные и не научно верифицированные.
+version: 11.0.0
+author: IonogramMorphologyLab
+entrypoint: iml_count_trace_branches.m
+script_type: frame_analysis
+supported_profiles:
+  - "*"
+MATLAB_release: R2019a
+Octave_compatible: true
+required_toolboxes: []
+scientific_status: teaching
+limitations_en: Profile-dependent candidate methods only; no true-height or causal claims.
+limitations_ru: Только профиль-зависимые кандидатные методы; без утверждений об истинной высоте или причинности.
+methods:
+  - iml_count_trace_branches
+  - iml_measure_branch_separation
+  - iml_measure_branch_parallelism
+  - iml_compare_branch_diffuseness
+  - iml_detect_possible_ox_pattern
+  - iml_detect_possible_multiple_reflection

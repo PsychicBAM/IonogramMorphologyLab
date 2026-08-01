@@ -1,0 +1,44 @@
+# Screenshot capture log
+
+- UI: live Qt MainWindow
+- Platform: `None`
+- Data: synthetic teaching MAT only (EvidenceQA workspace)
+- Private paths / research MAT / MATLAB install path: excluded from settings shown
+- Count: 36
+
+- `home_ru.png`
+- `project_creation_ru.png`
+- `mat_import_ru.png`
+- `data_audit_ru.png`
+- `instrument_profile_ru.png`
+- `ionogram_viewer_ru.png`
+- `contact_sheet_ru.png`
+- `batch_analysis_ru.png`
+- `results_ru.png`
+- `expert_review_ru.png`
+- `rule_builder_ru.png`
+- `rule_testing_ru.png`
+- `matlab_studio_ru.png`
+- `method_comparison_ru.png`
+- `pipeline_builder_ru.png`
+- `parameters_ru.png`
+- `settings_ru.png`
+- `help_ru.png`
+- `home_en.png`
+- `project_creation_en.png`
+- `mat_import_en.png`
+- `data_audit_en.png`
+- `instrument_profile_en.png`
+- `ionogram_viewer_en.png`
+- `contact_sheet_en.png`
+- `batch_analysis_en.png`
+- `results_en.png`
+- `expert_review_en.png`
+- `rule_builder_en.png`
+- `rule_testing_en.png`
+- `matlab_studio_en.png`
+- `method_comparison_en.png`
+- `pipeline_builder_en.png`
+- `parameters_en.png`
+- `settings_en.png`
+- `help_en.png`

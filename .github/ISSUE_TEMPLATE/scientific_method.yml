@@ -1,0 +1,17 @@
+name: Scientific method or rule proposal
+description: Propose a method, threshold, profile or rule-pack change
+title: "[Method]: "
+labels: [scientific-method]
+body:
+  - type: textarea
+    id: claim
+    attributes: {label: Target, scope and expected output}
+    validations: {required: true}
+  - type: textarea
+    id: evidence
+    attributes: {label: Sources, provenance, assumptions and limitations}
+    validations: {required: true}
+  - type: textarea
+    id: validation
+    attributes: {label: Proposed validation protocol and uncertainty handling}
+    validations: {required: true}

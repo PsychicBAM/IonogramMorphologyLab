@@ -1,0 +1,19 @@
+{
+  "pack_id": "iml-kfu-cyclone-profile",
+  "version": "1.1.0",
+  "sources": [
+    "A3L007",
+    "CALSTAT"
+  ],
+  "verification_status": "mixed; inspect individual rules",
+  "compatibility": [
+    "IML v1.1",
+    "additive to RULE_PACK_IML1.csv"
+  ],
+  "limitations": [
+    "Rules produce candidate evidence, not physical confirmation."
+  ],
+  "changelog": [
+    "1.1.0: initial source-traceable pack."
+  ]
+}

@@ -1,0 +1,28 @@
+plugin_id: builtin_f_layer_analysis_v11
+name_en: Built-in candidate library: f_layer_analysis
+name_ru: Встроенная кандидатная библиотека: f_layer_analysis
+description_en: Development and teaching heuristics; not causal or scientifically verified.
+description_ru: Эвристики для разработки и обучения; не причинные и не научно верифицированные.
+version: 11.0.0
+author: IonogramMorphologyLab
+entrypoint: iml_detect_f1_candidate.m
+script_type: frame_analysis
+supported_profiles:
+  - "*"
+MATLAB_release: R2019a
+Octave_compatible: true
+required_toolboxes: []
+scientific_status: teaching
+limitations_en: Profile-dependent candidate methods only; no true-height or causal claims.
+limitations_ru: Только профиль-зависимые кандидатные методы; без утверждений об истинной высоте или причинности.
+methods:
+  - iml_detect_f1_candidate
+  - iml_detect_f2_candidate
+  - iml_detect_f_unspecified
+  - iml_separate_f1_f2_candidate
+  - iml_estimate_foF1_candidate
+  - iml_estimate_foF2_candidate
+  - iml_estimate_fxF2_candidate
+  - iml_estimate_hF1_prime_candidate
+  - iml_estimate_hF2_prime_candidate
+  - iml_f_layer_temporal_tracking
