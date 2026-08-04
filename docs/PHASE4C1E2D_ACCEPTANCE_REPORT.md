@@ -130,7 +130,7 @@ powershell -ExecutionPolicy Bypass -File packaging\build_portable.ps1
 Succeeded. New portable tree (not a reuse of the prior 4C.1e.1 EXE).
 
 **EXE path:**  
-`E:\ionog\conference_presentation\IonogramMorphologyLab\dist\IonogramMorphologyLab\IonogramMorphologyLab.exe`
+`dist/IonogramMorphologyLab/IonogramMorphologyLab.exe`
 
 ## Build Identity
 

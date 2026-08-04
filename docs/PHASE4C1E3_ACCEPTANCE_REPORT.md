@@ -134,7 +134,7 @@ powershell -ExecutionPolicy Bypass -File packaging\build_portable.ps1
 Succeeded.
 
 **EXE path:**  
-`E:\ionog\conference_presentation\IonogramMorphologyLab\dist\IonogramMorphologyLab\IonogramMorphologyLab.exe`
+`dist/IonogramMorphologyLab/IonogramMorphologyLab.exe`
 
 ## Build Identity
 

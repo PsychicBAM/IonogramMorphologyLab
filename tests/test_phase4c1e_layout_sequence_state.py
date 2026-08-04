@@ -404,8 +404,8 @@ def test_build_identity_includes_phase_4c1e2d():
     from ionogram_morphology_lab.ui.build_identity import collect_build_identity, format_build_identity
 
     ident = collect_build_identity(compute_sha=False)
-    assert ident.get("release_phase") == "4C.1e.3"
+    assert ident.get("release_phase") == "4C.1e.3a"
     assert ident.get("fd_layout_schema_version") == FD_LAYOUT_SCHEMA_VERSION
     assert ident.get("sequence_state_contract_version") == SEQUENCE_STATE_CONTRACT_VERSION
     text = format_build_identity(ident, "en")
-    assert "4C.1e.3" in text
+    assert "4C.1e.3a" in text

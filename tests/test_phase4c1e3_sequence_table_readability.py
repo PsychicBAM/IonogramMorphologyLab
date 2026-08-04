@@ -379,8 +379,8 @@ def test_build_identity_phase_4c1e3():
     from ionogram_morphology_lab.ui.build_identity import collect_build_identity, format_build_identity
 
     ident = collect_build_identity()
-    assert ident.get("release_phase") == "4C.1e.3"
-    assert "4C.1e.3" in format_build_identity(ident, "en")
+    assert ident.get("release_phase") == "4C.1e.3a"
+    assert "4C.1e.3a" in format_build_identity(ident, "en")
 
 
 def test_ru_en_retranslate_column_headers(qtbot, session):

@@ -1,6 +1,6 @@
 # Feature Diagnostics Real Archive Performance (Phase 4B.2g)
 
-**Primary archive:** `E:\ionog\conference_presentation\ion2014\maps201410oct\data\Am_all_2014-10-15.mat`
+**Primary archive:** `<OWNER_ARCHIVE_ROOT>/ion2014/maps201410oct/data/Am_all_2014-10-15.mat`
 **Size:** `192041636` bytes (~192.0 MB)
 **Shape:** `[368640, 400]`
 
@@ -40,4 +40,4 @@ Raw JSON: `_fd_real_perf_raw.json`
 
 ## Secondary archive
 
-`E:\ionog\conference_presentation\ion2013\maps201301jan\data\Am_all_2013-01-01.mat` — MAT load `2.615s`, uncached V2 median `0.732s`
+`<OWNER_ARCHIVE_ROOT>/ion2013/maps201301jan/data/Am_all_2013-01-01.mat` — MAT load `2.615s`, uncached V2 median `0.732s`

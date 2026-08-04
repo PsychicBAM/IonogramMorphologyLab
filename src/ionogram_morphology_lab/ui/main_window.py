@@ -4280,8 +4280,9 @@ class MainWindow(QMainWindow):
         if kind == "accept":
             dlg.rationale.setPlainText("accepted proposed category")
         elif kind in ("uncertain", "not_assessable"):
-            token = "indeterminate" if kind == "uncertain" else "not_assessable"
-            idx = dlg.morph.findData(token)
+            # Taxonomy code for the morphology combo (not an API credential).
+            morph_code = "indeterminate" if kind == "uncertain" else "not_assessable"
+            idx = dlg.morph.findData(morph_code)
             if idx >= 0:
                 dlg.morph.setCurrentIndex(idx)
             dlg.rationale.setPlainText(kind)

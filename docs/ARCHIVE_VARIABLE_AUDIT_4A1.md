@@ -6,7 +6,7 @@ Automatic use remains **disabled** until interpretation is source-supported.
 - script_version: `4A.1b-whosmat-1`
 - script_sha256: `3ba6816bf4e60da446251411809a76577e7c300ce320be6d53e1b108c358f2a0`
 - status: **completed** (completed whosmat scan; not the interrupted first attempt)
-- scan_roots: `['E:\\ionog\\conference_presentation\\ion2013', 'E:\\ionog\\conference_presentation\\ion2014']`
+- scan_roots: `['<OWNER_ARCHIVE_ROOT>/ion2013', '<OWNER_ARCHIVE_ROOT>/ion2014']`
 - start/end UTC: `2026-08-02T18:44:54.816798+00:00` → `2026-08-02T18:46:10.561630+00:00`
 - scanned_mat_files: **2708**
 - unreadable_file_count: **0**
@@ -31,9 +31,9 @@ Automatic use remains **disabled** until interpretation is source-supported.
 - dtypes_observed: `{'uint16': 677}`
 
 - example_paths:
-  - `E:\ionog\conference_presentation\ion2013\maps201312dec\data\ALL_data_2013-12-01.mat`
-  - `E:\ionog\conference_presentation\ion2013\maps201312dec\data\ALL_data_2013-12-02.mat`
-  - `E:\ionog\conference_presentation\ion2013\maps201312dec\data\ALL_data_2013-12-03.mat`
+  - `<OWNER_ARCHIVE_ROOT>/ion2013/maps201312dec/data/ALL_data_2013-12-01.mat`
+  - `<OWNER_ARCHIVE_ROOT>/ion2013/maps201312dec/data/ALL_data_2013-12-02.mat`
+  - `<OWNER_ARCHIVE_ROOT>/ion2013/maps201312dec/data/ALL_data_2013-12-03.mat`
 
 ## `H_map_F`
 
@@ -44,6 +44,6 @@ Automatic use remains **disabled** until interpretation is source-supported.
 - dtypes_observed: `{'uint16': 677}`
 
 - example_paths:
-  - `E:\ionog\conference_presentation\ion2013\maps201312dec\data\ALL_data_2013-12-01.mat`
-  - `E:\ionog\conference_presentation\ion2013\maps201312dec\data\ALL_data_2013-12-02.mat`
-  - `E:\ionog\conference_presentation\ion2013\maps201312dec\data\ALL_data_2013-12-03.mat`
+  - `<OWNER_ARCHIVE_ROOT>/ion2013/maps201312dec/data/ALL_data_2013-12-01.mat`
+  - `<OWNER_ARCHIVE_ROOT>/ion2013/maps201312dec/data/ALL_data_2013-12-02.mat`
+  - `<OWNER_ARCHIVE_ROOT>/ion2013/maps201312dec/data/ALL_data_2013-12-03.mat`

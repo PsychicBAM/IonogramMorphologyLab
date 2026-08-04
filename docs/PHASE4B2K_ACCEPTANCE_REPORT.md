@@ -14,7 +14,7 @@
 
 | Metric | Observed |
 |---|---|
-| Production cache root | `C:\Users\abdal\AppData\Local\IonogramMorphologyLab\cache` (OK) |
+| Production cache root | `%LOCALAPPDATA%/IonogramMorphologyLab/cache` (OK) |
 | FD page creation | ~0.046 s (OK) |
 | V2 worker compute | ~0.8–1.1 s (OK) |
 | Cancel closes app | no (OK) |

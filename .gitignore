@@ -35,3 +35,14 @@ secrets/
 Thumbs.db
 # Installer binaries only; retain installer sources
 installer/*.exe
+# Local verification bundles and scratch dirs (not product fixtures)
+IML_Phase*_Verification*.zip
+IML_Phase*_Verification*.sha256
+_t/
+_tmp*/
+# Temporary docs dumps / profiler outputs.
+# Product fixture docs/_control_reference_phase3c.json remains tracked (not ignored).
+docs/_fd_*
+docs/_phase4b*
+docs/_phase4c1b_qa_snapshot.json
+docs/_shadow_audit_v2/

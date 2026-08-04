@@ -1,7 +1,7 @@
 # Phase 4C.1e.1 — Owner Verification Commands
 
-**Project root:** `E:\ionog\conference_presentation\IonogramMorphologyLab`  
-**Purpose:** Manual source verification and packaging readiness after Phase 4C.1e.1 repairs.  
+**Project root:** `<PROJECT_ROOT>` (owner workspace)
+**Purpose:** Manual source verification and packaging readiness after Phase 4C.1e.1 repairs.
 **Do not treat the 4C.1d EXE as proof about this source tree.**
 
 ## Why the old EXE cannot verify 4C.1e
@@ -21,7 +21,7 @@ After source verification passes, the owner must **build a new executable**. Onl
 ## Prerequisites (PowerShell)
 
 ```powershell
-Set-Location E:\ionog\conference_presentation\IonogramMorphologyLab
+Set-Location "<PROJECT_ROOT>"
 $env:PYTHONPATH = (Join-Path (Get-Location) "src")
 $env:QT_QPA_PLATFORM = "offscreen"   # recommended for headless pytest
 ```
@@ -31,7 +31,7 @@ $env:QT_QPA_PLATFORM = "offscreen"   # recommended for headless pytest
 ## 1. Full pytest
 
 ```powershell
-Set-Location E:\ionog\conference_presentation\IonogramMorphologyLab
+Set-Location "<PROJECT_ROOT>"
 $env:PYTHONPATH = (Join-Path (Get-Location) "src")
 $env:QT_QPA_PLATFORM = "offscreen"
 python -m pytest tests -q
@@ -48,7 +48,7 @@ python -m pytest tests/test_phase4c1e_layout_sequence_state.py -q
 ## 2. Feature Registry validator
 
 ```powershell
-Set-Location E:\ionog\conference_presentation\IonogramMorphologyLab
+Set-Location "<PROJECT_ROOT>"
 $env:PYTHONPATH = (Join-Path (Get-Location) "src")
 python scripts/validate_feature_registry_v2.py
 ```
@@ -58,7 +58,7 @@ python scripts/validate_feature_registry_v2.py
 ## 3. Synthetic Geometry validator
 
 ```powershell
-Set-Location E:\ionog\conference_presentation\IonogramMorphologyLab
+Set-Location "<PROJECT_ROOT>"
 $env:PYTHONPATH = (Join-Path (Get-Location) "src")
 python scripts/validate_synthetic_geometry_v2.py
 ```
@@ -68,7 +68,7 @@ python scripts/validate_synthetic_geometry_v2.py
 ## 4. V2 shadow validator
 
 ```powershell
-Set-Location E:\ionog\conference_presentation\IonogramMorphologyLab
+Set-Location "<PROJECT_ROOT>"
 $env:PYTHONPATH = (Join-Path (Get-Location) "src")
 python scripts/validate_feature_shadow_mode.py
 ```
@@ -78,7 +78,7 @@ python scripts/validate_feature_shadow_mode.py
 ## 5. Morphology shadow validator
 
 ```powershell
-Set-Location E:\ionog\conference_presentation\IonogramMorphologyLab
+Set-Location "<PROJECT_ROOT>"
 $env:PYTHONPATH = (Join-Path (Get-Location) "src")
 python scripts/validate_morphology_candidate_shadow.py
 ```
@@ -88,7 +88,7 @@ python scripts/validate_morphology_candidate_shadow.py
 ## 6. i18n validator
 
 ```powershell
-Set-Location E:\ionog\conference_presentation\IonogramMorphologyLab
+Set-Location "<PROJECT_ROOT>"
 $env:PYTHONPATH = (Join-Path (Get-Location) "src")
 python scripts/validate_i18n.py
 ```
@@ -98,7 +98,7 @@ python scripts/validate_i18n.py
 ## 7. docs validator
 
 ```powershell
-Set-Location E:\ionog\conference_presentation\IonogramMorphologyLab
+Set-Location "<PROJECT_ROOT>"
 $env:PYTHONPATH = (Join-Path (Get-Location) "src")
 python scripts/validate_docs.py
 ```
@@ -110,7 +110,7 @@ python scripts/validate_docs.py
 Run **only after** pytest and validators succeed:
 
 ```powershell
-Set-Location E:\ionog\conference_presentation\IonogramMorphologyLab
+Set-Location "<PROJECT_ROOT>"
 powershell -ExecutionPolicy Bypass -File packaging\build_portable.ps1
 ```
 
@@ -124,7 +124,7 @@ Expected output path:
 
 ```powershell
 Get-FileHash `
-  "E:\ionog\conference_presentation\IonogramMorphologyLab\dist\IonogramMorphologyLab\IonogramMorphologyLab.exe" `
+  "dist\IonogramMorphologyLab\IonogramMorphologyLab.exe" `
   -Algorithm SHA256 | Format-List
 ```
 
@@ -143,12 +143,12 @@ Confirm Build Identity (Help / Technical Details / Build Identity) shows:
 
 ## Packaged QA reminder (new EXE only)
 
-1. Default layout: Layers left / canvas center / inspector right  
-2. Ctrl+0 restores ~15/55/30 with Layers open  
-3. Features More… menu; no mid-word truncated primary labels  
-4. Help / ⌨ shows Быстрые команды / Keyboard shortcuts  
-5. Ctrl+Shift+F / Ctrl+Shift+R / Escape  
-6. Sequence current-frame state messages (not bare “not calculated” while running)  
-7. Candidate controls follow current-frame readiness  
-8. Show results table / sequence splitter reachability  
-9. Cancel remains safe; no Not Responding  
+1. Default layout: Layers left / canvas center / inspector right
+2. Ctrl+0 restores ~15/55/30 with Layers open
+3. Features More… menu; no mid-word truncated primary labels
+4. Help / ⌨ shows Быстрые команды / Keyboard shortcuts
+5. Ctrl+Shift+F / Ctrl+Shift+R / Escape
+6. Sequence current-frame state messages (not bare “not calculated” while running)
+7. Candidate controls follow current-frame readiness
+8. Show results table / sequence splitter reachability
+9. Cancel remains safe; no Not Responding

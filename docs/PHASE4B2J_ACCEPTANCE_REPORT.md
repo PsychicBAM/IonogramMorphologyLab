@@ -32,7 +32,7 @@
 
 **Cause:** `config/user_settings.json` had been persisted with
 
-`performance.cache_location = C:\Users\…\AppData\Local\Temp\pytest-of-abdal\pytest-158\test_cache_cleanup_never_delet0\cache`
+`performance.cache_location = <TEMP>/pytest-of-<user>/pytest-158/test_cache_cleanup_never_delet0/cache`
 
 PyInstaller bundles `config/` into the packaged EXE (`--add-data "config;config"`). Frozen startup loaded that leaked pytest fixture path as the production cache root.
 
