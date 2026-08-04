@@ -86,6 +86,7 @@ class FrameStore:
         variable_name: str | None = None,
         prefetch_radius: int = 2,
         lru_capacity: int = 16,
+        source_sha256: str | None = None,
     ):
         self.source_path = default_blocklist().assert_allowed(source_path)
         self.profile = profile
@@ -101,7 +102,11 @@ class FrameStore:
         self._lock = threading.Lock()
         self._build_cancel = False
         self.stats = {"cache_hits": 0, "cache_misses": 0, "mat_loads": 0}
-        self.source_sha256 = sha256_file(self.source_path) if self.source_path.is_file() else ""
+        # Prefer caller-supplied SHA (import/session cache) — avoid re-hashing 165MB+ on every ensure_store
+        if source_sha256:
+            self.source_sha256 = str(source_sha256)
+        else:
+            self.source_sha256 = sha256_file(self.source_path) if self.source_path.is_file() else ""
         self.identity = CacheIdentity(
             source_sha256=self.source_sha256,
             variable_name=self.variable_name,
@@ -255,6 +260,9 @@ class FrameStore:
         return self.frames_per_file
 
     def get_frame(self, matlab_frame_id: int, prefetch: bool = True) -> np.ndarray:
+        """Return one frame via canonical extract_frame_consistent (not ad-hoc slicing)."""
+        from ionogram_morphology_lab.scientific_outputs.signal_contracts import extract_frame_consistent
+
         cached = self.lru.get(matlab_frame_id)
         if cached is not None:
             self.stats["cache_hits"] += 1
@@ -267,28 +275,36 @@ class FrameStore:
         n = self.n_frames()
         if not (1 <= matlab_frame_id <= n):
             raise IndexError(f"frame_index_out_of_range:{matlab_frame_id}")
-        r0 = (matlab_frame_id - 1) * self.height_bins
-        r1 = matlab_frame_id * self.height_bins
         with self._lock:
-            frame = np.array(self._zarr[r0:r1, :], copy=True)
+            # Zarr stacked rows are the Amp_all layout; canonical extractor owns the slice math.
+            frame, _rng = extract_frame_consistent(
+                self._zarr,
+                matlab_frame_id,
+                height_bins=self.height_bins,
+                frequency_bins=self.frequency_bins,
+            )
         self.lru.put(matlab_frame_id, frame)
         if prefetch:
             self.prefetch_neighbors(matlab_frame_id)
         return frame
 
     def prefetch_neighbors(self, center: int) -> None:
+        from ionogram_morphology_lab.scientific_outputs.signal_contracts import extract_frame_consistent
+
         n = self.n_frames()
         for d in range(1, self.prefetch_radius + 1):
             for fid in (center - d, center + d):
                 if 1 <= fid <= n and self.lru.get(fid) is None:
                     try:
-                        # avoid recursive prefetch
                         if self._zarr is None:
                             continue
-                        r0 = (fid - 1) * self.height_bins
-                        r1 = fid * self.height_bins
                         with self._lock:
-                            frame = np.array(self._zarr[r0:r1, :], copy=True)
+                            frame, _ = extract_frame_consistent(
+                                self._zarr,
+                                fid,
+                                height_bins=self.height_bins,
+                                frequency_bins=self.frequency_bins,
+                            )
                         self.lru.put(fid, frame)
                     except Exception:  # noqa: BLE001
                         pass

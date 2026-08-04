@@ -2,9 +2,9 @@
 
 from __future__ import annotations
 
-import json
 import hashlib
-from dataclasses import dataclass, asdict, field
+import json
+from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -22,6 +22,79 @@ MODEL_KINDS = [
     "knn",
     "calibrated_ensemble",
 ]
+PREPROCESSING_VERSION = "iml-ml-preproc-1.0"
+
+
+class ModelLabValidationError(Exception):
+    """A user-facing dataset validation failure with non-user-facing detail."""
+
+    def __init__(
+        self,
+        code: str,
+        message_en: str,
+        message_ru: str,
+        details: dict[str, Any] | None = None,
+        technical: str = "",
+    ):
+        self.code = code
+        self.message_en = message_en
+        self.message_ru = message_ru
+        self.details = details or {}
+        self.technical = technical
+        super().__init__(f"{code}: {message_en}")
+
+
+def _normalize_nonfinite_to_nan(values):
+    """Make sklearn's imputer the single, documented missing-data handler."""
+    array = np.asarray(values, dtype=float).copy()
+    array[~np.isfinite(array)] = np.nan
+    return array
+
+
+def _label_is_missing(value: Any) -> bool:
+    return value is None or (isinstance(value, float) and np.isnan(value)) or not str(value).strip()
+
+
+def inspect_dataset(dataset: dict[str, Any]) -> dict[str, Any]:
+    """Return a serializable quality report without modifying *dataset*."""
+    X = np.asarray(dataset.get("X", []), dtype=float)
+    if X.ndim != 2:
+        X = np.empty((0, 0), dtype=float)
+    features = list(dataset.get("features", []))
+    if len(features) != X.shape[1]:
+        features = [f"feature_{index}" for index in range(X.shape[1])]
+    feature_quality: dict[str, dict[str, int]] = {}
+    constant_columns: list[str] = []
+    all_missing_columns: list[str] = []
+    for index, name in enumerate(features):
+        values = X[:, index]
+        finite = values[np.isfinite(values)]
+        missing_count = int(np.isnan(values).sum())
+        infinite_count = int(np.isinf(values).sum())
+        feature_quality[name] = {
+            "valid_count": int(finite.size),
+            "missing_count": missing_count,
+            "infinite_count": infinite_count,
+        }
+        if finite.size == 0:
+            all_missing_columns.append(name)
+        elif np.all(finite == finite[0]):
+            constant_columns.append(name)
+
+    y = np.asarray(dataset.get("y", []), dtype=object)
+    labels = [str(value).strip() for value in y if not _label_is_missing(value)]
+    classes = sorted(set(labels))
+    dates = [str(value).strip() or "unknown" for value in dataset.get("dates", [])]
+    return {
+        "row_count": int(X.shape[0]),
+        "per_feature": feature_quality,
+        "constant_columns": constant_columns,
+        "all_missing_columns": all_missing_columns,
+        "class_distribution": {label: labels.count(label) for label in classes},
+        "date_group_distribution": {
+            date: dates.count(date) for date in sorted(set(dates))
+        },
+    }
 
 
 @dataclass
@@ -75,49 +148,59 @@ def _group_split_by_date(
     rng = np.random.default_rng(seed)
     uniq = sorted(set(dates))
     rng.shuffle(uniq)
-    n_test = max(1, int(round(len(uniq) * test_fraction)))
+    n_test = max(1, round(len(uniq) * test_fraction))
     test_dates = set(uniq[:n_test])
     train_idx = np.array([i for i, d in enumerate(dates) if d not in test_dates], dtype=int)
     test_idx = np.array([i for i, d in enumerate(dates) if d in test_dates], dtype=int)
     if train_idx.size == 0 or test_idx.size == 0:
-        # fallback: keep all in train if too few dates
-        train_idx = np.arange(len(dates))
-        test_idx = train_idx[: max(1, len(dates) // 5)]
+        # A one-group data set cannot be evaluated with a leakage-safe grouped split.
+        return np.array([], dtype=int), np.array([], dtype=int)
     return train_idx, test_idx
 
 
-def _make_estimator(kind: str):
-    from sklearn.ensemble import GradientBoostingClassifier, RandomForestClassifier, VotingClassifier
+def _make_estimator(kind: str, *, impute: bool = True):
+    from sklearn.ensemble import (
+        GradientBoostingClassifier,
+        RandomForestClassifier,
+        VotingClassifier,
+    )
+    from sklearn.impute import SimpleImputer
     from sklearn.linear_model import LogisticRegression
     from sklearn.neighbors import KNeighborsClassifier
     from sklearn.pipeline import Pipeline
-    from sklearn.preprocessing import StandardScaler
+    from sklearn.preprocessing import FunctionTransformer, StandardScaler
     from sklearn.svm import SVC
 
+    preprocessing = []
+    if impute:
+        preprocessing = [
+            ("finite_to_nan", FunctionTransformer(_normalize_nonfinite_to_nan, validate=False)),
+            ("imputer", SimpleImputer(strategy="median", add_indicator=True)),
+        ]
     if kind == "logistic_regression":
         return Pipeline(
-            [
+            preprocessing + [
                 ("scaler", StandardScaler()),
                 ("clf", LogisticRegression(max_iter=2000)),
             ]
         )
     if kind == "linear_svm":
-        return Pipeline([("scaler", StandardScaler()), ("clf", SVC(kernel="linear", probability=True))])
+        return Pipeline(preprocessing + [("scaler", StandardScaler()), ("clf", SVC(kernel="linear", probability=True))])
     if kind == "rbf_svm":
-        return Pipeline([("scaler", StandardScaler()), ("clf", SVC(kernel="rbf", probability=True))])
+        return Pipeline(preprocessing + [("scaler", StandardScaler()), ("clf", SVC(kernel="rbf", probability=True))])
     if kind == "random_forest":
-        return RandomForestClassifier(n_estimators=200, random_state=0)
+        return Pipeline(preprocessing + [("clf", RandomForestClassifier(n_estimators=200, random_state=0))])
     if kind == "gradient_boosting":
-        return GradientBoostingClassifier(random_state=0)
+        return Pipeline(preprocessing + [("clf", GradientBoostingClassifier(random_state=0))])
     if kind == "knn":
-        return Pipeline([("scaler", StandardScaler()), ("clf", KNeighborsClassifier(n_neighbors=5))])
+        return Pipeline(preprocessing + [("scaler", StandardScaler()), ("clf", KNeighborsClassifier(n_neighbors=5))])
     if kind == "calibrated_ensemble":
         base = [
             ("lr", LogisticRegression(max_iter=2000)),
             ("rf", RandomForestClassifier(n_estimators=100, random_state=0)),
         ]
         return Pipeline(
-            [
+            preprocessing + [
                 ("scaler", StandardScaler()),
                 ("clf", VotingClassifier(estimators=base, voting="soft")),
             ]
@@ -148,11 +231,15 @@ class ModelLab:
         if feature_columns is None:
             feature_columns = [
                 k
-                for k in rows[0].keys()
+                for k in rows[0]
                 if k not in (label_column, date_column, "frame_id", "sequence_id")
             ]
-        X = np.array([[float(r[c]) for c in feature_columns] for r in rows], dtype=float)
-        y = np.array([r[label_column] for r in rows], dtype=object)
+        def parse_feature(value: str | None) -> float:
+            value = (value or "").strip()
+            return float(value) if value else np.nan
+
+        X = np.array([[parse_feature(r.get(c)) for c in feature_columns] for r in rows], dtype=float)
+        y = np.array([r.get(label_column, "") for r in rows], dtype=object)
         dates = [r.get(date_column, "unknown") for r in rows]
         out = {
             "path": str(path),
@@ -180,20 +267,92 @@ class ModelLab:
         seed: int = 0,
         abstention_threshold: float = 0.45,
         model_id: str | None = None,
+        allow_imputation: bool = True,
     ) -> ModelCard:
         import joblib
         from sklearn.metrics import (
-            balanced_accuracy_score,
             classification_report,
             confusion_matrix,
             f1_score,
+            recall_score,
         )
 
         if kind not in MODEL_KINDS:
             raise ValueError(f"unknown_model:{kind}")
-        X = dataset["X"]
-        y = dataset["y"]
-        dates = dataset["dates"]
+        X = np.asarray(dataset["X"], dtype=float)
+        y = np.asarray(dataset["y"], dtype=object)
+        dates = list(dataset["dates"])
+        features = list(dataset["features"])
+        report = inspect_dataset(dataset)
+        if len(y) != len(X) or len(dates) != len(X):
+            raise ModelLabValidationError(
+                "dataset_shape_mismatch",
+                "Dataset rows, labels, and dates must have matching lengths.",
+                "Число строк набора данных, меток и дат должно совпадать.",
+                {"row_count": len(X), "label_count": len(y), "date_count": len(dates)},
+            )
+        missing_labels = [index for index, value in enumerate(y) if _label_is_missing(value)]
+        if missing_labels:
+            raise ModelLabValidationError(
+                "labels_missing",
+                "Training was not performed: labels are missing or empty.",
+                "Обучение не выполнено: метки классов отсутствуют или пусты.",
+                {"missing_label_rows": missing_labels, "quality_report": report},
+            )
+        if len(report["class_distribution"]) < 2:
+            raise ModelLabValidationError(
+                "one_class",
+                "Training was not performed: at least two label classes are required.",
+                "Обучение не выполнено: требуются метки как минимум двух классов.",
+                {"class_distribution": report["class_distribution"]},
+            )
+
+        required_features = set(dataset.get("required_features", []))
+        all_missing = set(report["all_missing_columns"])
+        required_all_missing = sorted(all_missing & required_features)
+        if required_all_missing:
+            raise ModelLabValidationError(
+                "required_feature_all_missing",
+                "Training was not performed: a required feature has no finite values.",
+                "Обучение не выполнено: обязательный признак не содержит конечных значений.",
+                {"columns": required_all_missing, "quality_report": report},
+            )
+        columns_removed = [name for name in features if name in all_missing]
+        kept_indices = [index for index, name in enumerate(features) if name not in all_missing]
+        if not kept_indices:
+            raise ModelLabValidationError(
+                "no_features_remaining",
+                "Training was not performed: no usable feature columns remain.",
+                "Обучение не выполнено: не осталось пригодных столбцов признаков.",
+                {"columns_removed": columns_removed, "quality_report": report},
+            )
+        X = X[:, kept_indices]
+        features = [features[index] for index in kept_indices]
+        valid_rows = np.any(np.isfinite(X), axis=1)
+        if not np.any(valid_rows):
+            raise ModelLabValidationError(
+                "no_valid_rows",
+                "Training was not performed: no rows contain finite feature values.",
+                "Обучение не выполнено: не осталось строк с конечными значениями признаков.",
+                {"quality_report": report, "columns_removed": columns_removed},
+            )
+        X, y = X[valid_rows], y[valid_rows]
+        dates = [date for index, date in enumerate(dates) if valid_rows[index]]
+        nonfinite = ~np.isfinite(X)
+        if np.any(nonfinite) and not allow_imputation:
+            raise ModelLabValidationError(
+                "missing_values_detected",
+                "Training was not performed: missing or infinite feature values were found. "
+                "Review the quality report or apply documented median imputation.",
+                "Обучение не выполнено: в признаках обнаружены пропущенные значения "
+                "или бесконечности. Откройте отчёт о качестве или примените "
+                "документированную медианную импутацию.",
+                {
+                    "quality_report": report,
+                    "columns_removed": columns_removed,
+                    "remaining_nonfinite_values": int(nonfinite.sum()),
+                },
+            )
         if split_method == "by_date":
             tr, te = _group_split_by_date(dates, y, seed=seed)
         else:
@@ -202,12 +361,32 @@ class ModelLab:
             rng.shuffle(idx)
             cut = max(1, int(0.75 * len(idx)))
             tr, te = idx[:cut], idx[cut:]
+        if tr.size == 0 or te.size == 0:
+            raise ModelLabValidationError(
+                "invalid_grouped_split",
+                "Training was not performed: the selected split leaves an empty train or test set.",
+                "Обучение не выполнено: выбранное разбиение оставляет пустую обучающую или тестовую выборку.",
+                {"split_method": split_method, "n_train": int(tr.size), "n_test": int(te.size)},
+            )
+        train_classes = sorted(set(y[tr].tolist()))
+        if len(train_classes) < 2:
+            raise ModelLabValidationError(
+                "one_class_train_split",
+                "Training was not performed: the training split contains only one class.",
+                "Обучение не выполнено: в обучающей выборке после разбиения остался только один класс.",
+                {
+                    "split_method": split_method,
+                    "train_classes": train_classes,
+                    "n_train": int(tr.size),
+                    "n_test": int(te.size),
+                },
+            )
 
         # leakage check: no shared dates
         if split_method == "by_date":
             assert set(np.array(dates)[tr]).isdisjoint(set(np.array(dates)[te])) or len(set(dates)) < 2
 
-        est = _make_estimator(kind)
+        est = _make_estimator(kind, impute=allow_imputation)
         est.fit(X[tr], y[tr])
         pred = est.predict(X[te])
         proba = None
@@ -216,13 +395,45 @@ class ModelLab:
                 proba = est.predict_proba(X[te])
             except Exception:  # noqa: BLE001
                 proba = None
+        # Explicit label set + zero_division=0: same numeric handling sklearn already
+        # applied after warning; avoids undefined-metric / single-label CM noise.
+        # Include full-dataset labels so a single-class test fold still yields a
+        # correctly shaped confusion matrix (sklearn docs recommendation).
+        metric_labels = sorted(set(np.asarray(y).tolist()) | set(np.asarray(pred).tolist()))
+        if hasattr(est, "classes_"):
+            metric_labels = sorted(set(metric_labels) | set(np.asarray(est.classes_).tolist()))
+        # Equivalent to balanced_accuracy_score, but accepts labels/zero_division
+        # (avoids UserWarning when a fold's y_true omits a predicted class).
+        bal_acc = float(
+            recall_score(
+                y[te],
+                pred,
+                average="macro",
+                labels=metric_labels,
+                zero_division=0,
+            )
+        )
         metrics = {
-            "balanced_accuracy": float(balanced_accuracy_score(y[te], pred)),
-            "macro_f1": float(f1_score(y[te], pred, average="macro")),
-            "confusion_matrix": confusion_matrix(y[te], pred).tolist(),
-            "classification_report": classification_report(y[te], pred, output_dict=True),
-            "n_train": int(len(tr)),
-            "n_test": int(len(te)),
+            "balanced_accuracy": bal_acc,
+            "macro_f1": float(
+                f1_score(
+                    y[te],
+                    pred,
+                    average="macro",
+                    labels=metric_labels,
+                    zero_division=0,
+                )
+            ),
+            "confusion_matrix": confusion_matrix(y[te], pred, labels=metric_labels).tolist(),
+            "classification_report": classification_report(
+                y[te],
+                pred,
+                labels=metric_labels,
+                output_dict=True,
+                zero_division=0,
+            ),
+            "n_train": len(tr),
+            "n_test": len(te),
             "abstention_rate": 0.0,
         }
         if proba is not None:
@@ -240,9 +451,30 @@ class ModelLab:
         manifest_path = model_dir / "training_manifest.json"
         training_manifest = {
             "seed": seed,
+            "split_method": split_method,
             "class_counts": dataset.get("class_counts"),
             "source": dataset.get("path"),
             "article3_labels_used": False,
+            "preprocessing_version": PREPROCESSING_VERSION,
+            "imputation_method": "median_with_missing_indicator" if allow_imputation else "disabled",
+            "columns_imputed": [
+                features[index] for index in range(len(features)) if np.any(nonfinite[:, index])
+            ],
+            "missing_fractions": {
+                features[index]: float(np.mean(nonfinite[:, index]))
+                for index in range(len(features))
+            },
+            "columns_removed": columns_removed,
+            "warnings": (
+                [f"Removed entirely missing optional feature columns: {', '.join(columns_removed)}"]
+                if columns_removed
+                else []
+            ),
+            "limitations": [
+                "Missing and infinite values are normalized to NaN then median-imputed with indicators."
+                if allow_imputation
+                else "No imputation was allowed for this training run."
+            ],
         }
         manifest_path.write_text(
             json.dumps(training_manifest, indent=2, ensure_ascii=False), encoding="utf-8"
@@ -252,8 +484,8 @@ class ModelLab:
             kind=kind,
             status="development",
             created_at=datetime.now(timezone.utc).isoformat(),
-            features=list(dataset["features"]),
-            classes=list(dataset["classes"]),
+            features=features,
+            classes=sorted({str(value) for value in y}),
             split_method=split_method,
             metrics=metrics,
             calibration_status="uncalibrated",

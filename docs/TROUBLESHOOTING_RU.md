@@ -74,6 +74,6 @@ HTML/Markdown могут содержать локальные пути — пр
 ## Связанные документы
 
 - [INSTALLATION_RU.md](INSTALLATION_RU.md)
-- [QUICK_START_RU.md](QUICK_START_RU.md)
+- [Руководство пользователя](USER_GUIDE_RU.md)
 - [RULE_TESTING_GUIDE_RU.md](RULE_TESTING_GUIDE_RU.md)
 - [MATLAB_STUDIO_GUIDE_RU.md](MATLAB_STUDIO_GUIDE_RU.md)

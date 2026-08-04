@@ -22,6 +22,7 @@ LAYER_VALUES = (
 MORPHOLOGY_VALUES = (
     "clean",
     "diffuse",
+    "diffuse_unspecified",
     "frequency_spread",
     "range_spread",
     "mixed_spread",

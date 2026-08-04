@@ -1,0 +1,425 @@
+# Source-to-code formula / definition registry — Phase 4A
+# classification:
+#   exact_physical_formula | exact_signal_processing_formula |
+#   observational_definition | morphology_definition |
+#   instrument_specific_procedure | project_engineering_heuristic |
+#   unsupported_or_incomplete
+version: "1.1.1"
+feature_flag: scientific_formula_pipeline_enabled  # must remain false by default
+
+items:
+  - formula_id: F001
+    scientific_concept: virtual_effective_height_from_group_delay
+    classification: exact_physical_formula
+    exact_source_id: A3L007
+    book_or_article_title: "Труды ИПГ им. Е.К. Фёдорова. Выпуск 87"
+    exact_page_or_equation: "printed p.14 / PDF p.16; h' = c·τ_g/2"
+    source_location:
+      printed_page: 14
+      pdf_page: 16
+      section: null
+      figure: null
+      table: null
+      equation: "h' = c·τ_g/2"
+    expression_kind: close_paraphrase
+    original_expression: "h' = c * tau_g / 2"
+    normalized_machine_expression: "h_prime_km = c_km_per_s * tau_g_s / 2.0"
+    variable_definitions:
+      h_prime_km: "virtual / effective height"
+      c_km_per_s: "speed of light in km/s (~299792.458)"
+      tau_g_s: "group-delay round-trip time in seconds"
+    units: {h_prime: km, c: km/s, tau_g: s}
+    input_signal_contract: null
+    domain_of_applicability: vertical_sounding_group_delay
+    instrument_assumptions: "Descriptive VS relation; not Amp_all metrology"
+    geographic_regime_assumptions: general_VS
+    required_preprocessing: "Requires measured group delay — not available as Amp_all intensity"
+    uncertainty: "Not a substitute for true-height inversion"
+    exclusions: "Do not compute h' from Amp_all pixel row index alone as physical confirmation"
+    implementation_status: implemented_parity_ready
+    python_implementation: ionogram_morphology_lab.scientific_outputs.formulas.virtual_height.virtual_height_from_group_delay
+    matlab_implementation: matlab_helpers/iml_formula_virtual_height_from_group_delay.m
+    parity_test_status: automated
+    validation_status: source_supported
+    ui_status: from_source
+
+  - formula_id: F002
+    scientific_concept: true_height_not_equal_virtual_height
+    classification: observational_definition
+    exact_source_id: A3L007
+    book_or_article_title: "Труды ИПГ им. Е.К. Фёдорова. Выпуск 87"
+    exact_page_or_equation: "printed p.14 / PDF p.16"
+    source_location:
+      printed_page: 14
+      pdf_page: 16
+      section: null
+      figure: null
+      table: null
+      equation: null
+    expression_kind: close_paraphrase
+    original_expression: "h_true ≠ h'"
+    normalized_machine_expression: "assert_not_equated(h_true, h_prime)"
+    variable_definitions:
+      h_true: "true height requiring N(h) inversion"
+      h_prime: "virtual / effective height"
+    units: {}
+    input_signal_contract: kfu_amp_all_v1
+    domain_of_applicability: vertical_sounding
+    instrument_assumptions: "Nominal 2.5 km/bin is not true height"
+    geographic_regime_assumptions: general
+    required_preprocessing: none
+    uncertainty: n/a
+    exclusions: "Never label Amp_all row×2.5 km as true height"
+    implementation_status: documentation_guard
+    python_implementation: ionogram_morphology_lab.scientific_outputs.formulas.virtual_height.assert_nominal_not_true_height
+    matlab_implementation: null
+    parity_test_status: n/a
+    validation_status: exact_verified
+    ui_status: from_source
+
+  - formula_id: F003
+    scientific_concept: OX_mode_separation_requires_polarimetry
+    classification: instrument_specific_procedure
+    exact_source_id: A3L007
+    book_or_article_title: "Труды ИПГ им. Е.К. Фёдорова. Выпуск 87"
+    exact_page_or_equation: "printed p.15 / PDF p.17"
+    source_location:
+      printed_page: 15
+      pdf_page: 17
+      section: null
+      figure: null
+      table: null
+      equation: null
+    expression_kind: close_paraphrase
+    original_expression: "O/X separable by circular polarization (DPS-like)"
+    normalized_machine_expression: null
+    variable_definitions:
+      O: ordinary
+      X: extraordinary
+    units: {}
+    input_signal_contract: kfu_amp_all_v1
+    domain_of_applicability: digisonde_or_polarimetric_VS
+    instrument_assumptions: "Amp_all archive has no polarimetry guarantee"
+    geographic_regime_assumptions: general
+    required_preprocessing: polarimetric_channels
+    uncertainty: high_without_polarimetry
+    exclusions: "Do not assign confirmed O/X from Amp_all dual ridges alone"
+    implementation_status: disabled_guard
+    python_implementation: null
+    matlab_implementation: null
+    parity_test_status: n/a
+    validation_status: exact_verified
+    ui_status: from_source
+
+  - formula_id: F004
+    scientific_concept: midlatitude_spread_f_observational_definition
+    classification: morphology_definition
+    exact_source_id: A3L018
+    book_or_article_title: "F-рассеяние в среднеширотной ионосфере по данным DPS-4"
+    exact_page_or_equation: "printed p.241; PDF p.2; §1 Введение"
+    source_location:
+      printed_page: 241
+      pdf_page: 2
+      section: "1. ВВЕДЕНИЕ"
+      figure: null
+      table: null
+      equation: null
+    expression_kind: translated_quotation
+    original_expression: >-
+      Термин F-рассеяние служит для описания результатов вертикального зондирования
+      ионосферы в случаях, когда сигнал, отраженный ионосферой, теряет свою первоначальную
+      структуру, становится диффузным по дистанции и наблюдаются отражения на частотах,
+      превышающих критические.
+    original_expression_en: >-
+      The term F-spread describes vertical-sounding results when the ionosphere-reflected
+      signal loses its original structure, becomes range-diffuse, and echoes are observed
+      at frequencies exceeding the critical frequencies.
+    normalized_machine_expression: null
+    variable_definitions:
+      SF: spread-F observational class
+      f_c: critical frequency context
+    units: observational
+    input_signal_contract: kfu_amp_all_v1
+    domain_of_applicability: midlatitude_vertical_sounding
+    instrument_assumptions: DPS-4 / midlatitude observational
+    geographic_regime_assumptions: midlatitude_not_equatorial
+    required_preprocessing: visual_or_feature_evidence
+    uncertainty: "Not a causal physical law; broad article page range 241–249 is NOT used as the citation"
+    exclusions: "Do not present as an exact numeric equation"
+    implementation_status: morphology_definition_only
+    python_implementation: null
+    matlab_implementation: null
+    parity_test_status: n/a
+    validation_status: source_supported
+    ui_status: from_source
+
+  - formula_id: F005
+    scientific_concept: appleton_hartree
+    classification: unsupported_or_incomplete
+    exact_source_id: null
+    book_or_article_title: null
+    exact_page_or_equation: null
+    original_expression: null
+    normalized_machine_expression: null
+    variable_definitions: {}
+    units: {}
+    input_signal_contract: null
+    domain_of_applicability: null
+    instrument_assumptions: null
+    geographic_regime_assumptions: null
+    required_preprocessing: null
+    uncertainty: null
+    exclusions: "Page in local literature not verified — do not reconstruct from memory"
+    implementation_status: disabled
+    python_implementation: null
+    matlab_implementation: null
+    parity_test_status: n/a
+    validation_status: candidate_not_ready
+    ui_status: not_yet_implemented
+
+  - formula_id: F006
+    scientific_concept: plasma_frequency
+    classification: unsupported_or_incomplete
+    exact_source_id: null
+    book_or_article_title: null
+    exact_page_or_equation: "ω_p² = N_e e²/(ε₀ m_e) — page in Статьи not verified"
+    original_expression: "omega_p^2 = N_e * e^2 / (epsilon_0 * m_e)"
+    normalized_machine_expression: null
+    variable_definitions: {}
+    units: {}
+    input_signal_contract: null
+    domain_of_applicability: null
+    instrument_assumptions: null
+    geographic_regime_assumptions: null
+    required_preprocessing: null
+    uncertainty: null
+    exclusions: "Do not insert without exact source/page"
+    implementation_status: disabled
+    python_implementation: null
+    matlab_implementation: null
+    parity_test_status: n/a
+    validation_status: candidate_not_ready
+    ui_status: disabled
+
+  - formula_id: DEF_FREQUENCY_SPREAD
+    scientific_concept: frequency_spread_morphology
+    classification: morphology_definition
+    exact_source_id: A3L018
+    book_or_article_title: "F-рассеяние в среднеширотной ионосфере по данным DPS-4"
+    exact_page_or_equation: "printed p.241; PDF p.2; §1 Введение"
+    source_location:
+      printed_page: 241
+      pdf_page: 2
+      section: "1. ВВЕДЕНИЕ"
+      figure: null
+      table: null
+      equation: null
+    expression_kind: translated_quotation
+    original_expression: >-
+      Появление диффузных отражений выше критических частот F-области называют
+      F-рассеянием по частоте.
+    original_expression_en: >-
+      Appearance of diffuse echoes above the F-region critical frequencies is called
+      frequency F-spread.
+    normalized_machine_expression: null
+    variable_definitions:
+      frequency_axis: "horizontal / frequency direction of the ionogram"
+    units: observational
+    input_signal_contract: kfu_amp_all_v1
+    domain_of_applicability: midlatitude_ionogram_morphology
+    instrument_assumptions: amplitude ionogram image morphology
+    geographic_regime_assumptions: midlatitude
+    required_preprocessing: trace_evidence
+    uncertainty: "Descriptive — not a complete numeric formula; dFs MHz scoring in the same article is instrument-specific and not Amp_all metrology"
+    exclusions: "Must not be shown as a literature equation with invented thresholds"
+    implementation_status: definition_recorded
+    python_implementation: null
+    matlab_implementation: null
+    parity_test_status: n/a
+    validation_status: source_supported
+    ui_status: from_source
+
+  - formula_id: DEF_RANGE_SPREAD
+    scientific_concept: range_spread_morphology
+    classification: morphology_definition
+    exact_source_id: A3L018
+    book_or_article_title: "F-рассеяние в среднеширотной ионосфере по данным DPS-4"
+    exact_page_or_equation: "printed p.241; PDF p.2; §1 Введение"
+    source_location:
+      printed_page: 241
+      pdf_page: 2
+      section: "1. ВВЕДЕНИЕ"
+      figure: null
+      table: null
+      equation: null
+    expression_kind: translated_quotation
+    original_expression: >-
+      Расплывание отраженного импульса по дальности на частотах существенно ниже
+      критических частот области F, например, на низкочастотном участке ионограммы,
+      называют рассеянием по высоте.
+    original_expression_en: >-
+      Spreading of the reflected pulse in range at frequencies substantially below the
+      F-region critical frequencies (e.g. on the low-frequency part of the ionogram)
+      is called height/range spread.
+    normalized_machine_expression: null
+    variable_definitions:
+      range_axis: "vertical / nominal virtual-height direction"
+    units: observational
+    input_signal_contract: kfu_amp_all_v1
+    domain_of_applicability: midlatitude_ionogram_morphology
+    instrument_assumptions: amplitude ionogram image morphology
+    geographic_regime_assumptions: midlatitude
+    required_preprocessing: trace_evidence
+    uncertainty: "Descriptive — not a complete numeric formula; Amp_all uses a nominal virtual-height axis"
+    exclusions: "Must not invent an equation where the source is descriptive"
+    implementation_status: definition_recorded
+    python_implementation: null
+    matlab_implementation: null
+    parity_test_status: n/a
+    validation_status: source_supported
+    ui_status: from_source
+
+  - formula_id: DEF_MIXED_SPREAD
+    scientific_concept: mixed_spread_morphology
+    classification: morphology_definition
+    exact_source_id: A2_PROTOCOL
+    book_or_article_title: "Article 2 morphology rule candidate (project protocol)"
+    exact_page_or_equation: "section: canonical morphology labels — frequency / range / mixed"
+    source_location:
+      printed_page: null
+      pdf_page: null
+      section: "canonical morphology labels (frequency / range / mixed)"
+      figure: null
+      table: null
+      equation: null
+    expression_kind: project_interpretation
+    original_expression: >-
+      Mixed is an Article 2 operational label used when independent frequency-axis and
+      range-axis diffuseness evidence co-occur; A3L018 defines frequency and height/range
+      aspects separately and does not supply a third “mixed” class on a cited page.
+    normalized_machine_expression: null
+    variable_definitions: {}
+    units: observational
+    input_signal_contract: kfu_amp_all_v1
+    domain_of_applicability: midlatitude_ionogram_morphology
+    instrument_assumptions: independent evidences for both axes
+    geographic_regime_assumptions: midlatitude
+    required_preprocessing: dual_axis_evidence
+    uncertainty: "Project interpretation bridging A3L018 dual aspects into Article 2 mixed label"
+    exclusions: "Not an equatorial MSF criterion transplant without domain warning; do not cite A3L018 page range as the mixed definition"
+    implementation_status: definition_recorded
+    python_implementation: null
+    matlab_implementation: null
+    parity_test_status: n/a
+    validation_status: project_heuristic
+    ui_status: project_heuristic
+
+  - formula_id: HEUR_IML_TRACE_WIDTH_BINS
+    scientific_concept: local_trace_width_in_bins
+    classification: project_engineering_heuristic
+    exact_source_id: A2_PROTOCOL
+    book_or_article_title: "Article 2 morphology rule candidate (project)"
+    exact_page_or_equation: "project protocol — not a literature equation"
+    original_expression: null
+    normalized_machine_expression: "width_bins = count_contiguous_trace_bins(axis)"
+    variable_definitions:
+      width_bins: "contiguous trace support in bins"
+    units: {width: bins}
+    input_signal_contract: kfu_amp_all_v1
+    domain_of_applicability: iml_development_features
+    instrument_assumptions: Amp_all KFU provisional profile
+    geographic_regime_assumptions: KFU_midlatitude_archive
+    required_preprocessing: trace_mask
+    uncertainty: "Project heuristic — thresholds belong to RuleEngine and are not changed in Phase 4A"
+    exclusions: "Never present as an equation taken directly from literature"
+    implementation_status: implemented_quantity_helper
+    python_implementation: ionogram_morphology_lab.scientific_outputs.formulas.trace_metrics.local_width_bins
+    matlab_implementation: matlab_helpers/iml_formula_local_width_bins.m
+    parity_test_status: automated
+    validation_status: project_heuristic
+    ui_status: project_heuristic
+
+  - formula_id: HEUR_BIN_TO_MHZ
+    scientific_concept: frequency_bin_to_mhz
+    classification: instrument_specific_procedure
+    exact_source_id: CALSTAT
+    book_or_article_title: "Calibration status Amp_all archive"
+    exact_page_or_equation: "profile frequency_start/step — provisional"
+    original_expression: "f_mhz = f0 + (bin - 1) * df"
+    normalized_machine_expression: "f_mhz = start_mhz + (bin_index_0based) * step_mhz"
+    variable_definitions:
+      bin_index_0based: "0 .. frequency_bins-1"
+      start_mhz: "profile frequency_start_mhz"
+      step_mhz: "profile frequency_step_mhz"
+    units: {f: MHz}
+    input_signal_contract: kfu_ff_v1
+    domain_of_applicability: kfu_cyclone_2013_2014
+    instrument_assumptions: "Requires verified axis length; prefer ff when present"
+    geographic_regime_assumptions: KFU
+    required_preprocessing: "axis available and length matches columns"
+    uncertainty: provisionally_verified
+    exclusions: "Do not convert when axis missing or length mismatch"
+    implementation_status: implemented_parity_ready
+    python_implementation: ionogram_morphology_lab.scientific_outputs.formulas.axes.bin_to_mhz
+    matlab_implementation: matlab_helpers/iml_formula_bin_to_mhz.m
+    parity_test_status: automated
+    validation_status: provisionally_verified
+    ui_status: adapted_from_source
+
+  - formula_id: HEUR_BIN_TO_NOMINAL_HEIGHT
+    scientific_concept: range_bin_to_nominal_virtual_height
+    classification: instrument_specific_procedure
+    exact_source_id: CALSTAT
+    book_or_article_title: "Calibration status Amp_all archive"
+    exact_page_or_equation: "nominal_range_km_per_bin = 2.5 — provisional"
+    original_expression: "h'_nom = bin_index * 2.5 km"
+    normalized_machine_expression: "h_nom_km = bin_index_0based * km_per_bin"
+    variable_definitions:
+      bin_index_0based: "0 .. height_bins-1"
+      km_per_bin: "profile nominal_range_km_per_bin"
+    units: {h_nom: km}
+    input_signal_contract: kfu_amp_all_v1
+    domain_of_applicability: kfu_cyclone_2013_2014
+    instrument_assumptions: "Nominal virtual height — not true height (see F002)"
+    geographic_regime_assumptions: KFU
+    required_preprocessing: "axis scale available"
+    uncertainty: provisionally_verified
+    exclusions: "Never claim true height"
+    implementation_status: implemented_parity_ready
+    python_implementation: ionogram_morphology_lab.scientific_outputs.formulas.axes.bin_to_nominal_height_km
+    matlab_implementation: matlab_helpers/iml_formula_bin_to_nominal_height_km.m
+    parity_test_status: automated
+    validation_status: provisionally_verified
+    ui_status: adapted_from_source
+
+  - formula_id: A3L015_EQUATORIAL_WARNING
+    scientific_concept: equatorial_spread_f_background
+    classification: unsupported_or_incomplete
+    exact_source_id: A3L015
+    book_or_article_title: "Equatorial Spread F (Calvert 1962)"
+    exact_page_or_equation: "NBS TN 145 — equatorial background"
+    original_expression: null
+    normalized_machine_expression: null
+    variable_definitions: {}
+    units: {}
+    input_signal_contract: null
+    domain_of_applicability: equatorial
+    instrument_assumptions: equatorial_ionosonde
+    geographic_regime_assumptions: equatorial_not_KFU_midlatitude
+    required_preprocessing: null
+    uncertainty: null
+    exclusions: "Do not use unrelated equatorial criteria directly for the KFU midlatitude archive without a domain warning"
+    implementation_status: disabled
+    python_implementation: null
+    matlab_implementation: null
+    parity_test_status: n/a
+    validation_status: applicable_with_limitations
+    ui_status: disabled
+
+# summary is NOT hand-maintained. It is computed at load time from item.classification
+# via scientific_outputs.formula_summary.compute_formula_summary (Phase 4A.1 / 4A.1b).
+# Groups: exact_physical_formulas | observational_definitions |
+#         exact_signal_processing_formulas | instrument_specific_procedures |
+#         morphology_definitions | project_engineering_heuristics |
+#         unsupported_or_disabled
+summary: auto

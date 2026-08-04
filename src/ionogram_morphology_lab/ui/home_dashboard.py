@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from PySide6.QtCore import Signal
+from PySide6.QtCore import Qt, Signal
 from PySide6.QtWidgets import (
     QComboBox,
     QGridLayout,
@@ -10,6 +10,8 @@ from PySide6.QtWidgets import (
     QHBoxLayout,
     QLabel,
     QPushButton,
+    QScrollArea,
+    QSizePolicy,
     QVBoxLayout,
     QWidget,
 )
@@ -30,6 +32,7 @@ STATUS_COLORS = {
 
 class HomeDashboard(QWidget):
     navigate_to = Signal(str)  # nav key
+    interface_mode_changed = Signal()
 
     def __init__(self, session, i18n, settings, parent=None):
         super().__init__(parent)
@@ -127,7 +130,15 @@ class HomeDashboard(QWidget):
         root.addWidget(status)
 
         self.workflow_box = QGroupBox()
-        self.workflow_layout = QVBoxLayout(self.workflow_box)
+        workflow_outer = QVBoxLayout(self.workflow_box)
+        self.workflow_scroll = QScrollArea()
+        self.workflow_scroll.setWidgetResizable(True)
+        self.workflow_scroll.setMinimumHeight(280)
+        self.workflow_content = QWidget()
+        self.workflow_layout = QVBoxLayout(self.workflow_content)
+        self.workflow_layout.setSpacing(8)
+        self.workflow_scroll.setWidget(self.workflow_content)
+        workflow_outer.addWidget(self.workflow_scroll)
         root.addWidget(self.workflow_box, 1)
         self.disclaimer = QLabel()
         self.disclaimer.setWordWrap(True)
@@ -138,6 +149,7 @@ class HomeDashboard(QWidget):
         mode = self.ux_mode.currentData()
         self.settings.set("ux", "interface_mode", mode)
         self.settings.save()
+        self.interface_mode_changed.emit()
         self.retranslate()
 
     def _nav(self, key: str) -> None:
@@ -186,15 +198,56 @@ class HomeDashboard(QWidget):
             if w:
                 w.deleteLater()
         self._step_buttons.clear()
-        for step in evaluate_workflow(self.session):
-            btn = QPushButton(f"[{step.status}] {step.title(lang)}")
+        self._step_cards: list[QWidget] = []
+        status_text = {
+            "completed": "Завершено" if lang == "ru" else "Completed",
+            "current": "Текущий шаг" if lang == "ru" else "Current step",
+            "incomplete": "Не завершено" if lang == "ru" else "Not completed",
+            "blocked": "Недоступно" if lang == "ru" else "Blocked",
+            "warning": "Требует внимания" if lang == "ru" else "Needs attention",
+            "optional": "Необязательно" if lang == "ru" else "Optional",
+        }
+        for number, step in enumerate(evaluate_workflow(self.session), start=1):
             color = STATUS_COLORS.get(step.status, "#333")
-            btn.setStyleSheet(f"text-align:left; color:{color}; padding:6px;")
-            if step.status == "blocked":
-                btn.setEnabled(False)
-            btn.clicked.connect(lambda _=False, k=step.nav_key: self.navigate_to.emit(k))
-            self.workflow_layout.addWidget(btn)
-            self._step_buttons.append(btn)
+            card = QWidget()
+            card.setObjectName(f"workflow_step_{step.step_id}")
+            card.setMinimumHeight(72)
+            self._step_cards.append(card)
+            card.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+            card.setStyleSheet(
+                "QWidget#" + card.objectName()
+                + f" {{ border:1px solid #b8b8b8; border-left:5px solid {color}; border-radius:5px; }}"
+            )
+            row = QHBoxLayout(card)
+            row.setContentsMargins(10, 7, 10, 7)
+            number_label = QLabel(str(number))
+            number_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            number_label.setMinimumWidth(28)
+            number_label.setStyleSheet("font-size:16px; font-weight:700; border:0;")
+            text_column = QVBoxLayout()
+            title = QLabel(step.title(lang))
+            title.setWordWrap(True)
+            title.setStyleSheet("font-weight:600; border:0;")
+            description = QLabel(step.description(lang))
+            description.setWordWrap(True)
+            description.setStyleSheet("color:#555; border:0;")
+            text_column.addWidget(title)
+            text_column.addWidget(description)
+            state = QLabel(status_text[step.status])
+            state.setWordWrap(True)
+            state.setMinimumWidth(100)
+            state.setStyleSheet(f"color:{color}; font-weight:600; border:0;")
+            row.addWidget(number_label)
+            row.addLayout(text_column, 1)
+            row.addWidget(state)
+            if step.status not in {"completed", "blocked"}:
+                btn = QPushButton("Открыть" if lang == "ru" else "Open")
+                btn.setMinimumHeight(32)
+                btn.clicked.connect(lambda _=False, k=step.nav_key: self.navigate_to.emit(k))
+                row.addWidget(btn)
+                self._step_buttons.append(btn)
+            self.workflow_layout.addWidget(card)
+        self.workflow_layout.addStretch(1)
         self.retranslate()
 
     def retranslate(self) -> None:

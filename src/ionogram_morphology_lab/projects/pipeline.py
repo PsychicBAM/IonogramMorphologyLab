@@ -16,7 +16,8 @@ from ionogram_morphology_lab import __version__
 from ionogram_morphology_lab.database.project_db import ProjectDatabase
 from ionogram_morphology_lab.disagreement.engine import DisagreementEngine
 from ionogram_morphology_lab.features.extract import extract_features
-from ionogram_morphology_lab.importers.adapters import load_amplitude_matrix, extract_frame_kfu
+from ionogram_morphology_lab.importers.adapters import load_amplitude_matrix
+from ionogram_morphology_lab.scientific_outputs.signal_contracts import extract_frame_consistent
 from ionogram_morphology_lab.importers.audit import audit_frame, audit_mat_path
 from ionogram_morphology_lab.instrument_profiles.schema import (
     load_profile,
@@ -53,6 +54,7 @@ def analyze_frame(
     frame_index: int,
     profile_id: str,
     source_variable: str = "Amp_all",
+    neighbor_masks: list[np.ndarray] | None = None,
 ) -> dict[str, Any]:
     profile = _load_profile(profile_id)
     freq = frequency_axis_from_profile(profile)
@@ -62,15 +64,24 @@ def analyze_frame(
     feats = extract_features(frame, seg)
     engine = RuleEngine()
     rule_res = engine.evaluate(feats.values, quality_status=q["status"])
+    temporal_block: dict[str, Any] = {}
+    if neighbor_masks:
+        from ionogram_morphology_lab.features.temporal_context import temporal_conclusion
+
+        masks = list(neighbor_masks) + [seg.trace_mask]
+        temporal_block = temporal_conclusion(
+            masks, single_frame_morphology=rule_res.candidate_morphology
+        )
     atlas = ReferenceAtlas()
     refs = atlas.find_nearest(feats.values, rule_res.candidate_morphology, top_k=5)
+    interference_status = getattr(rule_res, "interference_assessment", None) or (
+        "dominant" if feats.values.get("interference_dominance", 0) >= 0.55 else "none"
+    )
     dis = DisagreementEngine().analyze(
         rule_category=rule_res.candidate_morphology,
         rule_flags=rule_res.disagreement_flags,
         reference_categories=[r.case.canonical_terminology for r in refs],
-        interference_status="dominant"
-        if feats.values.get("interference_dominance", 0) >= 0.55
-        else "low",
+        interference_status=interference_status,
         possible_ox=feats.values.get("possible_ox_compatibility", 0) >= 0.5,
         low_signal=bool(q.get("low_signal")),
         domain_mismatch=profile.profile_verification_status == "user-defined-unverified",
@@ -125,16 +136,19 @@ def analyze_frame(
         "activated_rules": rule_res.activated_rules,
         "contradicted_rules": rule_res.contradicting_rules,
         "measured_features": feats.values,
-        "temporal_features": {},
+        # Single-frame persistence features live in measured_features; multi-frame
+        # temporal conclusions are stored separately when neighbors are supplied.
+        "temporal_features": (temporal_block.get("temporal_features") or {}),
+        "temporal_conclusion": temporal_block or None,
         "nearest_references": [r.to_dict() for r in refs],
         "source_ids": [c["source_id"] for c in rule_res.source_citations],
         "source_pages": [c["source_page"] for c in rule_res.source_citations],
         "disagreement_flags": dis.flags,
         "alternative_interpretations": dis.pairs,
         "possible_ox_confusion": feats.values.get("possible_ox_compatibility", 0) >= 0.5,
-        "interference_status": "dominant"
-        if feats.values.get("interference_dominance", 0) >= 0.55
-        else "low",
+        "interference_status": interference_status,
+        "near_threshold_rules": getattr(rule_res, "near_threshold_rules", []),
+        "abstention_reason": rule_res.abstention_reason,
         "out_of_domain_status": "outside_reference_domain" in dis.flags,
         "prohibited_causal_claims": rule_res.prohibited_causal_claims,
         "processing_version": __version__,
@@ -162,7 +176,43 @@ def analyze_frame(
         # keep candidate_morphology for IML1 Results browser compatibility
         record["candidate_morphology"] = sci.morphology
     except Exception as exc:  # noqa: BLE001
+        # Never leave a prior positive morphology after a serialization failure.
         record["scientific_axes_error"] = str(exc)
+        record["morphology"] = "indeterminate"
+        record["candidate_morphology"] = "indeterminate"
+        record["layer"] = "indeterminate"
+        record["ambiguity"] = "indeterminate"
+        record["final_auto_status"] = "not_assessable"
+        record["limitations"] = list(record.get("limitations") or []) + [
+            f"scientific_axes_serialization_failed:{exc}"
+        ]
+
+    # Feature Pipeline V2 shadow store — never feeds RuleEngine / morphology.
+    record["feature_pipeline_v2"] = None
+    try:
+        from ionogram_morphology_lab.app.settings_store import SettingsStore
+        from ionogram_morphology_lab.features.v2.pipeline import run_feature_pipeline_v2
+
+        settings = SettingsStore()
+        v2_on = bool(settings.get("analysis", "scientific_feature_pipeline_v2_enabled", False))
+        if v2_on:
+            v2 = run_feature_pipeline_v2(
+                frame,
+                signal_contract_id="kfu_amp_all_v1",
+                profile_id=profile_id,
+                frame_index=frame_index,
+                source_mat_sha256=source_sha256,
+                frequency_axis=freq,
+                height_axis=rng,
+            )
+            shadow = v2.to_serializable()
+            record["feature_pipeline_v2"] = shadow
+            ensure_dir(run.root / "features_v2")
+            (run.root / "features_v2" / f"{frame_id}.json").write_text(
+                json.dumps(shadow, indent=2, default=str), encoding="utf-8"
+            )
+    except Exception as exc:  # noqa: BLE001
+        record["feature_pipeline_v2_error"] = str(exc)
 
     pred_path = run.root / "predictions" / f"{frame_id}.json"
     pred_path.write_text(json.dumps(record, indent=2, ensure_ascii=False), encoding="utf-8")
@@ -329,7 +379,7 @@ def batch_analyze(
                     if store is not None:
                         frame = store.get_frame(idx)
                     elif loaded is not None and loaded.data.shape[0] % profile.height_bins == 0 and loaded.data.shape[1] == profile.frequency_bins:
-                        frame = extract_frame_kfu(
+                        frame, _ = extract_frame_consistent(
                             loaded.data,
                             idx,
                             height_bins=profile.height_bins,

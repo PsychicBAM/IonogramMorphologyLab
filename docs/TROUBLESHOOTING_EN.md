@@ -74,6 +74,6 @@ Exported HTML/Markdown may contain local paths from your session — review befo
 ## Related guides
 
 - [Installation](INSTALLATION_EN.md)
-- [Quick start](QUICK_START_EN.md)
+- [User Guide](USER_GUIDE_EN.md)
 - [Rule testing guide](RULE_TESTING_GUIDE_EN.md)
 - [MATLAB Studio guide](MATLAB_STUDIO_GUIDE_EN.md)

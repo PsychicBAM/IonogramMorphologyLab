@@ -3,10 +3,16 @@
 from __future__ import annotations
 
 import json
+import sys
 from copy import deepcopy
 from pathlib import Path
 from typing import Any
 
+from ionogram_morphology_lab.app.cache_root import (
+    looks_like_test_cache_path,
+    production_settings_path,
+    resolve_cache_root,
+)
 from ionogram_morphology_lab.utils.paths import app_root, ensure_dir
 
 ANALYSIS_MODES = ("fast_preview", "standard", "scientific_strict", "custom")
@@ -15,6 +21,7 @@ DEFAULT_SETTINGS: dict[str, Any] = {
     "general": {
         "language": "en",
         "theme": "system",
+        "interface_scale": "auto",
         "workspace_dir": "",
         "restore_last_project": True,
         "confirm_before_closing": True,
@@ -57,6 +64,7 @@ DEFAULT_SETTINGS: dict[str, Any] = {
         "rendered_image_cache": True,
         "background_prefetch": True,
         "lru_capacity": 16,
+        "packaged_exe_profiler": False,
     },
     "analysis": {
         "mode": "scientific_strict",
@@ -67,6 +75,8 @@ DEFAULT_SETTINGS: dict[str, Any] = {
         "rule_engine": True,
         "reference_comparison": True,
         "ml_models_enabled": False,
+        "scientific_formula_pipeline_enabled": False,
+        "scientific_feature_pipeline_v2_enabled": False,
         "abstention": True,
         "temporal_context": True,
         "disagreement": True,
@@ -101,6 +111,13 @@ DEFAULT_SETTINGS: dict[str, Any] = {
         "include_bibliography": True,
         "include_reproducibility_manifest": True,
     },
+    "storage": {
+        "project_dir": "",
+        "reports_dir": "",
+        "models_dir": "",
+        "matlab_workspace": "",
+        "temp_dir": "",
+    },
     "privacy": {
         "telemetry_disabled": True,
         "network_disabled_by_default": True,
@@ -110,9 +127,16 @@ DEFAULT_SETTINGS: dict[str, Any] = {
     },
     "ux": {
         "interface_mode": "guided",  # guided | research | expert — UI complexity only
+        "nav_groups_expanded": {},
         "show_intros": True,
         "dismissed_intros": {},
         "show_workflow_on_home": True,
+        "fd_help_expanded_once": False,
+        "fd_help_drawer_open": False,
+        "fd_help_drawer_pinned": False,
+        "fd_help_drawer_width": 360,
+        "fd_layers_drawer_open": False,
+        "fd_sequence_drawer_open": False,
     },
     "advanced": {
         "show_developer_logs": False,
@@ -123,10 +147,19 @@ DEFAULT_SETTINGS: dict[str, Any] = {
 }
 
 
+def _default_settings_path() -> Path:
+    # Frozen EXE: user-writable LOCALAPPDATA — never the bundled config copy.
+    if getattr(sys, "frozen", False):
+        return production_settings_path()
+    return app_root() / "config" / "user_settings.json"
+
+
 class SettingsStore:
     def __init__(self, path: Path | str | None = None):
-        self.path = Path(path) if path else app_root() / "config" / "user_settings.json"
+        self.path = Path(path) if path else _default_settings_path()
         self.data = deepcopy(DEFAULT_SETTINGS)
+        self._cache_root_resolution = None
+        self._cache_root_warning = ""
         self.load()
 
     def load(self) -> None:
@@ -139,6 +172,20 @@ class SettingsStore:
         mode = self.data.get("analysis", {}).get("mode", "scientific_strict")
         if mode not in ANALYSIS_MODES:
             self.data["analysis"]["mode"] = "scientific_strict"
+        scale = str(self.data.get("general", {}).get("interface_scale", "auto"))
+        if scale not in {"auto", "90", "100", "110", "125", "150"}:
+            self.data["general"]["interface_scale"] = "auto"
+        # Reject leaked pytest cache locations (especially when settings were
+        # contaminated by tests or a bundled config/user_settings.json).
+        custom = str(self.data.get("performance", {}).get("cache_location") or "")
+        if custom and looks_like_test_cache_path(custom):
+            if getattr(sys, "frozen", False):
+                self.data["performance"]["cache_location"] = ""
+                self._cache_root_warning = (
+                    f"Rejected test cache path from settings: {custom}"
+                )
+            # In pytest/dev keep the path so isolated tests still work when they
+            # intentionally set a tmp cache — resolve_cache_root decides policy.
 
     def save(self) -> None:
         ensure_dir(self.path.parent)
@@ -185,6 +232,23 @@ class SettingsStore:
 
     def cache_dir(self) -> Path:
         custom = self.get("performance", "cache_location", "")
-        if custom:
-            return ensure_dir(custom)
-        return ensure_dir(app_root() / "workspaces" / "_cache")
+        res = resolve_cache_root(custom)
+        self._cache_root_resolution = res
+        if res.warning:
+            self._cache_root_warning = res.warning
+            # Persist cleared location in frozen mode so next launch is clean
+            if res.rejected_path and getattr(sys, "frozen", False):
+                self.set("performance", "cache_location", "")
+                try:
+                    self.save()
+                except Exception:
+                    pass
+        return ensure_dir(res.path)
+
+    def cache_root_info(self) -> dict[str, Any]:
+        if self._cache_root_resolution is None:
+            self.cache_dir()
+        info = self._cache_root_resolution.as_dict() if self._cache_root_resolution else {}
+        if self._cache_root_warning:
+            info["cache_root_warning"] = self._cache_root_warning
+        return info

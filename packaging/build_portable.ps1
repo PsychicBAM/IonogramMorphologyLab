@@ -4,11 +4,14 @@ Set-Location $Root
 $env:PYTHONPATH = Join-Path $Root "src"
 python -m pip install -e . pyinstaller -q
 $DistDir = Join-Path $Root "dist\IonogramMorphologyLab"
+python scripts/generate_app_icon.py
+$Icon = Join-Path $Root "assets\IonogramMorphologyLab.ico"
 python -m PyInstaller `
   --noconfirm `
   --clean `
   --name IonogramMorphologyLab `
   --windowed `
+  --icon $Icon `
   --paths src `
   --add-data "src/ionogram_morphology_lab/i18n;ionogram_morphology_lab/i18n" `
   --add-data "config;config" `
@@ -17,6 +20,7 @@ python -m PyInstaller `
   --add-data "rule_packs;rule_packs" `
   --add-data "synthetic_data;synthetic_data" `
   --add-data "docs;docs" `
+  --add-data "assets;assets" `
   --add-data "matlab_helpers;matlab_helpers" `
   --add-data "matlab_studio_library;matlab_studio_library" `
   src/ionogram_morphology_lab/app/main.py

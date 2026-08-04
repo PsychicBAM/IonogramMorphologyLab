@@ -83,7 +83,7 @@ To remove a portable deployment, delete the release directory **after** archivin
 
 ## Related documentation
 
-- [Quick start](QUICK_START_EN.md)
-- [Complete user manual](COMPLETE_USER_MANUAL_EN.md)
+- [User Guide](USER_GUIDE_EN.md)
+- [Scientific Guide](SCIENTIFIC_GUIDE_EN.md)
 - [FAQ](FAQ_EN.md)
 - [Security reporting](../SECURITY.md)

@@ -1,10 +1,18 @@
 # Changelog
 
-This project follows [Semantic Versioning](https://semver.org/). Software version is separate from scientific validation status — see [Scientific limitations](docs/SCIENTIFIC_LIMITATIONS_EN.md).
+This project follows [Semantic Versioning](https://semver.org/). Software version is separate from scientific validation status — see [Scientific Guide](docs/SCIENTIFIC_GUIDE_EN.md).
 
 ## [1.1.1] - 2026-08-01
 
 Release hardening for GitHub publication: usability, bilingual documentation, repository hygiene, and security controls for untrusted imports.
+
+### Product simplification closure (same 1.1.1)
+
+- Morphology false-`mixed_spread` root cause fixed (local ridge thickness + dual-axis gates); real frame **421** → `clean`; frame **800** → frequency-spread candidate.
+- UI: collapsible nav, menus/toolbar, guided batch confirmation, results evidence panel, Storage settings (migrate / clear cache / restore defaults), branded icon, opt-in desktop shortcut.
+- Documentation consolidated to canonical guides; superseded manuals/checkpoints archived under `docs/archive/`.
+- Automated suite and packaged-EXE closure walkthrough recorded in `docs/PRODUCT_SIMPLIFICATION_QA.md` and `docs/SCIENTIFIC_CLASSIFICATION_QA.md`.
+- Repository is a GitHub project with green Actions on `main` (see latest successful Test / Security checks runs).
 
 ### Added
 
@@ -38,6 +46,7 @@ Release hardening for GitHub publication: usability, bilingual documentation, re
 - Broken rule-pack archives fail closed without writing outside the temporary extract directory (regression test).
 - Portable project packages exclude source MAT by default; import supports explicit source path relinking.
 - Version consistency script rejects obsolete active product versions in key metadata files.
+- **Ionogram Viewer:** fixed real-MAT process abort when moving the frame/time slider after import. Root cause was concurrent cache builds started from every slider `valueChanged` tick. Navigation now uses a single validated path (`go_to_frame` / `set_current_frame_from_ui`) with clamped 1-based indices, `QSignalBlocker` sync, render-on-release plus debounce, duplicate cache-build rejection, and controlled render-error status (no silent broad swallow). Regression: `tests/test_viewer_slider_safety.py` (7 tests). Later product-simplification closure suite: see current pytest count in QA docs (not the historical 77-test checkpoint).
 
 ### Documentation
 

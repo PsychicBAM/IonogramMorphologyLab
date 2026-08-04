@@ -21,14 +21,25 @@ Import or create scripts in the project or global library. Each save creates a v
 - Imported scripts are **not** verified merely because they execute.
 - Treat third-party `.m` files like any unreviewed code.
 
+## Check Code Without Running vs Run in MATLAB
+
+| Control | What it does |
+|---------|----------------|
+| **Check Code Without Running** | Inspects editor structure and basic IML requirements only. MATLAB is **not** started; no scientific result is computed. The outcome appears in an inline validation card (and Technical Log). |
+| **Run in MATLAB** | Executes the selected method via the configured backend (`matlab_engine`, `octave`, or `external_matlab`). Never labelled as a generic “Run” because multiple backends are possible. |
+
+## Expected Method Output
+
+Before execution, the **Expected Method Output** panel (from method metadata / manifests) states whether the method is expected to produce: scalar values, registered features, scientific candidates, tables, matrices, diagnostic images, figures, output files, or warning-only results. **Not every method creates an image.** Parameter-only methods say so explicitly.
+
 ## Running a script
 
-1. Select a script and inspect its manifest (inputs, outputs, status).
-2. Select execution context: current frame, selected frames, or sequence.
-3. Enter documented parameters and a timeout.
-4. Start the job; review status, log, files, and registered results.
+1. Select a script and read **Expected Method Output**.
+2. Optionally click **Check Code Without Running** (no MATLAB execution).
+3. Select execution context: current frame, selected range, one file, or folder.
+4. Click **Run in MATLAB**; review Summary and the result tabs (Values, Features, Candidates, Figures, Tables, Matrices, Created Files, Warnings, Technical Log, Provenance).
 
-Jobs run in a separate working directory. Inputs copy or serialize to bridge files; source MAT files are hashed before and after execution. Terminal statuses: `ok`, `error`, `timeout`, `cancelled`, `no_backend`. **`no_backend` never means analysis succeeded.**
+Jobs run in a separate working directory. Inputs copy or serialize to bridge files; source MAT files are hashed before and after execution. A process exit code of zero is **not** enough for scientific success. IML distinguishes: completed with registered output; files only; no registered output; failed; cancelled; timed out. Terminal statuses also include `no_backend`. **`no_backend` never means analysis succeeded.**
 
 ## Data exchange and outputs
 

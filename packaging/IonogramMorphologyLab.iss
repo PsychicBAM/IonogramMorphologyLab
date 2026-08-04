@@ -13,6 +13,7 @@ DefaultDirName={autopf}\IonogramMorphologyLab
 DefaultGroupName={#MyAppName}
 OutputDir=..\installer
 OutputBaseFilename=IonogramMorphologyLab_Setup_{#MyAppVersion}
+SetupIconFile=..\assets\IonogramMorphologyLab.ico
 Compression=lzma
 SolidCompression=yes
 PrivilegesRequired=lowest

@@ -14,6 +14,8 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from ionogram_morphology_lab.ui.empty_state import EmptyStatePanel
+
 
 class MethodComparisonPage(QWidget):
     def __init__(self, session, i18n, parent=None):
@@ -35,6 +37,39 @@ class MethodComparisonPage(QWidget):
             else "Rows keep layer, morphology, parameters, interference, and ambiguity separate. "
             "No automatic declaration that one method is correct."
         )
+        if hasattr(self, "empty"):
+            self.empty.configure(
+                title="Сравнение методов" if ru else "Method Comparison",
+                why=(
+                    "Пока нет результата анализа и зарегистрированных MATLAB/ML кандидатов для сравнения."
+                    if ru
+                    else "There is no analysis result and no registered MATLAB/ML candidates to compare yet."
+                ),
+                prereq=(
+                    "Нужен пакетный анализ и/или запуск MATLAB Studio с «Добавить в сравнение методов»."
+                    if ru
+                    else "Need Batch Analysis and/or a MATLAB Studio run with Add to Method Comparison."
+                ),
+                after=(
+                    "После появления кандидатов таблица покажет методы рядом без выбора «победителя»."
+                    if ru
+                    else "When candidates exist, the table shows methods side-by-side without declaring a winner."
+                ),
+                action="Открыть Результаты" if ru else "Open Results",
+                nav_key="results",
+            )
+        if hasattr(self, "table"):
+            headers = (
+                ["Метод", "Слой", "Морфология", "Альтернатива", "Помехи", "Неоднозначность", "Качество", "Статус"]
+                if ru else
+                ["Method", "Layer", "Morphology", "Alternative", "Interference", "Ambiguity", "Quality", "Status"]
+            )
+            self.table.setHorizontalHeaderLabels(headers)
+        if hasattr(self, "refresh_button"):
+            try:
+                self.refresh_button.setText(self.i18n.t("compare.refresh"))
+            except Exception:
+                self.refresh_button.setText("Обновить" if ru else "Refresh")
 
     def _build(self) -> None:
         root = QVBoxLayout(self)
@@ -43,6 +78,8 @@ class MethodComparisonPage(QWidget):
         self.note.setWordWrap(True)
         root.addWidget(self.title)
         root.addWidget(self.note)
+        self.empty = EmptyStatePanel()
+        root.addWidget(self.empty)
         self.retranslate()
         self.table = QTableWidget(0, 8)
         self.table.setHorizontalHeaderLabels(
@@ -58,9 +95,23 @@ class MethodComparisonPage(QWidget):
             ]
         )
         root.addWidget(self.table, 1)
-        btn = QPushButton("Refresh from last result")
-        btn.clicked.connect(self.refresh)
-        root.addWidget(btn)
+        self.refresh_button = QPushButton()
+        self.refresh_button.clicked.connect(self.refresh)
+        root.addWidget(self.refresh_button)
+        self.retranslate()
+
+    @staticmethod
+    def _row_from_candidate(item: dict, default_method: str = "MATLAB Studio") -> list[str]:
+        return [
+            str(item.get("method", default_method)),
+            str(item.get("layer", "")),
+            str(item.get("morphology", item.get("candidate_morphology", ""))),
+            str(item.get("alternative", "")),
+            str(item.get("interference", item.get("interference_status", ""))),
+            str(item.get("ambiguity", "")),
+            str(item.get("quality", "")),
+            str(item.get("status", "matlab_candidate")),
+        ]
 
     def refresh(self) -> None:
         rows: list[list[str]] = []
@@ -84,19 +135,7 @@ class MethodComparisonPage(QWidget):
                     ]
                 )
                 for m in sci.get("method_comparison") or data.get("method_comparison") or []:
-                    rows.append(
-                        [
-                            str(m.get("method", "")),
-                            str(m.get("layer", "")),
-                            str(m.get("morphology", "")),
-                            str(m.get("alternative", "")),
-                            str(m.get("interference", "")),
-                            str(m.get("ambiguity", "")),
-                            str(m.get("quality", "")),
-                            str(m.get("status", "")),
-                        ]
-                    )
-                # expert slot if present
+                    rows.append(self._row_from_candidate(m, default_method=""))
                 human = data.get("human_decision") or {}
                 if human:
                     rows.append(
@@ -111,49 +150,16 @@ class MethodComparisonPage(QWidget):
                             "reviewed",
                         ]
                     )
+        # Explicit MATLAB Studio hand-off (session-level; never mutates main Results).
+        for item in getattr(self.session, "matlab_comparison_candidates", None) or []:
+            if isinstance(item, dict):
+                rows.append(self._row_from_candidate(item))
+        if hasattr(self, "empty"):
+            self.empty.setVisible(not bool(rows))
+        self.table.setVisible(bool(rows))
         if not rows:
-            rows = [
-                [
-                    "Built-in rules",
-                    "indeterminate",
-                    "indeterminate",
-                    "",
-                    "low",
-                    "no_visible_ambiguity",
-                    "not_assessable",
-                    "no_result",
-                ],
-                [
-                    "MATLAB method",
-                    "—",
-                    "—",
-                    "",
-                    "",
-                    "",
-                    "",
-                    "not_run",
-                ],
-                [
-                    "ML model",
-                    "—",
-                    "—",
-                    "",
-                    "",
-                    "",
-                    "",
-                    "development",
-                ],
-                [
-                    "Expert",
-                    "—",
-                    "—",
-                    "",
-                    "",
-                    "",
-                    "",
-                    "pending",
-                ],
-            ]
+            self.table.setRowCount(0)
+            return
         self.table.setRowCount(len(rows))
         for i, row in enumerate(rows):
             for j, val in enumerate(row):

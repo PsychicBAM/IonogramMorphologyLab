@@ -164,5 +164,5 @@ Do not enable strict mode until testing records exist.
 
 - [Rule testing guide](RULE_TESTING_GUIDE_EN.md)
 - [Morphology methods](MORPHOLOGY_METHODS_EN.md)
-- [Scientific limitations](SCIENTIFIC_LIMITATIONS_EN.md)
-- [Quick start](QUICK_START_EN.md)
+- [Scientific Guide](SCIENTIFIC_GUIDE_EN.md)
+- [User Guide](USER_GUIDE_EN.md)

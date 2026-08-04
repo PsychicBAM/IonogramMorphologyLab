@@ -1,0 +1,156 @@
+{
+  "ruleset_id": "iml-morph-candidate-rules",
+  "ruleset_version": "0.1.0",
+  "candidate_engine_version": "iml-morph-candidate-0.1.1",
+  "compatible_feature_versions": ["iml2-0.2.0"],
+  "profile_applicability": ["kfu_cyclone_2013_2014", "*"],
+  "contract_applicability": ["kfu_amp_all_v1", "*"],
+  "created_at": "2026-08-03T00:00:00Z",
+  "provenance": "Phase 4C.1 provisional engineering seed; not literature-calibrated; not scientifically validated.",
+  "provisional": true,
+  "scientifically_validated": false,
+  "production_enabled": false,
+  "thresholds": {
+    "min_trace_pixel_fraction": {
+      "value": 0.002,
+      "unit": "fraction",
+      "status": "provisional_engineering_seed",
+      "reason": "Conservative floor for a barely visible accepted trace; prefer abstention below this."
+    },
+    "min_accepted_support_above_floor": {
+      "value": 0.15,
+      "unit": "fraction",
+      "status": "provisional_engineering_seed",
+      "reason": "Require non-trivial non-floor support before morphology assessment."
+    },
+    "h_elevated_fraction_weak": {
+      "value": 0.08,
+      "unit": "fraction",
+      "status": "provisional_engineering_seed",
+      "reason": "Weak horizontal broadening coverage; unvalidated."
+    },
+    "h_elevated_fraction_moderate": {
+      "value": 0.18,
+      "unit": "fraction",
+      "status": "provisional_engineering_seed",
+      "reason": "Moderate horizontal broadening coverage; unvalidated."
+    },
+    "h_elevated_fraction_strong": {
+      "value": 0.35,
+      "unit": "fraction",
+      "status": "provisional_engineering_seed",
+      "reason": "Strong horizontal broadening coverage; unvalidated."
+    },
+    "h_contiguous_length_min_bins": {
+      "value": 4.0,
+      "unit": "bins",
+      "status": "provisional_engineering_seed",
+      "reason": "Reject single-pixel horizontal spikes; require contiguous broadening."
+    },
+    "h_median_width_min_bins": {
+      "value": 2.5,
+      "unit": "bins",
+      "status": "provisional_engineering_seed",
+      "reason": "Median H width above thin-trace expectation; unvalidated."
+    },
+    "v_elevated_fraction_weak": {
+      "value": 0.08,
+      "unit": "fraction",
+      "status": "provisional_engineering_seed",
+      "reason": "Weak vertical broadening coverage; unvalidated."
+    },
+    "v_elevated_fraction_moderate": {
+      "value": 0.18,
+      "unit": "fraction",
+      "status": "provisional_engineering_seed",
+      "reason": "Moderate vertical broadening coverage; unvalidated."
+    },
+    "v_elevated_fraction_strong": {
+      "value": 0.35,
+      "unit": "fraction",
+      "status": "provisional_engineering_seed",
+      "reason": "Strong vertical broadening coverage; unvalidated."
+    },
+    "v_contiguous_length_min_bins": {
+      "value": 4.0,
+      "unit": "bins",
+      "status": "provisional_engineering_seed",
+      "reason": "Reject single-column vertical spikes."
+    },
+    "v_median_width_min_bins": {
+      "value": 2.5,
+      "unit": "bins",
+      "status": "provisional_engineering_seed",
+      "reason": "Median V width above thin-trace expectation; unvalidated."
+    },
+    "coexistence_score_min": {
+      "value": 0.25,
+      "unit": "score",
+      "status": "provisional_engineering_seed",
+      "reason": "Minimum independent coexistence for mixed; unvalidated."
+    },
+    "coexistence_fraction_min": {
+      "value": 0.15,
+      "unit": "fraction",
+      "status": "provisional_engineering_seed",
+      "reason": "Spatial coexistence fraction for mixed; unvalidated."
+    },
+    "max_floor_burden_for_v": {
+      "value": 0.45,
+      "unit": "fraction",
+      "status": "provisional_engineering_seed",
+      "reason": "High floor clutter blocks V-as-range support."
+    },
+    "max_full_height_stripe_burden": {
+      "value": 0.25,
+      "unit": "fraction",
+      "status": "provisional_engineering_seed",
+      "reason": "Full-height stripes must not become range candidates."
+    },
+    "blocking_interference_levels": {
+      "value": ["dominant", "prevents_assessment"],
+      "unit": "categorical",
+      "status": "provisional_engineering_seed",
+      "reason": "Mapped from v2_interference_level categorical axis."
+    },
+    "max_fragmentation_for_assessable": {
+      "value": 0.75,
+      "unit": "score",
+      "status": "provisional_engineering_seed",
+      "reason": "Severe fragmentation → not_assessable / indeterminate."
+    },
+    "temporal_strengthen_min_neighbours": {
+      "value": 1,
+      "unit": "count",
+      "status": "provisional_engineering_seed",
+      "reason": "At least one agreeing neighbour may strengthen moderate evidence."
+    }
+  },
+  "required_feature_ids": [
+    "v2_quality_status",
+    "v2_trace_pixel_fraction",
+    "v2_interference_level",
+    "v2_horizontal_width_elevated_fraction",
+    "v2_vertical_width_elevated_fraction",
+    "v2_coexistence_score"
+  ],
+  "h_support_feature_ids": [
+    "v2_horizontal_width_elevated_fraction",
+    "v2_horizontal_contiguous_broadening_length",
+    "v2_median_local_horizontal_width_bins",
+    "v2_horizontal_axis_width_applicable_fraction"
+  ],
+  "v_support_feature_ids": [
+    "v2_vertical_width_elevated_fraction",
+    "v2_vertical_contiguous_broadening_length",
+    "v2_median_local_vertical_width_bins",
+    "v2_vertical_axis_width_applicable_fraction"
+  ],
+  "blocking_feature_ids": [
+    "v2_interference_level",
+    "v2_oversegmentation_suspected",
+    "v2_floor_clutter_burden",
+    "v2_full_height_stripe_burden",
+    "v2_multiple_reflection_possibility"
+  ]
+}

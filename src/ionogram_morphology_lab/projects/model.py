@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json
 import uuid
-from dataclasses import dataclass, asdict, field
+from dataclasses import dataclass, asdict, field, fields
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -36,6 +36,7 @@ class AnalysisProject:
     created_at: str
     profile_id: str = "kfu_cyclone_2013_2014"
     source_paths: list[str] = field(default_factory=list)
+    active_source_path: str | None = None
     application_version: str = __version__
     rule_pack_version: str = "IML1-0.1.0"
     reference_atlas_version: str = "IML1-0.1.0"
@@ -43,6 +44,13 @@ class AnalysisProject:
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
+
+    @classmethod
+    def from_dict(cls, data: dict[str, Any]) -> "AnalysisProject":
+        """Load project.json with backward-compatible defaults."""
+        known = {f.name for f in fields(cls)}
+        filtered = {k: v for k, v in data.items() if k in known}
+        return cls(**filtered)
 
     @property
     def path(self) -> Path:

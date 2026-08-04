@@ -8,6 +8,10 @@ from typing import Any
 
 import numpy as np
 
+from ionogram_morphology_lab.rendering.display_transform import (
+    default_kfu_display_identity,
+    matplotlib_imshow_origin,
+)
 from ionogram_morphology_lab.utils.paths import ensure_dir
 
 
@@ -99,10 +103,12 @@ def render_raw_ionogram(
         float(rng[0]) if rng.size else 0.0,
         float(rng[-1]) if rng.size else float(original.shape[0]),
     ]
+    # Canonical display: scientific matrix + origin matching DisplayOrientationIdentity
+    orient = default_kfu_display_identity()
     # No interpolation — nearest neighbor only
     im = ax.imshow(
         display,
-        origin="lower",
+        origin=matplotlib_imshow_origin(orient),
         aspect="auto",
         cmap=spec.colormap,
         vmin=vmin,
@@ -125,6 +131,8 @@ def render_raw_ionogram(
         "raw_unchanged": True,
         "interpolation": "nearest",
         "smoothing": False,
+        "display_orientation": orient.to_dict(),
+        "scientific_matrix_mutated": False,
     }
     if out_path is not None:
         out_path = Path(out_path)
@@ -172,7 +180,7 @@ def render_contact_sheet(
             vmax = float(np.percentile(finite, 99)) if finite.size else 1.0
             ax.imshow(
                 display,
-                origin="lower",
+                origin=matplotlib_imshow_origin(default_kfu_display_identity()),
                 aspect="auto",
                 cmap=spec.colormap,
                 vmin=vmin,

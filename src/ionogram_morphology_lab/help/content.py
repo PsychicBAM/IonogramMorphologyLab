@@ -21,15 +21,63 @@ HELP_SECTIONS: list[dict[str, str]] = [
         "id": "import",
         "title_en": "3. Importing MAT Data",
         "title_ru": "3. Импорт MAT",
-        "body_en": "Select a file or folder. Protected Scientific Study mode is optional and off by default; when enabled, it blocks only the paths configured by the user or project. It is not a permanent Article 3 blocklist. Supported: MATLAB v5/v7 (SciPy) and v7.3 (HDF5).",
-        "body_ru": "Выберите файл или папку. Режим защищённого научного исследования необязателен и по умолчанию выключен; при включении он блокирует только пути, настроенные пользователем или проектом. Это не постоянный список блокировки Article 3. Поддержка: MATLAB v5/v7 (SciPy) и v7.3 (HDF5).",
+        "body_en": (
+            "Select a file or folder. Protected Scientific Study mode is optional and off by default; "
+            "when enabled, it blocks only the paths configured by the user or project. It is not a "
+            "permanent Article 3 blocklist. Supported: MATLAB v5/v7 (SciPy) and v7.3 (HDF5).\n\n"
+            "Source lifecycle on Active Source and Import rows:\n"
+            "• Activate for Analysis — select a compatible inventory MAT for Viewer, Batch, and Feature Diagnostics.\n"
+            "• Deactivate for Analysis — clears the active session source; the file remains in the project and on disk; "
+            "you can activate it again without reimport.\n"
+            "• Remove from Project — removes only the inventory entry; never deletes the physical MAT file."
+        ),
+        "body_ru": (
+            "Выберите файл или папку. Режим защищённого научного исследования необязателен и по умолчанию выключен; "
+            "при включении он блокирует только пути, настроенные пользователем или проектом. Это не постоянный список "
+            "блокировки Article 3. Поддержка: MATLAB v5/v7 (SciPy) и v7.3 (HDF5).\n\n"
+            "Жизненный цикл источника на карточке «Активный источник» и в строках импорта:\n"
+            "• Активировать для анализа — выбрать совместимый MAT из инвентаря для Viewer, Batch и диагностики признаков.\n"
+            "• Отключить от анализа — снять активный источник сессии; файл останется в проекте и на компьютере; "
+            "его можно снова активировать без повторного импорта.\n"
+            "• Убрать из проекта — удаляет только запись инвентаря; физический MAT-файл никогда не удаляется."
+        ),
     },
     {
         "id": "variables",
         "title_en": "4. Understanding MAT Variables",
         "title_ru": "4. Переменные MAT",
-        "body_en": "For the KFU archive the amplitude variable is usually Amp_all with shape 368640×400 (1440 minutes × 256 height bins × 400 frequencies). Filenames may say Am_all.",
-        "body_ru": "В архиве KFU амплитуда обычно Amp_all, форма 368640×400 (1440 минут × 256 высот × 400 частот). Имя файла может быть Am_all.",
+        "body_en": (
+            "Purpose: map archive variables to frames without inventing unverified physics.\n\n"
+            "Amp_all: primary amplitude cube for KFU-style archives. Expected shape 368640×400, "
+            "interpreted as 1440 minutes × 256 nominal range/height bins × 400 frequency bins after reshape. "
+            "Filenames may say Am_all.\n\n"
+            "Phs_all: may appear in some files. IML does not claim a verified polarimetric or phase-to-physics "
+            "interpretation of Phs_all beyond documenting its presence when inventory finds it.\n\n"
+            "Frame index: 1-based frame in the day sequence. Time mapping converts frame↔HH:MM using the "
+            "instrument profile (often 1 minute/frame for KFU).\n\n"
+            "Frequency axis and nominal virtual-height axis come from the selected profile; nominal virtual "
+            "height is not true height. Reshape conventions and axis labels are profile-dependent.\n\n"
+            "Related controls: Import, Data Audit, Instrument Profile, Viewer.\n"
+            "Common mistake: treating Amp_all pixel values as calibrated foF2.\n"
+            "Scientific limitation: archive geometry is provisional until profile verification is complete.\n"
+            "Next step: run Data Audit, then confirm the Instrument Profile."
+        ),
+        "body_ru": (
+            "Назначение: связать переменные архива с кадрами без выдуманной физики.\n\n"
+            "Amp_all: основная амплитудная матрица архивов типа KFU. Ожидаемая форма 368640×400, "
+            "интерпретация после reshape: 1440 минут × 256 номинальных высотных бинов × 400 частотных. "
+            "В имени файла может быть Am_all.\n\n"
+            "Phs_all: может присутствовать. IML не утверждает проверенную поляриметрическую или "
+            "фазово-физическую интерпретацию Phs_all сверх факта наличия в инвентаре.\n\n"
+            "Индекс кадра: 1-based в суточной последовательности. Привязка времени кадр↔ЧЧ:ММ задаётся "
+            "профилем (часто 1 мин/кадр для KFU).\n\n"
+            "Ось частоты и номинальной виртуальной высоты берутся из профиля; номинальная виртуальная "
+            "высота — не истинная. Правила reshape зависят от профиля.\n\n"
+            "Связанные элементы: Импорт, Аудит, Профиль, Просмотрщик.\n"
+            "Частая ошибка: принимать Amp_all за калиброванный foF2.\n"
+            "Ограничение: геометрия архива провизорна до проверки профиля.\n"
+            "Следующий шаг: Аудит данных, затем Профиль прибора."
+        ),
     },
     {
         "id": "profiles",
@@ -49,29 +97,151 @@ HELP_SECTIONS: list[dict[str, str]] = [
         "id": "cache",
         "title_en": "7. Building the Cache",
         "title_ru": "7. Создание кэша",
-        "body_en": "Large MAT files are converted once to a read-only derived Zarr cache chunked by frame. Cache identity includes source SHA, variable, profile, and format version. The MAT is never overwritten.",
-        "body_ru": "Большие MAT один раз преобразуются в производный Zarr-кэш с нарезкой по кадрам. Идентичность кэша включает SHA источника, переменную, профиль и версию формата. MAT не перезаписывается.",
+        "body_en": (
+            "Purpose: speed frame access without rewriting the source MAT.\n"
+            "Concept: one derived Zarr cache chunked by frame; identity includes source SHA, variable, profile, format version.\n"
+            "Example: after Import, click Cache on Viewer; subsequent frame seeks use the cache.\n"
+            "Related UI: Viewer → Cache; Data Audit; Instrument Profile.\n"
+            "Input: imported MAT + selected profile. Output: project cache directory.\n"
+            "Common mistake: editing or deleting cache while treating it as the source archive.\n"
+            "Scientific limitation: cache does not add calibration; axes remain profile-dependent.\n"
+            "Next step: open Viewer. Page link: Viewer."
+        ),
+        "body_ru": (
+            "Назначение: ускорить доступ к кадрам без перезаписи исходного MAT.\n"
+            "Концепция: производный Zarr-кэш по кадрам; идентичность включает SHA, переменную, профиль, версию формата.\n"
+            "Пример: после импорта нажмите «Кэш» в просмотрщике; дальнейшие переходы используют кэш.\n"
+            "Связанные элементы: Просмотрщик → Кэш; Аудит; Профиль.\n"
+            "Вход: импортированный MAT + профиль. Выход: каталог кэша проекта.\n"
+            "Ошибка: править/удалять кэш, считая его архивом.\n"
+            "Ограничение: кэш не добавляет калибровку; оси зависят от профиля.\n"
+            "Следующий шаг: Просмотрщик."
+        ),
     },
     {
         "id": "viewer",
         "title_en": "8. Viewing Real Ionograms",
         "title_ru": "8. Просмотр реальных ионограмм",
-        "body_en": "After import, the Viewer shows real frames. Synthetic demo is a separate teaching mode. Raw view has no hidden smoothing.",
-        "body_ru": "После импорта просмотрщик показывает реальные кадры. Синтетика — отдельный учебный режим. Сырой вид без скрытого сглаживания.",
+        "body_en": (
+            "Purpose: inspect real ionogram frames after import.\n"
+            "Concept: raw view has no hidden smoothing; synthetic demo is a separate teaching mode.\n"
+            "Example: jump −N/+N minutes, play a sequence, save PNG of the current view.\n"
+            "Related UI: Viewer controls, Contact sheet, Batch selection.\n"
+            "Input: cache or MAT frames + profile axes. Output: on-screen image / PNG export.\n"
+            "Common mistake: reading pixel intensity as calibrated foF2.\n"
+            "Scientific limitation: nominal virtual height is not true height.\n"
+            "Next step: Batch Analysis or Ionogram Parameters. Page link: Viewer."
+        ),
+        "body_ru": (
+            "Назначение: просмотр реальных кадров после импорта.\n"
+            "Концепция: сырой вид без скрытого сглаживания; синтетика — отдельный учебный режим.\n"
+            "Пример: прыжок −N/+N минут, воспроизведение, сохранение PNG.\n"
+            "Связанные элементы: Просмотрщик, Контактный лист, Пакетный выбор.\n"
+            "Вход: кэш/MAT + оси профиля. Выход: изображение / PNG.\n"
+            "Ошибка: принимать яркость пикселя за калиброванный foF2.\n"
+            "Ограничение: номинальная виртуальная высота — не истинная.\n"
+            "Следующий шаг: Пакетный анализ или Параметры. Ссылка: Просмотрщик."
+        ),
+    },
+    {
+        "id": "feature_diagnostics",
+        "title_en": "8b. Feature Diagnostics (experimental V2)",
+        "title_ru": "8б. Диагностика признаков (экспериментальный V2)",
+        "body_en": (
+            "Purpose: inspect shadow-only Viewer Feature Pipeline V2 geometry for one frame or a selected sequence.\n"
+            "Display orientation matches Ionogram Viewer (scientific row 0 at the bottom); display transforms do not "
+            "mutate the numeric analysis matrix.\n"
+            "Modes: Single Frame (detailed inspection) and Sequence (temporal evolution with an explicit frame/time "
+            "range — never silently the full day).\n"
+            "V2 feature cache is separate from the Viewer render cache; cache hits skip recomputation when keys match "
+            "(MAT SHA, frame, profile, contract, feature version, parameter hash).\n"
+            "Geometry review marks (acceptable / unacceptable / uncertain + comment) are owner review of display "
+            "geometry, not morphology ground truth.\n"
+            "Layout: Layers (left) | Ionogram + sequence results (center) | Inspector (right). Drag splitters to resize; "
+            "Ctrl+0 resets the preferred arrangement without clearing V2/candidate results.\n"
+            "Keyboard shortcuts / Quick commands: Ctrl+0 Reset Diagnostics layout; "
+            "Ctrl+Shift+F Open Features table in a separate window; "
+            "Ctrl+Shift+R Open Sequence Results in a separate window; "
+            "Escape Close the active detached window.\n"
+            "Sequence: “Follow processing” shows each completed frame’s ionogram, Features and candidate; "
+            "selecting a row pauses follow; detailed Features are always for one selected frame only.\n"
+            "Detached Features/Sequence windows can Follow current frame or Pin to a frame identity.\n"
+            "Related UI: Frame Selection, view presets, layer toggles, cache status, Run V2 / Recalculate.\n"
+            "Common mistake: treating diagnostic overlays as validated morphology classification."
+        ),
+        "body_ru": (
+            "Назначение: визуальная проверка геометрии экспериментального Feature Pipeline V2 для одного кадра или "
+            "явно выбранной последовательности.\n"
+            "Ориентация совпадает с Ionogram Viewer (научная строка 0 внизу); отображение не меняет числовую матрицу анализа.\n"
+            "Режимы: «Один кадр» и «Последовательность» (диапазон кадров/времени — полный суточный файл не "
+            "анализируется молча).\n"
+            "Кэш признаков V2 отделён от кэша отрисовки Viewer; повторный запуск с теми же ключами загружает кэш.\n"
+            "Отметка геометрии (приемлемо / неприемлемо / неуверенно + комментарий) — проверка владельца отображения, "
+            "не морфологическая истинность.\n"
+            "Расположение: Слои (слева) | Ионограмма и результаты последовательности (центр) | Инспектор (справа). "
+            "Разделители можно перетаскивать; Ctrl+0 восстанавливает предпочтительное расположение, не очищая "
+            "результаты V2/кандидата.\n"
+            "Быстрые команды: Ctrl+0 — Сбросить расположение Diagnostics; "
+            "Ctrl+Shift+F — Открыть таблицу признаков отдельно; "
+            "Ctrl+Shift+R — Открыть результаты последовательности отдельно; "
+            "Escape — Закрыть активное отдельное окно.\n"
+            "Последовательность: «Следовать за обработкой» показывает каждый завершённый кадр "
+            "(ионограмма, признаки, кандидат); выбор строки приостанавливает следование; "
+            "подробные признаки всегда относятся только к одному выбранному кадру.\n"
+            "Отдельные окна могут следовать за текущим кадром или быть закреплены на кадре.\n"
+            "Связанные элементы: Выбор кадра, пресеты вида, слои, статус кэша, Запуск V2 / Пересчёт.\n"
+            "Частая ошибка: принимать оверлеи диагностики за валидированную морфологическую классификацию."
+        ),
     },
     {
         "id": "frame_time",
         "title_en": "9. Frame Index and Time",
         "title_ru": "9. Индекс кадра и время",
-        "body_en": "For KFU, frame 1 ≈ 00:00, frame 1440 ≈ 23:59 provisionally (minute = index−1). This is not metrologically confirmed.",
-        "body_ru": "Для KFU кадр 1 ≈ 00:00, кадр 1440 ≈ 23:59 предварительно (минута = индекс−1). Это не метрологически подтверждено.",
+        "body_en": (
+            "Purpose: map frame index ↔ clock time for navigation and batch selection.\n"
+            "Concept: for KFU, frame 1 ≈ 00:00, frame 1440 ≈ 23:59 provisionally (minute = index−1).\n"
+            "Example: enter 06:30 to seek the corresponding frame when the profile mapping is available.\n"
+            "Related UI: Viewer time jump; Batch time range.\n"
+            "Input: frame index or HH:MM. Output: mapped counterpart.\n"
+            "Common mistake: treating the mapping as metrologically confirmed UTC.\n"
+            "Scientific limitation: Gate2 clock confirmation remains open.\n"
+            "Next step: Contact sheet or Batch. Page link: Viewer."
+        ),
+        "body_ru": (
+            "Назначение: связать индекс кадра ↔ время для навигации и пакетного выбора.\n"
+            "Концепция: для KFU кадр 1 ≈ 00:00, 1440 ≈ 23:59 предварительно (минута = индекс−1).\n"
+            "Пример: введите 06:30 для перехода к кадру при доступной привязке профиля.\n"
+            "Связанные элементы: прыжок по времени; пакетный диапазон времени.\n"
+            "Вход: индекс или ЧЧ:ММ. Выход: парное значение.\n"
+            "Ошибка: считать привязку метрологически подтверждённым UTC.\n"
+            "Ограничение: подтверждение часов Gate2 открыто.\n"
+            "Следующий шаг: Контактный лист или Пакетный анализ."
+        ),
     },
     {
         "id": "contact",
         "title_en": "10. Contact Sheets",
         "title_ru": "10. Контактные листы",
-        "body_en": "Build 3×3…5×5 grids with chosen minute steps. A summary shows count and time span before rendering.",
-        "body_ru": "Сетки 3×3…5×5 с выбранным шагом минут. Перед отрисовкой показывается число кадров и интервал времени.",
+        "body_en": (
+            "Purpose: overview a time sequence on one sheet.\n"
+            "Concept: 3×3…5×5 grids with chosen minute steps; a summary shows count and span before rendering.\n"
+            "Example: 3×3 every 60 minutes for a daytime overview.\n"
+            "Related UI: Sequences / Contact sheet; Viewer.\n"
+            "Input: selected frames/step. Output: contact-sheet PNG.\n"
+            "Common mistake: using the sheet as calibrated parameter values.\n"
+            "Scientific limitation: overview only — not a scientific confirmation.\n"
+            "Next step: pick frames for Batch. Page link: Sequences."
+        ),
+        "body_ru": (
+            "Назначение: обзор последовательности на одном листе.\n"
+            "Концепция: сетки 3×3…5×5 с шагом минут; перед отрисовкой — число и интервал.\n"
+            "Пример: 3×3 каждые 60 минут для дневного обзора.\n"
+            "Связанные элементы: Последовательности / Контактный лист; Просмотрщик.\n"
+            "Вход: кадры/шаг. Выход: PNG листа.\n"
+            "Ошибка: читать лист как калиброванные параметры.\n"
+            "Ограничение: только обзор — не научное подтверждение.\n"
+            "Следующий шаг: выбор кадров для пакета."
+        ),
     },
     {
         "id": "batch_select",
@@ -84,8 +254,8 @@ HELP_SECTIONS: list[dict[str, str]] = [
         "id": "batch_run",
         "title_en": "12. Batch Analysis",
         "title_ru": "12. Пакетный анализ",
-        "body_en": "Choose operations (audit/cache/render/features/rules/export). Pause, resume, cancel. Cancel keeps completed outputs.",
-        "body_ru": "Выберите операции (аудит/кэш/рендер/признаки/правила/экспорт). Пауза, продолжение, отмена. Отмена сохраняет уже готовые результаты.",
+        "body_en": "What: select current frame, selected frames, frame/time range, every N minutes, entire file, or a custom list. Example: choose Time range 05:00–07:00 with a 10-minute step, then read the confirmation count. Produce: candidate results, evidence, and reproducibility records. Does not prove a physical mechanism or calibrated measurement. Next: open Results → Evidence; common mistake: reporting a candidate as confirmation. Manual link: Recommended Workflow.",
+        "body_ru": "Что: выберите текущий кадр, выбранные кадры, диапазон кадров/времени, каждые N минут, весь файл или список. Пример: диапазон времени 05:00–07:00 с шагом 10 минут, затем проверьте число кадров в подтверждении. Результат: кандидаты, доказательства и записи воспроизводимости. Это не доказывает физический механизм или калиброванное измерение. Далее: Результаты → Доказательства; ошибка: выдавать кандидата за подтверждение. Ссылка: Рекомендуемый порядок работы.",
     },
     {
         "id": "quality",
@@ -98,43 +268,133 @@ HELP_SECTIONS: list[dict[str, str]] = [
         "id": "categories",
         "title_en": "14. Morphology Categories",
         "title_ru": "14. Категории морфологии",
-        "body_en": "Canonical tokens: frequency, range, mixed, none, indeterminate, artifact, not_assessable, other, abstain. Display names are translated; tokens stay English internally.",
-        "body_ru": "Канонические значения: frequency, range, mixed, none, indeterminate, artifact, not_assessable, other, abstain. Отображаемые имена переводятся; внутри остаются английские токены.",
+        "body_en": "What: translated result names describe candidate image morphology. Examples: Frequency spread is horizontal trace broadening; Range spread is vertical/range-direction diffuseness; Mixed spread requires both independent evidences. Produce: a candidate label plus evidence and alternatives. Does not prove a layer, cause, O/X mode, or physical mechanism. Next: inspect Evidence and limitations; common mistake: reading the internal canonical token as a scientific conclusion. Manual link: Results.",
+        "body_ru": "Что: переведённые названия описывают кандидатную морфологию изображения. Примеры: частотное рассеяние — горизонтальное уширение трассы; высотное — вертикальная/высотная диффузность; смешанное требует обоих независимых доказательств. Результат: кандидатная метка, доказательства и альтернативы. Это не доказывает слой, причину, O/X или физический механизм. Далее: проверьте Доказательства и ограничения; ошибка: считать внутренний токен научным выводом. Ссылка: Результаты.",
     },
     {
         "id": "auto_vs_human",
         "title_en": "15. Candidate Result versus Human Decision",
         "title_ru": "15. Автоматический кандидат и решение эксперта",
-        "body_en": "Automatic results are never overwritten by expert edits. Both are stored separately with an audit trail.",
-        "body_ru": "Автоматический результат не перезаписывается правкой эксперта. Оба хранятся отдельно с журналом.",
+        "body_en": (
+            "Purpose: keep automatic candidates and human decisions separate.\n"
+            "Concept: expert edits never overwrite the automatic row; both stay with an audit trail.\n"
+            "Example: Accept on Results records owner-reviewed status with rationale; automatic candidate remains visible.\n"
+            "Related UI: Results → Expert decision dialog (canonical morphology list — no free-text tokens).\n"
+            "Input: selected result row + rationale. Output: human decision files.\n"
+            "Common mistake: reading Owner-reviewed as Expert-confirmed (never assigned automatically).\n"
+            "Scientific limitation: human labels are still provisional without external validation.\n"
+            "Next step: Reports or review dataset. Page link: Results / Expert Review."
+        ),
+        "body_ru": (
+            "Назначение: разделить автоматических кандидатов и решения человека.\n"
+            "Концепция: правка эксперта не затирает автоматическую строку; оба хранятся с журналом.\n"
+            "Пример: «Принять» записывает статус владельца с обоснованием; кандидат остаётся видимым.\n"
+            "Связанные элементы: Результаты → диалог эксперта (канонический список морфологии — без произвольных токенов).\n"
+            "Вход: строка результата + обоснование. Выход: файлы решения.\n"
+            "Ошибка: принимать «проверено владельцем» за «подтверждено экспертом» (автоматически не назначается).\n"
+            "Ограничение: человеческие метки провизорны без внешней валидации.\n"
+            "Следующий шаг: Отчёты или набор проверки."
+        ),
     },
     {
         "id": "confidence",
         "title_en": "16. Confidence and Calibration",
         "title_ru": "16. Уверенность и калибровка",
-        "body_en": "If confidence_score is null, the UI explains that model calibration has not been performed. Do not treat status labels as calibrated probabilities.",
-        "body_ru": "Если confidence_score отсутствует, интерфейс объясняет, что калибровка модели не выполнена. Статусы — не калиброванные вероятности.",
+        "body_en": (
+            "Purpose: communicate when scores are uncalibrated.\n"
+            "Concept: if confidence_score is null, the UI states that model calibration was not performed.\n"
+            "Example: a row shows Automatic candidate with no probability — treat status labels only.\n"
+            "Related UI: Results columns; Model Lab trust cards.\n"
+            "Input: analysis outputs. Output: displayed status / optional score.\n"
+            "Common mistake: treating status chips as calibrated probabilities.\n"
+            "Scientific limitation: no default probability calibration in 1.1.1.\n"
+            "Next step: expert review. Page link: Results."
+        ),
+        "body_ru": (
+            "Назначение: показать, когда оценки не калиброваны.\n"
+            "Концепция: при отсутствии confidence_score UI сообщает, что калибровка не выполнена.\n"
+            "Пример: строка «Автоматический кандидат» без вероятности — смотрите только статус.\n"
+            "Связанные элементы: столбцы Результатов; карточки Model Lab.\n"
+            "Вход: выходы анализа. Выход: статус / опциональная оценка.\n"
+            "Ошибка: считать статусы калиброванными вероятностями.\n"
+            "Ограничение: в 1.1.1 нет калибровки вероятностей по умолчанию.\n"
+            "Следующий шаг: экспертный просмотр."
+        ),
     },
     {
         "id": "abstention",
         "title_en": "17. Abstention",
         "title_ru": "17. Воздержание алгоритма",
-        "body_en": "The algorithm may abstain under O/X ambiguity, disagreement, out-of-domain profile, or poor quality. Abstention is a valid scientific outcome.",
-        "body_ru": "Алгоритм может воздержаться при O/X-неоднозначности, разногласиях, вне области профиля или плохом качестве. Воздержание — допустимый научный исход.",
+        "body_en": (
+            "Purpose: allow a valid scientific outcome when evidence is insufficient.\n"
+            "Concept: abstain under O/X ambiguity, disagreement, out-of-domain profile, or poor quality.\n"
+            "Example: possible O/X → algorithm withholds automatic spread assignment.\n"
+            "Related UI: Results status; Evidence panel.\n"
+            "Input: features + quality flags. Output: abstention / not_assessable candidate.\n"
+            "Common mistake: forcing a morphology label when the algorithm abstained.\n"
+            "Scientific limitation: abstention is not a confirmed physical mechanism.\n"
+            "Next step: expert decision or re-audit. Page link: Results."
+        ),
+        "body_ru": (
+            "Назначение: допустимый исход при недостаточных доказательствах.\n"
+            "Концепция: воздержание при O/X, разногласиях, вне профиля или плохом качестве.\n"
+            "Пример: возможная O/X → алгоритм не назначает рассеяние автоматически.\n"
+            "Связанные элементы: статус Результатов; Доказательства.\n"
+            "Вход: признаки + флаги качества. Выход: воздержание / not_assessable.\n"
+            "Ошибка: навязывать морфологию после воздержания.\n"
+            "Ограничение: воздержание — не подтверждённый механизм.\n"
+            "Следующий шаг: решение эксперта или повторный аудит."
+        ),
     },
     {
         "id": "alternatives",
         "title_en": "18. Alternative Interpretations",
         "title_ru": "18. Альтернативные трактовки",
-        "body_en": "Disagreement engine lists competing interpretations with supporting/opposing evidence and recommended expert action.",
-        "body_ru": "Движок разногласий показывает конкурирующие трактовки с доводами «за/против» и рекомендацией эксперту.",
+        "body_en": (
+            "Purpose: surface competing readings before an expert decision.\n"
+            "Concept: disagreement engine lists alternatives with supporting/opposing evidence.\n"
+            "Example: Frequency spread vs interference-dominated frame as competing rows.\n"
+            "Related UI: Results alternatives; Method Comparison.\n"
+            "Input: rule/feature outputs. Output: ranked alternatives + recommended action.\n"
+            "Common mistake: picking the first listed alternative as truth.\n"
+            "Scientific limitation: alternatives are candidates, not confirmations.\n"
+            "Next step: Expert decision dialog. Page link: Results."
+        ),
+        "body_ru": (
+            "Назначение: показать конкурирующие трактовки до решения эксперта.\n"
+            "Концепция: движок разногласий с доводами «за/против».\n"
+            "Пример: частотное рассеяние против кадра с доминирующими помехами.\n"
+            "Связанные элементы: альтернативы в Результатах; Сравнение методов.\n"
+            "Вход: выходы правил/признаков. Выход: альтернативы + рекомендация.\n"
+            "Ошибка: принимать первую альтернативу за истину.\n"
+            "Ограничение: альтернативы — кандидаты, не подтверждения.\n"
+            "Следующий шаг: диалог эксперта."
+        ),
     },
     {
         "id": "ox",
         "title_en": "19. O/X Ambiguity",
         "title_ru": "19. Неоднозначность O/X",
-        "body_en": "Two branches do not prove O/X. Amp_all has no polarimetry guarantee. Possible O/X triggers abstention from automatic spread assignment.",
-        "body_ru": "Две ветви не доказывают O/X. В Amp_all нет гарантии поляриметрии. Возможная O/X вызывает воздержание от автоматического назначения рассеяния.",
+        "body_en": (
+            "Purpose: avoid false O/X claims from amplitude-only archives.\n"
+            "Concept: two branches do not prove O/X; Amp_all has no polarimetry guarantee.\n"
+            "Example: branched trace → possible_ox ambiguity axis; automatic spread may abstain.\n"
+            "Related UI: scientific axes on Results; Expert dialog Ambiguity field.\n"
+            "Input: trace geometry. Output: ambiguity flag / abstention trigger.\n"
+            "Common mistake: labelling dual ridges as confirmed O and X.\n"
+            "Scientific limitation: without verified polarimetry, O/X stays candidate.\n"
+            "Next step: expert review. Page link: Results / Scientific Basis."
+        ),
+        "body_ru": (
+            "Назначение: не утверждать O/X по только амплитудным архивам.\n"
+            "Концепция: две ветви не доказывают O/X; у Amp_all нет гарантии поляриметрии.\n"
+            "Пример: ветвление → ось possible_ox; автоматическое рассеяние может воздержаться.\n"
+            "Связанные элементы: научные оси; поле неоднозначности в диалоге эксперта.\n"
+            "Вход: геометрия трассы. Выход: флаг неоднозначности / воздержание.\n"
+            "Ошибка: называть двойные гребни подтверждёнными O и X.\n"
+            "Ограничение: без проверенной поляриметрии O/X остаётся кандидатом.\n"
+            "Следующий шаг: экспертный просмотр."
+        ),
     },
     {
         "id": "interference",
@@ -266,8 +526,28 @@ HELP_SECTIONS: list[dict[str, str]] = [
         "id": "matlab_outputs",
         "title_en": "38. Output Variables",
         "title_ru": "38. Выходные переменные",
-        "body_en": "Scripts may return matrices and write registered features, candidate results, warnings, provenance, figures, and tables into the isolated run workspace.",
-        "body_ru": "Скрипты могут возвращать матрицы и записывать зарегистрированные признаки, кандидатные результаты, предупреждения, происхождение, рисунки и таблицы в изолированную рабочую папку запуска.",
+        "body_en": (
+            "Before Run in MATLAB, the Expected Method Output panel lists whether the method should produce "
+            "scalars, registered features, scientific candidates, tables, matrices, diagnostic images, figures, "
+            "files, or warning-only results. Not every method creates an image.\n\n"
+            "Check Code Without Running validates editor structure only — it does not execute MATLAB.\n"
+            "Run in MATLAB executes via the selected backend. Numeric values appear under Values; figures under "
+            "Figures; files under Created Files. Add to Method Comparison is explicit; main Results are unchanged "
+            "unless a registered plugin is enabled in a future pipeline.\n\n"
+            "A zero process exit code is not enough: IML distinguishes registered output, files-only, no output, "
+            "failed, cancelled, and timed out."
+        ),
+        "body_ru": (
+            "Перед «Запустить в MATLAB» панель «Ожидаемый результат метода» указывает, должен ли метод дать "
+            "скаляры, признаки, кандидаты, таблицы, матрицы, диагностические изображения, рисунки, файлы или "
+            "только предупреждение. Не каждый метод создаёт изображение.\n\n"
+            "«Проверить код без запуска» проверяет только структуру редактора — MATLAB не выполняется.\n"
+            "«Запустить в MATLAB» выполняет выбранным backend. Числа — во вкладке «Значения», рисунки — "
+            "в «Рисунки», файлы — в «Созданные файлы». «Добавить в сравнение методов» явно; основные "
+            "«Результаты» не меняются, пока плагин не включён в будущем конвейере.\n\n"
+            "Нулевой код выхода процесса недостаточен: IML различает зарегистрированный выход, только файлы, "
+            "нет выхода, ошибку, отмену и таймаут."
+        ),
     },
     {
         "id": "run_one_frame",
@@ -511,8 +791,8 @@ HELP_SECTIONS: list[dict[str, str]] = [
         "id": "custom_rules",
         "title_en": "73. Custom Rules",
         "title_ru": "73. Пользовательские правила",
-        "body_en": "Rule Builder creates local, versioned candidate rules. Define one target axis, conditions, outputs, applicability, exclusions, limitations, and abstention; a custom rule is not validated merely because it executes.",
-        "body_ru": "Rule Builder создаёт локальные версионированные кандидатные правила. Задайте одну целевую ось, условия, выходы, применимость, исключения, ограничения и воздержание; пользовательское правило не становится валидированным только потому, что выполняется.",
+        "body_en": "No programming required. What: use the Rule Builder wizard to define one candidate target, conditions, exclusions, sources, limitations, and abstention. Produce: a local versioned rule and a readable preview. Does not prove validation merely because the rule runs. Next: test on labelled or synthetic teaching data; common mistake: marking incomplete citations source-verified. Manual link: Creating a Rule Without Programming.",
+        "body_ru": "Программирование не требуется. Что: используйте мастер Rule Builder для одной цели-кандидата, условий, исключений, источников, ограничений и воздержания. Результат: локальное версионированное правило и читаемый предпросмотр. Выполнение правила не доказывает его валидацию. Далее: проверьте на размеченных или учебных синтетических данных; ошибка: помечать неполную ссылку как source-verified. Ссылка: Создание правила без программирования.",
     },
     {
         "id": "rule_sources",
@@ -741,6 +1021,14 @@ HELP_SYNONYMS: dict[str, list[str]] = {
     "режим": ["ux_modes", "analysis_modes"],
     "crash": ["troubleshooting", "recovery"],
     "восстановление": ["troubleshooting", "recovery"],
+    "быстрые команды": ["feature_diagnostics"],
+    "keyboard shortcuts": ["feature_diagnostics"],
+    "shortcuts": ["feature_diagnostics"],
+    "ctrl+0": ["feature_diagnostics"],
+    "ctrl+shift+f": ["feature_diagnostics"],
+    "ctrl+shift+r": ["feature_diagnostics"],
+    "отдельное окно": ["feature_diagnostics"],
+    "detach": ["feature_diagnostics"],
 }
 
 

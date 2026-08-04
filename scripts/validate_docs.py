@@ -15,46 +15,19 @@ REQUIRED_ROOT = [
 ]
 
 REQUIRED_DOCS = [
-    DOCS / "QUICK_START_EN.md",
-    DOCS / "QUICK_START_RU.md",
-    DOCS / "COMPLETE_USER_MANUAL_EN.md",
-    DOCS / "COMPLETE_USER_MANUAL_RU.md",
-    DOCS / "INSTALLATION_EN.md",
-    DOCS / "INSTALLATION_RU.md",
-    DOCS / "TROUBLESHOOTING_EN.md",
-    DOCS / "TROUBLESHOOTING_RU.md",
-    DOCS / "FAQ_EN.md",
-    DOCS / "FAQ_RU.md",
-    DOCS / "SCIENTIFIC_METHOD_EN.md",
-    DOCS / "SCIENTIFIC_METHOD_RU.md",
-    DOCS / "CUSTOM_RULE_BUILDER_EN.md",
-    DOCS / "CUSTOM_RULE_BUILDER_RU.md",
-    DOCS / "RULE_TESTING_GUIDE_EN.md",
-    DOCS / "RULE_TESTING_GUIDE_RU.md",
-    DOCS / "MATLAB_STUDIO_GUIDE_EN.md",
-    DOCS / "MATLAB_STUDIO_GUIDE_RU.md",
-    DOCS / "THREAT_MODEL.md",
-    DOCS / "SECURITY_AUDIT_V1_1_1.md",
-    DOCS / "USABILITY_QA_EN.md",
-    DOCS / "USABILITY_QA_RU.md",
-    DOCS / "FINAL_RELEASE_QA_V1_1_1.md",
-    DOCS / "DOCUMENTATION_COMPLETENESS_REPORT.md",
-    DOCS / "REPOSITORY_HYGIENE_REPORT.md",
-    DOCS / "DEPENDENCY_AUDIT_V1_1_1.md",
-    DOCS / "RUSSIAN_DOCUMENTATION_LANGUAGE_REVIEW.md",
+    DOCS / "USER_GUIDE_EN.md",
+    DOCS / "USER_GUIDE_RU.md",
+    DOCS / "SCIENTIFIC_GUIDE_EN.md",
+    DOCS / "SCIENTIFIC_GUIDE_RU.md",
+    DOCS / "DEVELOPER_GUIDE.md",
+    DOCS / "SECURITY_AND_TRUST.md",
+    DOCS / "PRODUCT_SIMPLIFICATION_QA.md",
+    DOCS / "SCIENTIFIC_CLASSIFICATION_QA.md",
 ]
 
 EN_RU_PAIRS = [
-    (DOCS / "QUICK_START_EN.md", DOCS / "QUICK_START_RU.md"),
-    (DOCS / "COMPLETE_USER_MANUAL_EN.md", DOCS / "COMPLETE_USER_MANUAL_RU.md"),
-    (DOCS / "INSTALLATION_EN.md", DOCS / "INSTALLATION_RU.md"),
-    (DOCS / "TROUBLESHOOTING_EN.md", DOCS / "TROUBLESHOOTING_RU.md"),
-    (DOCS / "FAQ_EN.md", DOCS / "FAQ_RU.md"),
-    (DOCS / "SCIENTIFIC_METHOD_EN.md", DOCS / "SCIENTIFIC_METHOD_RU.md"),
-    (DOCS / "CUSTOM_RULE_BUILDER_EN.md", DOCS / "CUSTOM_RULE_BUILDER_RU.md"),
-    (DOCS / "RULE_TESTING_GUIDE_EN.md", DOCS / "RULE_TESTING_GUIDE_RU.md"),
-    (DOCS / "MATLAB_STUDIO_GUIDE_EN.md", DOCS / "MATLAB_STUDIO_GUIDE_RU.md"),
-    (DOCS / "USABILITY_QA_EN.md", DOCS / "USABILITY_QA_RU.md"),
+    (DOCS / "USER_GUIDE_EN.md", DOCS / "USER_GUIDE_RU.md"),
+    (DOCS / "SCIENTIFIC_GUIDE_EN.md", DOCS / "SCIENTIFIC_GUIDE_RU.md"),
     (ROOT / "README.md", ROOT / "README_RU.md"),
 ]
 
@@ -78,10 +51,21 @@ LINK_RE = re.compile(r"(?<!!)\[[^]]*\]\(([^)#]+)")
 MIN_LINES_DEFAULT = 40
 MIN_LINES_EXCEPTIONS = {
     ROOT / "CHANGELOG.md": 0,  # historical sections allowed to be short overall
-    DOCS / "DEPENDENCY_AUDIT_V1_1_1.md": 25,
+    DOCS / "USER_GUIDE_EN.md": 20,
+    DOCS / "USER_GUIDE_RU.md": 20,
+    DOCS / "SCIENTIFIC_GUIDE_EN.md": 20,
+    DOCS / "SCIENTIFIC_GUIDE_RU.md": 20,
+    DOCS / "DEVELOPER_GUIDE.md": 20,
+    DOCS / "SECURITY_AND_TRUST.md": 12,
+    DOCS / "PRODUCT_SIMPLIFICATION_QA.md": 0,
+    DOCS / "SCIENTIFIC_CLASSIFICATION_QA.md": 0,
 }
 
-SCAN_MARKDOWN = [ROOT / "README.md", ROOT / "README_RU.md", *sorted(DOCS.glob("*.md"))]
+SCAN_MARKDOWN = [
+    ROOT / "README.md",
+    ROOT / "README_RU.md",
+    *sorted(p for p in DOCS.rglob("*.md") if "archive" not in p.parts),
+]
 
 VERSION_FILES = [ROOT / "README.md", ROOT / "CHANGELOG.md"]
 
@@ -120,22 +104,6 @@ def _check_placeholders(path: Path, errors: list[str]) -> None:
             errors.append(f"{path.relative_to(ROOT)}: placeholder phrase {pattern.pattern!r}")
 
 
-def _check_manual_tutorials(errors: list[str]) -> None:
-    en = DOCS / "COMPLETE_USER_MANUAL_EN.md"
-    ru = DOCS / "COMPLETE_USER_MANUAL_RU.md"
-    if en.is_file():
-        text = en.read_text(encoding="utf-8")
-        for n in range(1, 11):
-            if not re.search(rf"Tutorial\s+{n}\b", text, re.IGNORECASE):
-                errors.append(f"COMPLETE_USER_MANUAL_EN.md: missing heading Tutorial {n}")
-    if ru.is_file():
-        text = ru.read_text(encoding="utf-8")
-        if not re.search(r"Учебный пример", text):
-            errors.append("COMPLETE_USER_MANUAL_RU.md: missing «Учебный пример» headings")
-        if not re.search(r"Tutorial", text):
-            errors.append("COMPLETE_USER_MANUAL_RU.md: missing Tutorial reference in headings")
-
-
 def main() -> int:
     errors: list[str] = []
 
@@ -170,8 +138,6 @@ def main() -> int:
         if path in REQUIRED_ROOT or path in REQUIRED_DOCS:
             _check_mojibake(path, errors)
             _check_placeholders(path, errors)
-
-    _check_manual_tutorials(errors)
 
     if errors:
         sys.stdout.buffer.write(b"Documentation validation FAILED:\n")

@@ -4,7 +4,11 @@ import csv
 
 import numpy as np
 
-from ionogram_morphology_lab.classifiers.model_lab import ModelLab, _group_split_by_date
+from ionogram_morphology_lab.classifiers.model_lab import (
+    ModelLab,
+    _group_split_by_date,
+    inspect_dataset,
+)
 
 
 def test_grouped_split_by_date_prevents_neighbor_leakage():
@@ -34,3 +38,18 @@ def test_model_lab_trains_tiny_csv_and_marks_research_only(tmp_path):
     card = lab.train(dataset, kind="logistic_regression", model_id="tiny")
     assert card.status == "development"
     assert any("research use only" in note.lower() for note in card.limitations)
+
+
+def test_inspect_dataset_reports_missing_infinite_and_constants():
+    dataset = {
+        "X": np.array([[1.0, np.nan, np.inf], [1.0, np.nan, -np.inf]]),
+        "y": np.array(["a", "b"], dtype=object),
+        "dates": ["2024-01-01", "2024-01-02"],
+        "features": ["constant", "empty", "infinite"],
+    }
+    report = inspect_dataset(dataset)
+    assert report["row_count"] == 2
+    assert report["per_feature"]["empty"]["missing_count"] == 2
+    assert report["per_feature"]["infinite"]["infinite_count"] == 2
+    assert report["constant_columns"] == ["constant"]
+    assert set(report["all_missing_columns"]) == {"empty", "infinite"}

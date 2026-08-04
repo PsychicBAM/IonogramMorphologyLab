@@ -42,12 +42,12 @@ def main() -> int:
     for rel in [
         "README.md",
         "docs/MATLAB_API_REFERENCE_EN.md",
-        "docs/RELEASE_NOTES_1.1.0_EN.md",
+        "docs/archive/release-notes/RELEASE_NOTES_1.1.0_EN.md",
         "src/ionogram_morphology_lab/__init__.py",
     ]:
         text = (ROOT / rel).read_text(encoding="utf-8")
         if rel.endswith("RELEASE_NOTES_1.1.0_EN.md") and "1.1.0" not in text:
-            fail("missing RELEASE_NOTES_1.1.0_EN", errors)
+            fail("archived RELEASE_NOTES_1.1.0_EN is incomplete", errors)
         if rel == "src/ionogram_morphology_lab/__init__.py" and "1.1.1" not in text:
             fail("__init__ version", errors)
 
@@ -133,8 +133,11 @@ def main() -> int:
             fail(f"parameter catalog incomplete: {item.get('name')}", errors)
 
     # Checkpoint dedicated
-    if not (ROOT / "checkpoints" / "CHECKPOINT_IML_V1_1_SCIENTIFIC_METHODS_RULE_BUILDER_READY.md").exists():
-        fail("missing dedicated v1.1 checkpoint", errors)
+    if not (
+        ROOT / "docs" / "archive" / "checkpoints"
+        / "CHECKPOINT_IML_V1_1_SCIENTIFIC_METHODS_RULE_BUILDER_READY.md"
+    ).exists():
+        fail("missing archived dedicated v1.1 checkpoint", errors)
 
     # Portable build contents (if present)
     dist = ROOT / "dist" / "IonogramMorphologyLab"

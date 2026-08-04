@@ -47,6 +47,8 @@ class RuleTestingPage(QWidget):
             else "Synthetic/development tests are not scientific validation. "
             "Split by date where labels include a date field."
         )
+        for button, key in getattr(self, "_buttons", []):
+            button.setText(self.i18n.t(key))
 
     def _build(self) -> None:
         root = QVBoxLayout(self)
@@ -65,17 +67,20 @@ class RuleTestingPage(QWidget):
         row.addWidget(self.out, 2)
         root.addLayout(row, 1)
         btns = QHBoxLayout()
-        for text, slot in [
-            ("Refresh", self.refresh),
-            ("Run selected", self._run),
-            ("Threshold sweep", self._sweep),
-            ("Confusion (demo labels)", self._confusion),
-            ("Load built-in packs", self._load_packs),
+        self._buttons = []
+        for key, slot in [
+            ("test.refresh", self.refresh),
+            ("test.run_selected", self._run),
+            ("test.threshold_sweep", self._sweep),
+            ("test.confusion", self._confusion),
+            ("test.load_packs", self._load_packs),
         ]:
-            b = QPushButton(text)
+            b = QPushButton()
             b.clicked.connect(slot)
+            self._buttons.append((b, key))
             btns.addWidget(b)
         root.addLayout(btns)
+        self.retranslate()
 
     def refresh(self) -> None:
         self.rules.clear()

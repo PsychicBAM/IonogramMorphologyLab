@@ -26,7 +26,7 @@
       "real_computation_status": "fully_implemented",
       "supported_inputs": "current_frame, frequency_axis, range_axis, optional_matrix",
       "outputs": "features, candidate, provenance, result_struct",
-      "backend_test": "external_matlab_r2019a_ok_real_Am_all_2013-01-01",
+      "backend_test": "pending_smoke",
       "source_status": "engineering_utility",
       "limitations": "Candidate/heuristic only; profile-dependent; not causal; not a validated measurement."
     },
@@ -50,7 +50,7 @@
       "real_computation_status": "fully_implemented",
       "supported_inputs": "current_frame, frequency_axis, range_axis, optional_matrix",
       "outputs": "features, candidate, matrix, provenance, result_struct",
-      "backend_test": "external_matlab_r2019a_ok_real_Am_all_2013-01-01",
+      "backend_test": "pending_smoke",
       "source_status": "development_heuristic_with_project_terminology",
       "limitations": "Candidate/heuristic only; profile-dependent; not causal; not a validated measurement."
     },
@@ -182,7 +182,7 @@
       "real_computation_status": "fully_implemented",
       "supported_inputs": "current_frame, frequency_axis, range_axis, optional_matrix",
       "outputs": "features, candidate, matrix, provenance, result_struct",
-      "backend_test": "external_matlab_r2019a_ok_real_Am_all_2013-01-01",
+      "backend_test": "pending_smoke",
       "source_status": "development_heuristic",
       "limitations": "Candidate/heuristic only; profile-dependent; not causal; not a validated measurement."
     },
@@ -278,7 +278,7 @@
       "real_computation_status": "fully_implemented",
       "supported_inputs": "current_frame, frequency_axis, range_axis, optional_matrix",
       "outputs": "features, candidate, matrix, provenance, result_struct",
-      "backend_test": "external_matlab_r2019a_ok_real_Am_all_2013-01-01",
+      "backend_test": "pending_smoke",
       "source_status": "development_heuristic",
       "limitations": "Candidate/heuristic only; profile-dependent; not causal; not a validated measurement."
     },
@@ -290,7 +290,7 @@
       "real_computation_status": "fully_implemented",
       "supported_inputs": "current_frame, frequency_axis, range_axis, optional_matrix",
       "outputs": "features, candidate, matrix, provenance, result_struct",
-      "backend_test": "external_matlab_r2019a_ok_real_Am_all_2013-01-01",
+      "backend_test": "pending_smoke",
       "source_status": "development_heuristic",
       "limitations": "Candidate/heuristic only; profile-dependent; not causal; not a validated measurement."
     },
@@ -434,7 +434,7 @@
       "real_computation_status": "fully_implemented",
       "supported_inputs": "current_frame, frequency_axis, range_axis, optional_matrix",
       "outputs": "features, candidate, matrix, provenance, result_struct",
-      "backend_test": "external_matlab_r2019a_ok_real_Am_all_2013-01-01",
+      "backend_test": "pending_smoke",
       "source_status": "development_heuristic_with_project_terminology",
       "limitations": "Candidate/heuristic only; profile-dependent; not causal; not a validated measurement."
     },
@@ -482,7 +482,7 @@
       "real_computation_status": "fully_implemented",
       "supported_inputs": "current_frame, frequency_axis, range_axis, optional_matrix",
       "outputs": "features, candidate, matrix, provenance, result_struct",
-      "backend_test": "external_matlab_r2019a_ok_real_Am_all_2013-01-01",
+      "backend_test": "pending_smoke",
       "source_status": "development_heuristic",
       "limitations": "Candidate/heuristic only; profile-dependent; not causal; not a validated measurement."
     },
@@ -626,7 +626,7 @@
       "real_computation_status": "fully_implemented",
       "supported_inputs": "current_frame, frequency_axis, range_axis, optional_matrix",
       "outputs": "features, candidate, matrix, provenance, result_struct",
-      "backend_test": "external_matlab_r2019a_ok_real_Am_all_2013-01-01",
+      "backend_test": "pending_smoke",
       "source_status": "development_heuristic",
       "limitations": "Candidate/heuristic only; profile-dependent; not causal; not a validated measurement."
     },
@@ -734,7 +734,7 @@
       "real_computation_status": "fully_implemented",
       "supported_inputs": "current_frame, frequency_axis, range_axis, optional_matrix",
       "outputs": "features, candidate, matrix, provenance, result_struct",
-      "backend_test": "external_matlab_r2019a_ok_real_Am_all_2013-01-01",
+      "backend_test": "pending_smoke",
       "source_status": "development_heuristic_with_project_terminology",
       "limitations": "Candidate/heuristic only; profile-dependent; not causal; not a validated measurement."
     },
@@ -746,7 +746,7 @@
       "real_computation_status": "fully_implemented",
       "supported_inputs": "current_frame, frequency_axis, range_axis, optional_matrix",
       "outputs": "features, candidate, matrix, provenance, result_struct",
-      "backend_test": "external_matlab_r2019a_ok_real_Am_all_2013-01-01",
+      "backend_test": "pending_smoke",
       "source_status": "development_heuristic_with_project_terminology",
       "limitations": "Candidate/heuristic only; profile-dependent; not causal; not a validated measurement."
     },
@@ -758,7 +758,7 @@
       "real_computation_status": "fully_implemented",
       "supported_inputs": "current_frame, frequency_axis, range_axis, optional_matrix",
       "outputs": "features, candidate, matrix, provenance, result_struct",
-      "backend_test": "external_matlab_r2019a_ok_real_Am_all_2013-01-01",
+      "backend_test": "pending_smoke",
       "source_status": "development_heuristic_with_project_terminology",
       "limitations": "Candidate/heuristic only; profile-dependent; not causal; not a validated measurement."
     },

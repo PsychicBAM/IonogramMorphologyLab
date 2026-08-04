@@ -14,7 +14,7 @@ REQUIRED_REL = [
     "IonogramMorphologyLab.exe",
     "_internal/ionogram_morphology_lab/i18n/en.json",
     "_internal/ionogram_morphology_lab/i18n/ru.json",
-    "_internal/docs/QUICK_START_EN.md",
+    "_internal/docs/USER_GUIDE_EN.md",
     "_internal/matlab_builtin",
     "_internal/rule_packs",
     "_internal/knowledge_base",

@@ -133,5 +133,5 @@ Strict — после записей тестирования.
 
 - [RULE_TESTING_GUIDE_RU.md](RULE_TESTING_GUIDE_RU.md)
 - [MORPHOLOGY_METHODS_RU.md](MORPHOLOGY_METHODS_RU.md)
-- [SCIENTIFIC_LIMITATIONS_RU.md](SCIENTIFIC_LIMITATIONS_RU.md)
-- [QUICK_START_RU.md](QUICK_START_RU.md)
+- [Научное руководство](SCIENTIFIC_GUIDE_RU.md)
+- [Руководство пользователя](USER_GUIDE_RU.md)

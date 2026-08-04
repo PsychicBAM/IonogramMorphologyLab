@@ -55,6 +55,7 @@ class RuleBuilderPage(QWidget):
 
     def retranslate(self) -> None:
         ru = self.i18n.language == "ru"
+        self._localize_static_widgets(ru)
         self.banner.setText(
             "Для создания правила программирование не требуется."
             if ru
@@ -95,11 +96,82 @@ class RuleBuilderPage(QWidget):
         self.btn_prev.setText("Назад" if ru else "Back")
         self.btn_next.setText("Далее" if ru else "Next")
         self.btn_save.setText("Сохранить" if ru else "Save")
+        self.examples_label.setText(self.i18n.t("rule.examples"))
+        self.btn_copy_example.setText(self.i18n.t("rule.copy_example"))
+        self.saved_label.setText(self.i18n.t("rule.saved"))
+        self.btn_load_saved.setText(self.i18n.t("rule.load_saved"))
+        self.btn_show_advanced.setText(self.i18n.t("rule.show_advanced"))
+        self.tabs_adv.setTabText(0, self.i18n.t("rule.advanced"))
         if self.settings and hasattr(self, "intro"):
             self.intro.retranslate()
         self._update_target_help()
         self._update_threshold_help()
         self._refresh_preview()
+
+    def _localize_static_widgets(self, ru: bool) -> None:
+        """Translate instructional controls while leaving canonical tokens untouched."""
+        translations = {
+            "Copy example → draft": "Скопировать пример → черновик",
+            "Load saved": "Загрузить сохранённое",
+            "Examples:": "Примеры:",
+            "Saved:": "Сохранённые:",
+            "Advanced: generated Python / MATLAB / JSON only (optional).": "Дополнительно: только сгенерированные Python / MATLAB / JSON (необязательно).",
+            "Show / hide Advanced tab": "Показать / скрыть вкладку «Дополнительно»",
+            "Choose exactly one target axis:": "Выберите ровно одну целевую ось:",
+            "Canonical proposed result:": "Канонический предлагаемый результат:",
+            "Visual condition blocks (AND between rows; OR via nested group flag):": "Блоки визуальных условий (И между строками; ИЛИ — через флаг группы):",
+            "OR group with previous": "Группа ИЛИ с предыдущим",
+            "Add condition": "Добавить условие",
+            "Clear conditions": "Очистить условия",
+            "Do not activate when vertical interference dominates": "Не активировать при доминирующих вертикальных помехах",
+            "Abstain when trace quality is poor": "Воздержаться при низком качестве трассы",
+            "Add possible O/X as an alternative": "Добавить возможный O/X как альтернативу",
+            "Disable for incompatible profiles": "Отключить для несовместимых профилей",
+            "Additional exclusions:": "Дополнительные исключения:",
+            "Alternatives:": "Альтернативы:",
+            "Source Assistant — incomplete source may only be draft / imported_unverified / development.": "Помощник по источнику: неполный источник допускается только для черновика / непроверенного импорта / разработки.",
+            "Rule ID": "ID правила",
+            "Name EN": "Название EN",
+            "Name RU": "Название RU",
+            "Source ID": "ID источника",
+            "Authors": "Авторы",
+            "Year": "Год",
+            "Title": "Название",
+            "Type": "Тип",
+            "Printed page": "Печатная страница",
+            "PDF page": "Страница PDF",
+            "Source wording": "Формулировка источника",
+            "User paraphrase": "Перефразировка пользователя",
+            "Applicability": "Применимость",
+            "Assumptions": "Допущения",
+            "Limitations": "Ограничения",
+            "Rights note": "Примечание о правах",
+            "Threshold origin:": "Источник порога:",
+            "Natural-language preview (EN):": "Предпросмотр на естественном языке (EN):",
+            "Natural-language preview (RU):": "Предпросмотр на естественном языке (RU):",
+            "Refresh preview + generated code": "Обновить предпросмотр и сгенерированный код",
+            "Run rule test (dry evaluation)": "Запустить проверку правила (без выполнения конвейера)",
+            "Test scope:": "Область проверки:",
+            "Save as:": "Сохранить как:",
+        }
+        for cls in (QLabel, QPushButton, QCheckBox):
+            for widget in self.findChildren(cls):
+                english = widget.property("iml_en_text") or widget.text()
+                if english in translations:
+                    widget.setProperty("iml_en_text", english)
+                    widget.setText(translations[english] if ru else english)
+        placeholders = {
+            "Extra exclusion phrases, one per line": "Дополнительные фразы исключений, по одной на строку",
+            "comma-separated alternatives": "альтернативы через запятую",
+        }
+        for cls in (QLineEdit, QPlainTextEdit):
+            for widget in self.findChildren(cls):
+                english = widget.property("iml_en_placeholder") or widget.placeholderText()
+                if english in placeholders:
+                    widget.setProperty("iml_en_placeholder", english)
+                    widget.setPlaceholderText(placeholders[english] if ru else english)
+        if hasattr(self, "tabs_adv"):
+            self.tabs_adv.setTabText(0, "Дополнительно" if ru else "Advanced")
 
     def _build(self) -> None:
         root = QVBoxLayout(self)
@@ -137,16 +209,20 @@ class RuleBuilderPage(QWidget):
         self.examples = QComboBox()
         for ex in builtin_examples():
             self.examples.addItem(f"{ex.rule_id}: {ex.name_en}", ex.rule_id)
-        btn_ex = QPushButton("Copy example → draft")
+        btn_ex = QPushButton()
         btn_ex.setObjectName("btn_copy_example")
         btn_ex.clicked.connect(self._copy_example)
+        self.btn_copy_example = btn_ex
         self.saved_list = QComboBox()
-        btn_load = QPushButton("Load saved")
+        btn_load = QPushButton()
         btn_load.clicked.connect(self._load_saved)
-        top.addWidget(QLabel("Examples:"))
+        self.btn_load_saved = btn_load
+        self.examples_label = QLabel()
+        top.addWidget(self.examples_label)
         top.addWidget(self.examples, 1)
         top.addWidget(btn_ex)
-        top.addWidget(QLabel("Saved:"))
+        self.saved_label = QLabel()
+        top.addWidget(self.saved_label)
         top.addWidget(self.saved_list, 1)
         top.addWidget(btn_load)
         root.addLayout(top)
@@ -198,14 +274,15 @@ class RuleBuilderPage(QWidget):
         al.addWidget(self.gen_py, 1)
         al.addWidget(self.gen_m, 1)
         al.addWidget(self.machine, 1)
-        self.tabs_adv.addTab(adv, "Advanced")
+        self.tabs_adv.addTab(adv, "")
         # Collapse advanced for guided mode
         mode = "guided"
         if self.settings:
             mode = self.settings.get("ux", "interface_mode", "guided")
         self.tabs_adv.setVisible(mode == "expert")
-        btn_adv = QPushButton("Show / hide Advanced tab")
+        btn_adv = QPushButton()
         btn_adv.clicked.connect(lambda: self.tabs_adv.setVisible(not self.tabs_adv.isVisible()))
+        self.btn_show_advanced = btn_adv
         root.addWidget(btn_adv)
         root.addWidget(self.tabs_adv)
         self.step_list.setCurrentRow(0)

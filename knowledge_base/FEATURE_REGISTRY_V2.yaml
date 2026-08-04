@@ -1,0 +1,1973 @@
+version: iml2-0.2.0
+feature_flag: scientific_feature_pipeline_v2_enabled
+default_enabled: false
+label_en: Experimental features — not used by the current classification
+label_ru: Экспериментальные признаки — не участвуют в текущей классификации
+input_signal_contract: kfu_amp_all_v1
+unresolved_signals_excluded:
+- Phs_all
+- Date_Time1
+- AmEsP
+- A_map_F
+- H_map_F
+branch_geometry_storage: branch_records list in PipelineV2Result / features.json — not v2_branch_N_* global
+  IDs
+width_coordinate_systems:
+  fixed_vertical_axis_width_bins: vertical cut along fixed row axis (invalid if axis_tangent_to_trace)
+  fixed_horizontal_axis_width_bins: horizontal cut along fixed column axis (invalid if axis_tangent_to_trace)
+  normal_to_ridge_width_bins: local normal from local tangent
+  normal_width_baseline_residual_bins: max(normal_width - thin_baseline, 0)
+  true_slope_compensated_horizontal_residual_bins: fixed-H minus projected thin thickness (only when H
+    applicable)
+  along_ridge_support_length_bins: supported length along ridge
+geometry_heuristics:
+  ANGLE_NEAR_AXIS_DEG: 30
+  MULTI_INTERSECTION_MIN_SUPPORT: 3
+  ALONG_RIDGE_SUPPORT_RATIO: 2.5
+  note: Project geometry heuristics — not physical ionogram thresholds
+branch_width_storage: per-branch widths under branch_records[].widths; aggregates from valid branch-local
+  samples only
+count_policy:
+  open_ended_features:
+  - v2_centerline_count
+  - v2_consolidated_branch_count
+  - v2_preconsolidation_centerline_count
+  - v2_raw_component_count
+  - v2_total_connected_component_count
+  - v2_branch_count
+  - v2_component_count
+  note: Do not silently clip counts; emit plausibility_warning when above threshold
+features:
+- feature_id: v2_accepted_nonfloor_trace_fraction
+  name_en: accepted nonfloor trace fraction
+  name_ru: accepted nonfloor trace fraction
+  scientific_meaning: V2 aggregate measurement v2_accepted_nonfloor_trace_fraction
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: fraction
+  expected_range:
+  - 0
+  - 1
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_accepted_support_above_floor_fraction
+  name_en: accepted support above floor fraction
+  name_ru: accepted support above floor fraction
+  scientific_meaning: V2 aggregate measurement v2_accepted_support_above_floor_fraction
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: fraction
+  expected_range:
+  - 0
+  - 1
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_along_ridge_support_length_bins
+  name_en: along ridge support length bins
+  name_ru: along ridge support length bins
+  scientific_meaning: V2 aggregate measurement v2_along_ridge_support_length_bins
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: bins
+  expected_range:
+  - 0
+  - 400
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_axis_tangent_rejection_count
+  name_en: axis tangent rejection count
+  name_ru: axis tangent rejection count
+  scientific_meaning: V2 aggregate measurement v2_axis_tangent_rejection_count
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: count
+  expected_range:
+  - 0
+  - 400
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_branch_count
+  name_en: branch count
+  name_ru: branch count
+  scientific_meaning: V2 aggregate measurement v2_branch_count
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: count
+  expected_range: null
+  plausibility_warning_above: 16
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_branch_overlap_rejection_count
+  name_en: branch overlap rejection count
+  name_ru: branch overlap rejection count
+  scientific_meaning: V2 aggregate measurement v2_branch_overlap_rejection_count
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: count
+  expected_range:
+  - 0
+  - 400
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_branch_parallelism
+  name_en: branch parallelism
+  name_ru: branch parallelism
+  scientific_meaning: V2 aggregate measurement v2_branch_parallelism
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: score
+  expected_range:
+  - 0
+  - 1
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_branch_relative_amplitude
+  name_en: branch relative amplitude
+  name_ru: branch relative amplitude
+  scientific_meaning: V2 aggregate measurement v2_branch_relative_amplitude
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: ratio
+  expected_range:
+  - 0
+  - 1000000000000.0
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_branch_separation_bins
+  name_en: branch separation bins
+  name_ru: branch separation bins
+  scientific_meaning: V2 aggregate measurement v2_branch_separation_bins
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: bins
+  expected_range:
+  - 0
+  - 400
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_centerline_count
+  name_en: centerline count
+  name_ru: centerline count
+  scientific_meaning: V2 aggregate measurement v2_centerline_count
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: count
+  expected_range: null
+  plausibility_warning_above: 16
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_coexistence_fraction
+  name_en: coexistence fraction
+  name_ru: coexistence fraction
+  scientific_meaning: V2 aggregate measurement v2_coexistence_fraction
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: fraction
+  expected_range:
+  - 0
+  - 1
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_coexistence_score
+  name_en: coexistence score
+  name_ru: coexistence score
+  scientific_meaning: V2 aggregate measurement v2_coexistence_score
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: score
+  expected_range:
+  - 0
+  - 1
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_column_background_burden
+  name_en: column background burden
+  name_ru: column background burden
+  scientific_meaning: V2 aggregate measurement v2_column_background_burden
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: ratio
+  expected_range:
+  - 0
+  - 1000000000000.0
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_component_count
+  name_en: component count
+  name_ru: component count
+  scientific_meaning: V2 aggregate measurement v2_component_count
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: count
+  expected_range: null
+  plausibility_warning_above: 128
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_consolidated_branch_count
+  name_en: consolidated branch count
+  name_ru: consolidated branch count
+  scientific_meaning: V2 aggregate measurement v2_consolidated_branch_count
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: count
+  expected_range: null
+  plausibility_warning_above: 16
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_consolidation_count
+  name_en: consolidation count
+  name_ru: consolidation count
+  scientific_meaning: V2 aggregate measurement v2_consolidation_count
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: count
+  expected_range:
+  - 0
+  - 400
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_dynamic_range
+  name_en: dynamic range
+  name_ru: dynamic range
+  scientific_meaning: V2 aggregate measurement v2_dynamic_range
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: amplitude
+  expected_range:
+  - 0
+  - 1000000000.0
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_empty_region_fraction
+  name_en: empty region fraction
+  name_ru: empty region fraction
+  scientific_meaning: V2 aggregate measurement v2_empty_region_fraction
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: fraction
+  expected_range:
+  - 0
+  - 1
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_finite_fraction
+  name_en: finite fraction
+  name_ru: finite fraction
+  scientific_meaning: V2 aggregate measurement v2_finite_fraction
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: fraction
+  expected_range:
+  - 0
+  - 1
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_fixed_horizontal_axis_width_bins
+  name_en: fixed horizontal axis width bins
+  name_ru: fixed horizontal axis width bins
+  scientific_meaning: V2 aggregate measurement v2_fixed_horizontal_axis_width_bins
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: bins
+  expected_range:
+  - 0
+  - 400
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_fixed_vertical_axis_width_bins
+  name_en: fixed vertical axis width bins
+  name_ru: fixed vertical axis width bins
+  scientific_meaning: V2 aggregate measurement v2_fixed_vertical_axis_width_bins
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: bins
+  expected_range:
+  - 0
+  - 400
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_floor_candidate_removed_fraction
+  name_en: floor candidate removed fraction
+  name_ru: floor candidate removed fraction
+  scientific_meaning: V2 aggregate measurement v2_floor_candidate_removed_fraction
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: fraction
+  expected_range:
+  - 0
+  - 1
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_floor_clutter_burden
+  name_en: floor clutter burden
+  name_ru: floor clutter burden
+  scientific_meaning: V2 aggregate measurement v2_floor_clutter_burden
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: fraction
+  expected_range:
+  - 0
+  - 1
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_floor_rejected_component_count
+  name_en: floor rejected component count
+  name_ru: floor rejected component count
+  scientific_meaning: V2 aggregate measurement v2_floor_rejected_component_count
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: count
+  expected_range:
+  - 0
+  - 400
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_fragmentation_score
+  name_en: fragmentation score
+  name_ru: fragmentation score
+  scientific_meaning: V2 aggregate measurement v2_fragmentation_score
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: ratio
+  expected_range:
+  - 0
+  - 1000000000000.0
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_frequency_axis_available
+  name_en: frequency axis available
+  name_ru: frequency axis available
+  scientific_meaning: V2 aggregate measurement v2_frequency_axis_available
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: flag
+  expected_range:
+  - 0
+  - 1
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_full_height_stripe_burden
+  name_en: full height stripe burden
+  name_ru: full height stripe burden
+  scientific_meaning: V2 aggregate measurement v2_full_height_stripe_burden
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: fraction
+  expected_range:
+  - 0
+  - 1
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_height_axis_available
+  name_en: height axis available
+  name_ru: height axis available
+  scientific_meaning: V2 aggregate measurement v2_height_axis_available
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: flag
+  expected_range:
+  - 0
+  - 1
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_horizontal_axis_width_applicable_fraction
+  name_en: horizontal axis width applicable fraction
+  name_ru: horizontal axis width applicable fraction
+  scientific_meaning: V2 aggregate measurement v2_horizontal_axis_width_applicable_fraction
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: fraction
+  expected_range:
+  - 0
+  - 1
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_horizontal_contiguous_broadening_length
+  name_en: horizontal contiguous broadening length
+  name_ru: horizontal contiguous broadening length
+  scientific_meaning: V2 aggregate measurement v2_horizontal_contiguous_broadening_length
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: samples
+  expected_range:
+  - 0
+  - 400
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_horizontal_width_elevated_fraction
+  name_en: horizontal width elevated fraction
+  name_ru: horizontal width elevated fraction
+  scientific_meaning: V2 aggregate measurement v2_horizontal_width_elevated_fraction
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: fraction
+  expected_range:
+  - 0
+  - 1
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_impulsive_outlier_fraction
+  name_en: impulsive outlier fraction
+  name_ru: impulsive outlier fraction
+  scientific_meaning: V2 aggregate measurement v2_impulsive_outlier_fraction
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: fraction
+  expected_range:
+  - 0
+  - 1
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_inferred_continuation_across_interference
+  name_en: inferred continuation across interference
+  name_ru: inferred continuation across interference
+  scientific_meaning: V2 aggregate measurement v2_inferred_continuation_across_interference
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: fraction
+  expected_range:
+  - 0
+  - 1
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_interference_affected_frequency_fraction
+  name_en: interference affected frequency fraction
+  name_ru: interference affected frequency fraction
+  scientific_meaning: V2 aggregate measurement v2_interference_affected_frequency_fraction
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: fraction
+  expected_range:
+  - 0
+  - 1
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_interference_level
+  name_en: interference level
+  name_ru: interference level
+  scientific_meaning: V2 aggregate measurement v2_interference_level
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: categorical
+  expected_range: []
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_interference_stripe_amplitude
+  name_en: interference stripe amplitude
+  name_ru: interference stripe amplitude
+  scientific_meaning: V2 aggregate measurement v2_interference_stripe_amplitude
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: fraction
+  expected_range:
+  - 0
+  - 1
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_interference_stripe_density
+  name_en: interference stripe density
+  name_ru: interference stripe density
+  scientific_meaning: V2 aggregate measurement v2_interference_stripe_density
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: fraction
+  expected_range:
+  - 0
+  - 1
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_interference_stripe_height_persistence
+  name_en: interference stripe height persistence
+  name_ru: interference stripe height persistence
+  scientific_meaning: V2 aggregate measurement v2_interference_stripe_height_persistence
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: fraction
+  expected_range:
+  - 0
+  - 1
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_interference_stripe_width
+  name_en: interference stripe width
+  name_ru: interference stripe width
+  scientific_meaning: V2 aggregate measurement v2_interference_stripe_width
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: bins
+  expected_range:
+  - 0
+  - 400
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_interference_trace_overlap
+  name_en: interference trace overlap
+  name_ru: interference trace overlap
+  scientific_meaning: V2 aggregate measurement v2_interference_trace_overlap
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: fraction
+  expected_range:
+  - 0
+  - 1
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_local_horizontal_width_max
+  name_en: local horizontal width max
+  name_ru: local horizontal width max
+  scientific_meaning: V2 aggregate measurement v2_local_horizontal_width_max
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: bins
+  expected_range:
+  - 0
+  - 400
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_local_vertical_width_max
+  name_en: local vertical width max
+  name_ru: local vertical width max
+  scientific_meaning: V2 aggregate measurement v2_local_vertical_width_max
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: bins
+  expected_range:
+  - 0
+  - 400
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_median_local_horizontal_width_bins
+  name_en: median local horizontal width bins
+  name_ru: median local horizontal width bins
+  scientific_meaning: V2 aggregate measurement v2_median_local_horizontal_width_bins
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: bins
+  expected_range:
+  - 0
+  - 400
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_median_local_vertical_width_bins
+  name_en: median local vertical width bins
+  name_ru: median local vertical width bins
+  scientific_meaning: V2 aggregate measurement v2_median_local_vertical_width_bins
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: bins
+  expected_range:
+  - 0
+  - 400
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_merge_split_locations
+  name_en: merge split locations
+  name_ru: merge split locations
+  scientific_meaning: V2 aggregate measurement v2_merge_split_locations
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: count
+  expected_range:
+  - 0
+  - 400
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_multiple_intersection_rejection_count
+  name_en: multiple intersection rejection count
+  name_ru: multiple intersection rejection count
+  scientific_meaning: V2 aggregate measurement v2_multiple_intersection_rejection_count
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: count
+  expected_range:
+  - 0
+  - 400
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_multiple_reflection_possibility
+  name_en: multiple reflection possibility
+  name_ru: multiple reflection possibility
+  scientific_meaning: V2 aggregate measurement v2_multiple_reflection_possibility
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: flag
+  expected_range:
+  - 0
+  - 1
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_nonfloor_candidate_retained_fraction
+  name_en: nonfloor candidate retained fraction
+  name_ru: nonfloor candidate retained fraction
+  scientific_meaning: V2 aggregate measurement v2_nonfloor_candidate_retained_fraction
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: fraction
+  expected_range:
+  - 0
+  - 1
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_normal_to_ridge_width_bins
+  name_en: normal to ridge width bins
+  name_ru: normal to ridge width bins
+  scientific_meaning: V2 aggregate measurement v2_normal_to_ridge_width_bins
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: bins
+  expected_range:
+  - 0
+  - 400
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_normal_width_baseline_residual_bins
+  name_en: normal width baseline residual bins
+  name_ru: normal width baseline residual bins
+  scientific_meaning: V2 aggregate measurement v2_normal_width_baseline_residual_bins
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: bins
+  expected_range:
+  - 0
+  - 400
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_overlapping_layer_possibility
+  name_en: overlapping layer possibility
+  name_ru: overlapping layer possibility
+  scientific_meaning: V2 aggregate measurement v2_overlapping_layer_possibility
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: flag
+  expected_range:
+  - 0
+  - 1
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_oversegmentation_suspected
+  name_en: oversegmentation suspected
+  name_ru: oversegmentation suspected
+  scientific_meaning: V2 aggregate measurement v2_oversegmentation_suspected
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: flag
+  expected_range:
+  - 0
+  - 1
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_ox_ambiguity_possibility
+  name_en: ox ambiguity possibility
+  name_ru: ox ambiguity possibility
+  scientific_meaning: V2 aggregate measurement v2_ox_ambiguity_possibility
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: flag
+  expected_range:
+  - 0
+  - 1
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_potential_trace_interference_overlap
+  name_en: potential trace interference overlap
+  name_ru: potential trace interference overlap
+  scientific_meaning: V2 aggregate measurement v2_potential_trace_interference_overlap
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: fraction
+  expected_range:
+  - 0
+  - 1
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_preconsolidation_centerline_count
+  name_en: preconsolidation centerline count
+  name_ru: preconsolidation centerline count
+  scientific_meaning: V2 aggregate measurement v2_preconsolidation_centerline_count
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: count
+  expected_range: null
+  plausibility_warning_above: 128
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_preexclusion_floor_overlap_fraction
+  name_en: preexclusion floor overlap fraction
+  name_ru: preexclusion floor overlap fraction
+  scientific_meaning: V2 aggregate measurement v2_preexclusion_floor_overlap_fraction
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: fraction
+  expected_range:
+  - 0
+  - 1
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_quality_status
+  name_en: quality status
+  name_ru: quality status
+  scientific_meaning: V2 aggregate measurement v2_quality_status
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: categorical
+  expected_range: []
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_raw_component_count
+  name_en: raw component count
+  name_ru: raw component count
+  scientific_meaning: V2 aggregate measurement v2_raw_component_count
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: count
+  expected_range: null
+  plausibility_warning_above: 128
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_rejected_component_count
+  name_en: rejected component count
+  name_ru: rejected component count
+  scientific_meaning: V2 aggregate measurement v2_rejected_component_count
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: count
+  expected_range:
+  - 0
+  - 400
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_robust_percentile_p1
+  name_en: robust percentile p1
+  name_ru: robust percentile p1
+  scientific_meaning: V2 aggregate measurement v2_robust_percentile_p1
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: amplitude
+  expected_range:
+  - 0
+  - 1000000000.0
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_robust_percentile_p50
+  name_en: robust percentile p50
+  name_ru: robust percentile p50
+  scientific_meaning: V2 aggregate measurement v2_robust_percentile_p50
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: amplitude
+  expected_range:
+  - 0
+  - 1000000000.0
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_robust_percentile_p99
+  name_en: robust percentile p99
+  name_ru: robust percentile p99
+  scientific_meaning: V2 aggregate measurement v2_robust_percentile_p99
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: amplitude
+  expected_range:
+  - 0
+  - 1000000000.0
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_row_background_burden
+  name_en: row background burden
+  name_ru: row background burden
+  scientific_meaning: V2 aggregate measurement v2_row_background_burden
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: ratio
+  expected_range:
+  - 0
+  - 1000000000000.0
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_saturation_fraction
+  name_en: saturation fraction
+  name_ru: saturation fraction
+  scientific_meaning: V2 aggregate measurement v2_saturation_fraction
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: fraction
+  expected_range:
+  - 0
+  - 1
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_temporal_branch_persistence
+  name_en: temporal branch persistence
+  name_ru: temporal branch persistence
+  scientific_meaning: V2 aggregate measurement v2_temporal_branch_persistence
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: dimensionless
+  expected_range:
+  - 0
+  - 1000000.0
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_temporal_centerline_displacement
+  name_en: temporal centerline displacement
+  name_ru: temporal centerline displacement
+  scientific_meaning: V2 aggregate measurement v2_temporal_centerline_displacement
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: dimensionless
+  expected_range:
+  - 0
+  - 1000000.0
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_temporal_event_class
+  name_en: temporal event class
+  name_ru: temporal event class
+  scientific_meaning: V2 aggregate measurement v2_temporal_event_class
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: dimensionless
+  expected_range:
+  - 0
+  - 1000000.0
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_temporal_interference_persistence
+  name_en: temporal interference persistence
+  name_ru: temporal interference persistence
+  scientific_meaning: V2 aggregate measurement v2_temporal_interference_persistence
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: dimensionless
+  expected_range:
+  - 0
+  - 1000000.0
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_temporal_mask_overlap
+  name_en: temporal mask overlap
+  name_ru: temporal mask overlap
+  scientific_meaning: V2 aggregate measurement v2_temporal_mask_overlap
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: dimensionless
+  expected_range:
+  - 0
+  - 1000000.0
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_temporal_width_persistence
+  name_en: temporal width persistence
+  name_ru: temporal width persistence
+  scientific_meaning: V2 aggregate measurement v2_temporal_width_persistence
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: dimensionless
+  expected_range:
+  - 0
+  - 1000000.0
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_total_connected_component_count
+  name_en: total connected component count
+  name_ru: total connected component count
+  scientific_meaning: V2 aggregate measurement v2_total_connected_component_count
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: count
+  expected_range: null
+  plausibility_warning_above: 512
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_trace_continuity
+  name_en: trace continuity
+  name_ru: trace continuity
+  scientific_meaning: V2 aggregate measurement v2_trace_continuity
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: fraction
+  expected_range:
+  - 0
+  - 1
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_trace_pixel_fraction
+  name_en: trace pixel fraction
+  name_ru: trace pixel fraction
+  scientific_meaning: V2 aggregate measurement v2_trace_pixel_fraction
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: fraction
+  expected_range:
+  - 0
+  - 1
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_true_slope_compensated_horizontal_residual_bins
+  name_en: true slope compensated horizontal residual bins
+  name_ru: true slope compensated horizontal residual bins
+  scientific_meaning: V2 aggregate measurement v2_true_slope_compensated_horizontal_residual_bins
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: bins
+  expected_range:
+  - 0
+  - 400
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_unresolved_floor_conflict_fraction
+  name_en: unresolved floor conflict fraction
+  name_ru: unresolved floor conflict fraction
+  scientific_meaning: V2 aggregate measurement v2_unresolved_floor_conflict_fraction
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: fraction
+  expected_range:
+  - 0
+  - 1
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_unresolved_occluded_fraction
+  name_en: unresolved occluded fraction
+  name_ru: unresolved occluded fraction
+  scientific_meaning: V2 aggregate measurement v2_unresolved_occluded_fraction
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: fraction
+  expected_range:
+  - 0
+  - 1
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_usable_trace_fraction_outside_interference
+  name_en: usable trace fraction outside interference
+  name_ru: usable trace fraction outside interference
+  scientific_meaning: V2 aggregate measurement v2_usable_trace_fraction_outside_interference
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: fraction
+  expected_range:
+  - 0
+  - 1
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_vertical_axis_width_applicable_fraction
+  name_en: vertical axis width applicable fraction
+  name_ru: vertical axis width applicable fraction
+  scientific_meaning: V2 aggregate measurement v2_vertical_axis_width_applicable_fraction
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: fraction
+  expected_range:
+  - 0
+  - 1
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_vertical_contiguous_broadening_length
+  name_en: vertical contiguous broadening length
+  name_ru: vertical contiguous broadening length
+  scientific_meaning: V2 aggregate measurement v2_vertical_contiguous_broadening_length
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: samples
+  expected_range:
+  - 0
+  - 400
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_vertical_stripe_count
+  name_en: vertical stripe count
+  name_ru: vertical stripe count
+  scientific_meaning: V2 aggregate measurement v2_vertical_stripe_count
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: count
+  expected_range:
+  - 0
+  - 400
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_vertical_width_elevated_fraction
+  name_en: vertical width elevated fraction
+  name_ru: vertical width elevated fraction
+  scientific_meaning: V2 aggregate measurement v2_vertical_width_elevated_fraction
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: fraction
+  expected_range:
+  - 0
+  - 1
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_width_aggregate_branches_agree
+  name_en: width aggregate branches agree
+  name_ru: width aggregate branches agree
+  scientific_meaning: V2 aggregate measurement v2_width_aggregate_branches_agree
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: flag
+  expected_range:
+  - 0
+  - 1
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_width_aggregate_branches_contributed
+  name_en: width aggregate branches contributed
+  name_ru: width aggregate branches contributed
+  scientific_meaning: V2 aggregate measurement v2_width_aggregate_branches_contributed
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: count
+  expected_range:
+  - 0
+  - 400
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_width_aggregate_dominant_branch_id
+  name_en: width aggregate dominant branch id
+  name_ru: width aggregate dominant branch id
+  scientific_meaning: V2 aggregate measurement v2_width_aggregate_dominant_branch_id
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: id
+  expected_range:
+  - 0
+  - 1000000.0
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_width_balance_ratio
+  name_en: width balance ratio
+  name_ru: width balance ratio
+  scientific_meaning: V2 aggregate measurement v2_width_balance_ratio
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: ratio
+  expected_range:
+  - 0
+  - 1000000000000.0
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_width_connected_support_bins
+  name_en: width connected support bins
+  name_ru: width connected support bins
+  scientific_meaning: V2 aggregate measurement v2_width_connected_support_bins
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: bins
+  expected_range:
+  - 0
+  - 400
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_width_estimator_disagreement
+  name_en: width estimator disagreement
+  name_ru: width estimator disagreement
+  scientific_meaning: V2 aggregate measurement v2_width_estimator_disagreement
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: ratio
+  expected_range:
+  - 0
+  - 1000000000000.0
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_width_estimators_available
+  name_en: width estimators available
+  name_ru: width estimators available
+  scientific_meaning: V2 aggregate measurement v2_width_estimators_available
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: text
+  expected_range: []
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_width_excluded_count
+  name_en: width excluded count
+  name_ru: width excluded count
+  scientific_meaning: V2 aggregate measurement v2_width_excluded_count
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: count
+  expected_range:
+  - 0
+  - 400
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_width_fwhm_bins
+  name_en: width fwhm bins
+  name_ru: width fwhm bins
+  scientific_meaning: V2 aggregate measurement v2_width_fwhm_bins
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: bins
+  expected_range:
+  - 0
+  - 400
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_width_second_moment_bins
+  name_en: width second moment bins
+  name_ru: width second moment bins
+  scientific_meaning: V2 aggregate measurement v2_width_second_moment_bins
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: bins
+  expected_range:
+  - 0
+  - 400
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_width_valid_count
+  name_en: width valid count
+  name_ru: width valid count
+  scientific_meaning: V2 aggregate measurement v2_width_valid_count
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: count
+  expected_range:
+  - 0
+  - 400
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false
+- feature_id: v2_zero_fraction
+  name_en: zero fraction
+  name_ru: zero fraction
+  scientific_meaning: V2 aggregate measurement v2_zero_fraction
+  algorithm: feature_pipeline_v2
+  formula_registry_ref: null
+  unit: fraction
+  expected_range:
+  - 0
+  - 1
+  plausibility_warning_above: null
+  missing_value_policy: invalid_not_zero
+  uncertainty_method: estimator_or_sample_stats
+  exclusions: not a morphology classification
+  diagnostic_image: null
+  implementation_version: iml2-0.2.0
+  source_basis: engineering
+  status: experimental
+  input_signal_contract: kfu_amp_all_v1
+  emitted_by_fixture: synthetic_geometry_suite
+  conditional: false

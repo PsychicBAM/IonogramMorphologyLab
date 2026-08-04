@@ -215,17 +215,27 @@ def run_matlab_job(req: MatlabRunRequest, cancel_flag: callable | None = None) -
             stdout, stderr, status, err_msg, err_id, stack = _run_engine(work, runner, req.timeout_s)
         elif backend.backend_id == "external_matlab":
             stdout, stderr, status, err_msg = _run_external(
-                backend.path or req.matlab_executable, work, runner, req.timeout_s, matlab=True
+                backend.path or req.matlab_executable,
+                work,
+                runner,
+                req.timeout_s,
+                matlab=True,
+                cancel_flag=cancel_flag,
             )
         elif backend.backend_id == "octave":
             stdout, stderr, status, err_msg = _run_external(
-                backend.path or req.octave_executable, work, runner, req.timeout_s, matlab=False
+                backend.path or req.octave_executable,
+                work,
+                runner,
+                req.timeout_s,
+                matlab=False,
+                cancel_flag=cancel_flag,
             )
         else:
             status = "no_backend"
             err_msg = "unsupported backend"
 
-        if (work / "iml_error.txt").exists():
+        if status != "cancelled" and (work / "iml_error.txt").exists():
             txt = (work / "iml_error.txt").read_text(encoding="utf-8", errors="replace")
             lines = txt.splitlines()
             err_id = lines[0] if lines else ""
@@ -234,6 +244,9 @@ def run_matlab_job(req: MatlabRunRequest, cancel_flag: callable | None = None) -
         diary_path = work / "diary.txt"
         if diary_path.exists():
             diary = diary_path.read_text(encoding="utf-8", errors="replace")
+        if cancel_flag and cancel_flag() and status == "ok":
+            status = "cancelled"
+            err_msg = "cancelled by user"
     except subprocess.TimeoutExpired:
         status = "timeout"
         err_msg = f"Execution exceeded timeout ({req.timeout_s}s)"
@@ -293,8 +306,14 @@ def _run_engine(work: Path, runner: Path, timeout_s: int) -> tuple[str, str, str
 
 
 def _run_external(
-    exe: str, work: Path, runner: Path, timeout_s: int, matlab: bool
+    exe: str,
+    work: Path,
+    runner: Path,
+    timeout_s: int,
+    matlab: bool,
+    cancel_flag: callable | None = None,
 ) -> tuple[str, str, str, str]:
+    """Run external MATLAB/Octave with argument list (no shell). Cancel-aware."""
     work_abs = Path(work).resolve()
     # Use absolute POSIX path; avoid relative cd when cwd is already the work dir.
     work_posix = work_abs.as_posix().replace("'", "''")
@@ -302,13 +321,38 @@ def _run_external(
         cmd = [exe, "-batch", f"cd('{work_posix}'); iml_batch_entry();"]
     else:
         cmd = [exe, "--quiet", "--eval", f"cd('{work_posix}'); iml_batch_entry();"]
-    proc = subprocess.run(
+    # Prefer Popen so cancel_flag can terminate mid-run (GUI path uses QProcess instead).
+    proc = subprocess.Popen(
         cmd,
-        capture_output=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
         text=True,
-        timeout=timeout_s,
         cwd=str(work_abs),
-        check=False,
+        shell=False,
     )
-    status = "ok" if proc.returncode == 0 else "error"
-    return proc.stdout or "", proc.stderr or "", status, (proc.stderr or "")[:2000]
+    import time
+
+    t0 = time.monotonic()
+    while True:
+        if cancel_flag and cancel_flag():
+            proc.terminate()
+            try:
+                out, err = proc.communicate(timeout=3)
+            except subprocess.TimeoutExpired:
+                proc.kill()
+                out, err = proc.communicate(timeout=2)
+            return out or "", err or "", "cancelled", "cancelled by user"
+        rc = proc.poll()
+        if rc is not None:
+            out, err = proc.communicate()
+            status = "ok" if rc == 0 else "error"
+            return out or "", err or "", status, (err or "")[:2000]
+        if time.monotonic() - t0 > max(1, int(timeout_s)):
+            proc.terminate()
+            try:
+                out, err = proc.communicate(timeout=3)
+            except subprocess.TimeoutExpired:
+                proc.kill()
+                out, err = proc.communicate(timeout=2)
+            raise subprocess.TimeoutExpired(cmd, timeout_s, output=out, stderr=err)
+        time.sleep(0.05)

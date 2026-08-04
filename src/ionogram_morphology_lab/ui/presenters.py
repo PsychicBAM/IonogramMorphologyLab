@@ -4,22 +4,28 @@ from __future__ import annotations
 
 from typing import Any
 
+from ionogram_morphology_lab.ui.display_values import display_status
+
 
 MORPHOLOGY_LABEL = {
     "en": {
-        "frequency": "Frequency spread",
-        "frequency_spread": "Frequency spread",
-        "range": "Range spread / virtual-height spread",
-        "range_spread": "Range spread / virtual-height spread",
-        "mixed": "Mixed spread",
-        "mixed_spread": "Mixed spread",
-        "spread_unspecified": "Unspecified spread / diffuse",
-        "clean": "Clean / no confirmed spread feature",
-        "diffuse": "Diffuse (unspecified)",
-        "none": "No confirmed compatible feature",
-        "indeterminate": "Indeterminate",
-        "artifact": "Artifact / interference-dominated",
-        "interference_dominated": "Interference-dominated",
+        "frequency": "Possible frequency F-spread",
+        "frequency_spread": "Possible frequency F-spread",
+        "range": "Possible range F-spread",
+        "range_spread": "Possible range F-spread",
+        "mixed": "Possible mixed F-spread",
+        "mixed_spread": "Possible mixed F-spread",
+        "spread_unspecified": "Diffuse structure visible; spread type undetermined",
+        "clean": "No visible spread",
+        "diffuse": "Diffuse structure visible; spread type undetermined",
+        "diffuse_unspecified": "Diffuse structure visible; spread type undetermined",
+        "none": "No visible spread",
+        "no_visible_spread": "No visible spread",
+        "clean_trace": "No visible spread",
+        "morphology_none": "No visible spread",
+        "indeterminate": "Insufficient data to determine morphology",
+        "artifact": "Assessment limited by interference",
+        "interference_dominated": "Assessment limited by interference",
         "low_signal": "Low signal",
         "multiple_branch": "Multiple branch",
         "possible_multiple_reflection": "Possible multiple reflection",
@@ -29,23 +35,27 @@ MORPHOLOGY_LABEL = {
         "abstain": "Algorithm abstained",
     },
     "ru": {
-        "frequency": "Частотное рассеяние",
-        "frequency_spread": "Частотное рассеяние",
-        "range": "Высотное рассеяние / рассеяние по виртуальной высоте",
-        "range_spread": "Высотное рассеяние / рассеяние по виртуальной высоте",
-        "mixed": "Смешанное рассеяние",
-        "mixed_spread": "Смешанное рассеяние",
-        "spread_unspecified": "Неуточнённое рассеяние / диффузность",
-        "clean": "Чистая трасса / без подтверждённого рассеяния",
-        "diffuse": "Диффузная (неуточнённая)",
-        "none": "Убедительных признаков нет",
-        "indeterminate": "Неопределённо",
-        "artifact": "Артефакт / доминирующая помеха",
-        "interference_dominated": "Доминирующая помеха",
+        "frequency": "Возможно частотное F-рассеяние",
+        "frequency_spread": "Возможно частотное F-рассеяние",
+        "range": "Возможно высотное F-рассеяние",
+        "range_spread": "Возможно высотное F-рассеяние",
+        "mixed": "Возможно смешанное F-рассеяние",
+        "mixed_spread": "Возможно смешанное F-рассеяние",
+        "spread_unspecified": "Наблюдается диффузная структура, тип не определён",
+        "clean": "Явное рассеяние не обнаружено",
+        "diffuse": "Наблюдается диффузная структура, тип не определён",
+        "diffuse_unspecified": "Наблюдается диффузная структура, тип не определён",
+        "none": "Явное рассеяние не обнаружено",
+        "no_visible_spread": "Явное рассеяние не обнаружено",
+        "clean_trace": "Явное рассеяние не обнаружено",
+        "morphology_none": "Явное рассеяние не обнаружено",
+        "indeterminate": "Недостаточно данных для определения морфологии",
+        "artifact": "Оценка ограничена помехами",
+        "interference_dominated": "Оценка ограничена помехами",
         "low_signal": "Слабый сигнал",
         "multiple_branch": "Множественные ветви",
         "possible_multiple_reflection": "Возможное многократное отражение",
-        "not_assessable": "Невозможно оценить",
+        "not_assessable": "Кадр невозможно надёжно оценить",
         "other": "Другая морфология",
         "other_morphology": "Другая морфология",
         "abstain": "Алгоритм воздержался от решения",
@@ -81,24 +91,43 @@ def explain_result(record: dict[str, Any], lang: str) -> str:
     alts = [morphology_label(a, lang) for a in alts if a]
     feats = record.get("measured_features") or {}
     reasons = []
-    if feats.get("median_horizontal_width", 0) >= 5:
-        reasons.append("горизонтальное уширение" if lang == "ru" else "horizontal broadening")
-    if feats.get("median_vertical_width", 0) >= 8:
-        reasons.append("вертикальное уширение" if lang == "ru" else "vertical broadening")
+    if float(feats.get("frequency_evidence_passed", 0) or 0) >= 1.0:
+        reasons.append(
+            "независимое частотное уширение (локальная толщина)"
+            if lang == "ru"
+            else "independent frequency broadening (local thickness)"
+        )
+    if float(feats.get("range_evidence_passed", 0) or 0) >= 1.0:
+        reasons.append(
+            "независимое высотное уширение (локальная толщина)"
+            if lang == "ru"
+            else "independent range broadening (local thickness)"
+        )
+    if float(feats.get("colocated_spread_fraction", 0) or 0) >= 0.20:
+        reasons.append(
+            "со-локализация частотного и высотного уширения"
+            if lang == "ru"
+            else "co-located frequency and range broadening"
+        )
     if feats.get("interference_dominance", 0) >= 0.55:
         reasons.append("доминирование помех" if lang == "ru" else "interference dominance")
     if record.get("possible_ox_confusion"):
         reasons.append("возможная O/X-неоднозначность" if lang == "ru" else "possible O/X ambiguity")
 
+    auto = record.get("final_auto_status", "")
     if lang == "ru":
+        if auto in ("abstain", "not_assessable", "uncertain"):
+            status_txt = f"Статус автоматического решения: {auto}"
+        elif record.get("confidence_score") is None:
+            status_txt = f"Статус: {auto or 'proposed'} (численная уверенность не откалибрована)"
+        else:
+            status_txt = status_line(record, lang)
         lines = [
             f"Кандидатная морфология:\n{morph}",
-            f"\nСтатус:\nПредложено, но уверенность не откалибрована"
-            if record.get("confidence_score") is None
-            else f"\nСтатус:\n{status_line(record, lang)}",
+            f"\nСтатус:\n{status_txt}",
             "\nОсновные основания:",
         ]
-        lines += [f"- {r}" for r in (reasons or ["см. измеренные признаки"])]
+        lines += [f"- {r}" for r in (reasons or ["явное рассеяние не подтверждено признаками"])]
         if alts:
             lines.append("\nАльтернативы:")
             for i, a in enumerate(alts, 1):
@@ -113,14 +142,18 @@ def explain_result(record: dict[str, Any], lang: str) -> str:
         ]
         return "\n".join(lines)
 
+    if auto in ("abstain", "not_assessable", "uncertain"):
+        status_txt = f"Automatic decision status: {auto}"
+    elif record.get("confidence_score") is None:
+        status_txt = f"Status: {auto or 'proposed'} (numerical confidence uncalibrated)"
+    else:
+        status_txt = status_line(record, lang)
     lines = [
         f"Candidate morphology:\n{morph}",
-        "\nStatus:\nProposed, but confidence is not calibrated"
-        if record.get("confidence_score") is None
-        else f"\nStatus:\n{status_line(record, lang)}",
+        f"\nStatus:\n{status_txt}",
         "\nMain evidence:",
     ]
-    lines += [f"- {r}" for r in (reasons or ["see measured features"])]
+    lines += [f"- {r}" for r in (reasons or ["no positive spread evidence gates passed"])]
     if alts:
         lines.append("\nAlternatives:")
         for i, a in enumerate(alts, 1):
@@ -152,32 +185,35 @@ def status_line(record: dict[str, Any], lang: str) -> str:
 def audit_card(audit: dict[str, Any], lang: str) -> str:
     path = audit.get("path", "")
     name = path.replace("\\", "/").split("/")[-1]
+    status = display_status(audit.get("status"), lang)
+    warnings = ", ".join(audit.get("warnings") or []) or display_status("no" if lang == "ru" else "none", lang)
     if lang == "ru":
         return (
             f"Файл:\n{name}\n\n"
-            f"Статус:\n{audit.get('status')}\n\n"
+            f"Статус:\n{status}\n\n"
             f"Формат / адаптер:\n{audit.get('adapter')}\n\n"
             f"SHA-256:\n{(audit.get('sha256') or '')[:16]}…\n\n"
             f"Форма:\n{audit.get('shape')}\n\n"
             f"Доля конечных значений:\n{audit.get('finite_fraction')}\n\n"
-            f"Предупреждения:\n{', '.join(audit.get('warnings') or []) or 'нет'}"
+            f"Предупреждения:\n{warnings}"
         )
     return (
         f"File:\n{name}\n\n"
-        f"Status:\n{audit.get('status')}\n\n"
+        f"Status:\n{status}\n\n"
         f"Format / adapter:\n{audit.get('adapter')}\n\n"
         f"SHA-256:\n{(audit.get('sha256') or '')[:16]}…\n\n"
         f"Shape:\n{audit.get('shape')}\n\n"
         f"Finite fraction:\n{audit.get('finite_fraction')}\n\n"
-        f"Warnings:\n{', '.join(audit.get('warnings') or []) or 'none'}"
+        f"Warnings:\n{warnings}"
     )
 
 
 def profile_card(profile: dict[str, Any], lang: str) -> str:
+    verification_status = display_status(profile.get("profile_verification_status"), lang)
     if lang == "ru":
         return (
             f"Профиль:\n{profile.get('profile_name')}\n\n"
-            f"Статус проверки:\n{profile.get('profile_verification_status')}\n\n"
+            f"Статус проверки:\n{verification_status}\n\n"
             f"Учреждение / прибор:\n{profile.get('institution')} / {profile.get('instrument')}\n\n"
             f"Станция:\n{profile.get('station_name')}\n\n"
             f"Координаты:\n{profile.get('latitude')}, {profile.get('longitude')}\n\n"
@@ -191,7 +227,7 @@ def profile_card(profile: dict[str, Any], lang: str) -> str:
         )
     return (
         f"Profile:\n{profile.get('profile_name')}\n\n"
-        f"Verification status:\n{profile.get('profile_verification_status')}\n\n"
+        f"Verification status:\n{verification_status}\n\n"
         f"Institution / instrument:\n{profile.get('institution')} / {profile.get('instrument')}\n\n"
         f"Station:\n{profile.get('station_name')}\n\n"
         f"Coordinates:\n{profile.get('latitude')}, {profile.get('longitude')}\n\n"

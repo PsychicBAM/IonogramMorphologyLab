@@ -1,0 +1,307 @@
+# Machine-readable MAT signal contracts — Phase 4A / 4A.1
+# Status vocabulary: verified | provisionally_verified | source_supported |
+#                    project_heuristic | unavailable | unresolved | disabled
+#
+# Schema (Phase 4A.1): do NOT mix notes and numeric shapes in the same list.
+# Use: accepted_shapes | shape_constraints | accepted_dtypes | optional_presence |
+#      verification_evidence
+version: "1.1.1"
+profile_id: kfu_cyclone_2013_2014
+schema_version: "4A.1"
+
+contracts:
+  - contract_id: kfu_amp_all_v1
+    profile_id: kfu_cyclone_2013_2014
+    variable_name: Amp_all
+    variable_role: primary_amplitude
+    expected_shape: [368640, 400]
+    accepted_shapes:
+      - [368640, 400]
+    shape_constraints:
+      ndim: 2
+      dim0_multiple_of: 256
+      dim1: 400
+      rows_per_frame: 256
+      frames_per_file: 1440
+      note: "Synthetic/test stacks may use N*256 x 400 with N < 1440; full-day archive is 1440 frames."
+    accepted_dtypes: [uint16, float64, double]
+    optional_presence: false
+    verification_evidence:
+      - "Am_all_2013-01-01.mat shape (368640, 400) dtype uint16; frames 1/421/1440 via extract_frame_consistent"
+      - "workspaces/_phase4a_evidence/ (Phase 4A.1 bundle)"
+    dtype: uint16_or_double
+    reshape_order: frames_stacked_rows
+    frame_axis:
+      kind: stacked_row_blocks
+      frames_per_file: 1440
+      height_bins: 256
+      rows_per_frame: 256
+      index_base: 1
+      row_start_formula: "(frame_index - 1) * 256"
+      row_end_formula: "frame_index * 256"   # exclusive end in Python slice
+      verification_status: provisionally_verified
+    range_axis:
+      bins: 256
+      meaning: nominal_virtual_height_bins
+      unit: km
+      scale_km_per_bin: 2.5
+      verification_status: provisionally_verified
+      note: "Nominal virtual height proxy — not true height"
+    frequency_axis:
+      bins: 400
+      unit: MHz
+      start_mhz: 1.5
+      step_mhz: 0.019
+      end_mhz: 9.081
+      source_variable: ff
+      verification_status: provisionally_verified
+      note: "When ff is absent, profile start/step/end are used as provisional axis"
+    time_axis:
+      mapping: matlab_index_minus_1_minute
+      unit: minute_of_day
+      frame_1_minute: 0
+      frame_1440_minute: 1439
+      verification_status: provisionally_verified
+    units:
+      amplitude: uncalibrated_archive_units
+    calibration_status: unavailable
+    verification_status: provisionally_verified
+    source_reference:
+      - CALSTAT
+      - GETION
+      - config/instrument_profiles/kfu_cyclone_2013_2014.yaml
+    limitations:
+      - "Image PNG is a visualization of this matrix, not a scientific replacement."
+      - "Absolute MHz/km metrology and clock confirmation remain Gate2-open."
+      - "Do not treat pixel intensity as calibrated foF2."
+    allowed_scientific_uses:
+      - morphology_candidate_features
+      - teaching_visualization
+      - comparative_diagnostics
+    prohibited_scientific_claims:
+      - calibrated_critical_frequency
+      - true_height_profile
+      - confirmed_OX_mode_assignment
+
+  - contract_id: kfu_phs_all_v1
+    profile_id: kfu_cyclone_2013_2014
+    variable_name: Phs_all
+    variable_role: phase_or_unknown_companion
+    expected_shape: [368640, 400]
+    accepted_shapes:
+      - [368640, 400]
+    shape_constraints:
+      ndim: 2
+      dim0_multiple_of: 256
+      dim1: 400
+      rows_per_frame: 256
+      frames_per_file: 1440
+    accepted_dtypes: [float64, double]
+    optional_presence: true
+    verification_evidence: []
+    dtype: double
+    reshape_order: frames_stacked_rows
+    frame_axis:
+      kind: stacked_row_blocks
+      frames_per_file: 1440
+      height_bins: 256
+      rows_per_frame: 256
+      index_base: 1
+      verification_status: unresolved
+    range_axis:
+      bins: 256
+      verification_status: unresolved
+    frequency_axis:
+      bins: 400
+      verification_status: unresolved
+    time_axis:
+      mapping: unknown_until_verified
+      verification_status: unresolved
+    units:
+      phase: unverified
+    calibration_status: unavailable
+    verification_status: unresolved
+    source_reference:
+      - config/instrument_profiles/kfu_cyclone_2013_2014.yaml
+    limitations:
+      - "Numeric range, wrapping, and physical meaning are not verified for this profile."
+      - "Do not use for automatic scientific decisions until verified."
+      - "Phase unwrapping validity is unknown."
+    allowed_scientific_uses:
+      - inventory_presence_only
+      - expert_manual_inspection_with_warning
+    prohibited_scientific_claims:
+      - polarimetric_OX_separation
+      - absolute_phase_physics
+      - automatic_phase_derived_morphology
+    ui_message_en: "Phase data are available, but their scientific interpretation is not verified for this profile."
+    ui_message_ru: "Фазовые данные доступны, но их научная интерпретация для этого профиля не подтверждена."
+    automatic_rules_enabled: false
+
+  - contract_id: kfu_ff_v1
+    profile_id: kfu_cyclone_2013_2014
+    variable_name: ff
+    variable_role: frequency_vector
+    expected_shape: [400]
+    accepted_shapes:
+      - [400]
+      - [1, 400]
+      - [400, 1]
+    shape_constraints:
+      axis_length: 400
+      note: "Row or column vector of length 400 is accepted."
+    accepted_dtypes: [float64, double]
+    optional_presence: true
+    verification_evidence:
+      - "Profile frequency_bins=400; ff preferred when present"
+    dtype: double
+    reshape_order: none
+    frame_axis: null
+    range_axis: null
+    frequency_axis:
+      bins: 400
+      unit: MHz
+      verification_status: provisionally_verified
+    time_axis: null
+    units:
+      frequency: MHz
+    calibration_status: provisionally_verified
+    verification_status: provisionally_verified
+    source_reference:
+      - CALSTAT
+      - config/instrument_profiles/kfu_cyclone_2013_2014.yaml
+    limitations:
+      - "May be absent; profile start/step/end used as fallback."
+    allowed_scientific_uses:
+      - frequency_axis_labeling
+      - bin_to_mhz_conversion_when_present
+    prohibited_scientific_claims:
+      - metrologically_confirmed_frequency_scale
+
+  - contract_id: kfu_date_time1_v1
+    profile_id: kfu_cyclone_2013_2014
+    variable_name: Date_Time1
+    variable_role: archive_time_metadata
+    expected_shape: unresolved
+    accepted_shapes: []
+    shape_constraints:
+      status: unresolved
+    accepted_dtypes: []
+    optional_presence: true
+    verification_evidence: []
+    dtype: unresolved
+    reshape_order: unresolved
+    frame_axis: null
+    range_axis: null
+    frequency_axis: null
+    time_axis:
+      mapping: unresolved_file_dependent
+      verification_status: unresolved
+    units: {}
+    calibration_status: unavailable
+    verification_status: unresolved
+    source_reference:
+      - config/instrument_profiles/kfu_cyclone_2013_2014.yaml
+      - GETION
+    limitations:
+      - "Presence and layout vary by file; do not assume identical meaning across MAT files."
+      - "Primary time navigation for KFU uses matlab_index_minus_1_minute, not Date_Time1."
+    allowed_scientific_uses:
+      - optional_metadata_display
+    prohibited_scientific_claims:
+      - confirmed_UTC_clock
+
+  - contract_id: kfu_amesp_unresolved
+    profile_id: kfu_cyclone_2013_2014
+    variable_name: AmEsP
+    variable_role: unresolved_archive_product
+    expected_shape: unresolved
+    accepted_shapes: []
+    shape_constraints:
+      status: unresolved
+    accepted_dtypes: []
+    optional_presence: true
+    verification_evidence: []
+    dtype: unresolved
+    reshape_order: unresolved
+    frame_axis: null
+    range_axis: null
+    frequency_axis: null
+    time_axis: null
+    units: {}
+    calibration_status: unavailable
+    verification_status: unresolved
+    source_reference: []
+    limitations:
+      - "Do not assume meaning from the name alone."
+      - "See docs/ARCHIVE_VARIABLE_AUDIT_4A1.md for files where this variable was actually observed."
+    allowed_scientific_uses: []
+    prohibited_scientific_claims:
+      - automatic_use_without_contract
+
+  - contract_id: kfu_a_map_f_unresolved
+    profile_id: kfu_cyclone_2013_2014
+    variable_name: A_map_F
+    variable_role: unresolved_archive_product
+    expected_shape: unresolved
+    accepted_shapes: []
+    shape_constraints:
+      status: unresolved
+    accepted_dtypes: []
+    optional_presence: true
+    verification_evidence: []
+    dtype: unresolved
+    reshape_order: unresolved
+    frame_axis: null
+    range_axis: null
+    frequency_axis: null
+    time_axis: null
+    units: {}
+    calibration_status: unavailable
+    verification_status: unresolved
+    source_reference: []
+    limitations:
+      - "Do not assume identical meaning across MAT files with similar names."
+      - "See docs/ARCHIVE_VARIABLE_AUDIT_4A1.md."
+    allowed_scientific_uses: []
+    prohibited_scientific_claims:
+      - automatic_use_without_contract
+
+  - contract_id: kfu_h_map_f_unresolved
+    profile_id: kfu_cyclone_2013_2014
+    variable_name: H_map_F
+    variable_role: unresolved_archive_product
+    expected_shape: unresolved
+    accepted_shapes: []
+    shape_constraints:
+      status: unresolved
+    accepted_dtypes: []
+    optional_presence: true
+    verification_evidence: []
+    dtype: unresolved
+    reshape_order: unresolved
+    frame_axis: null
+    range_axis: null
+    frequency_axis: null
+    time_axis: null
+    units: {}
+    calibration_status: unavailable
+    verification_status: unresolved
+    source_reference: []
+    limitations:
+      - "See docs/ARCHIVE_VARIABLE_AUDIT_4A1.md."
+    allowed_scientific_uses: []
+    prohibited_scientific_claims:
+      - automatic_use_without_contract
+
+summary:
+  verified_or_provisional:
+    - kfu_amp_all_v1
+    - kfu_ff_v1
+  unresolved:
+    - kfu_phs_all_v1
+    - kfu_date_time1_v1
+    - kfu_amesp_unresolved
+    - kfu_a_map_f_unresolved
+    - kfu_h_map_f_unresolved
+  phase_automatic_rules: disabled

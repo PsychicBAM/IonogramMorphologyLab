@@ -1,0 +1,20 @@
+{
+  "import": true,
+  "profile": true,
+  "cache": true,
+  "trace": true,
+  "layer_e": false,
+  "layer_es": false,
+  "layer_f1": false,
+  "layer_f2": false,
+  "interference": true,
+  "spread_f": true,
+  "ox_ambiguity": true,
+  "parameters": false,
+  "custom_rules": false,
+  "matlab": true,
+  "ml": true,
+  "temporal": true,
+  "human_review": true,
+  "report": true
+}

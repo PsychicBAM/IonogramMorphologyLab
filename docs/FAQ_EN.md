@@ -49,7 +49,7 @@ Documentation PNG captures use **synthetic teaching projects only** (`synthetic_
 
 ## Where is version 1.1.1 documented?
 
-See [CHANGELOG.md](../CHANGELOG.md), About dialog, and [Documentation completeness report](DOCUMENTATION_COMPLETENESS_REPORT.md).
+See [CHANGELOG.md](../CHANGELOG.md), About dialog, and [Documentation file audit](DOCUMENTATION_FILE_AUDIT.md).
 
 ## Can I run IML on Linux for development?
 
@@ -65,7 +65,7 @@ Run `python scripts/validate_docs.py` together with `validate_readme.py` and `ch
 
 ## Related documentation
 
-- [Quick start](QUICK_START_EN.md)
-- [Scientific limitations](SCIENTIFIC_LIMITATIONS_EN.md)
+- [User Guide](USER_GUIDE_EN.md)
+- [Scientific Guide](SCIENTIFIC_GUIDE_EN.md)
 - [Troubleshooting](TROUBLESHOOTING_EN.md)
 - [Custom Rule Builder](CUSTOM_RULE_BUILDER_EN.md)

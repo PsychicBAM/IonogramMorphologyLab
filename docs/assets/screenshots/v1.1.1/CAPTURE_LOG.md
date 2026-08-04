@@ -1,0 +1,53 @@
+# Screenshot capture log
+
+- Version dir: `v1.1.1`
+- UI: live Qt MainWindow
+- Platform: `windows`
+- Data: synthetic teaching MAT only (EvidenceQA workspace)
+- Private paths / research MAT / MATLAB install path: excluded
+- Count: 44
+
+- `docs/assets/screenshots/v1.1.1/home_ru.png`
+- `docs/assets/screenshots/v1.1.1/project_creation_ru.png`
+- `docs/assets/screenshots/v1.1.1/mat_import_ru.png`
+- `docs/assets/screenshots/v1.1.1/data_audit_ru.png`
+- `docs/assets/screenshots/v1.1.1/instrument_profile_ru.png`
+- `docs/assets/screenshots/v1.1.1/ionogram_viewer_ru.png`
+- `docs/assets/screenshots/v1.1.1/contact_sheet_ru.png`
+- `docs/assets/screenshots/v1.1.1/batch_analysis_ru.png`
+- `docs/assets/screenshots/v1.1.1/results_ru.png`
+- `docs/assets/screenshots/v1.1.1/parameters_ru.png`
+- `docs/assets/screenshots/v1.1.1/expert_review_ru.png`
+- `docs/assets/screenshots/v1.1.1/reports_ru.png`
+- `docs/assets/screenshots/v1.1.1/reference_atlas_ru.png`
+- `docs/assets/screenshots/v1.1.1/scientific_basis_ru.png`
+- `docs/assets/screenshots/v1.1.1/rule_builder_ru.png`
+- `docs/assets/screenshots/v1.1.1/rule_testing_ru.png`
+- `docs/assets/screenshots/v1.1.1/matlab_studio_ru.png`
+- `docs/assets/screenshots/v1.1.1/method_comparison_ru.png`
+- `docs/assets/screenshots/v1.1.1/pipeline_builder_ru.png`
+- `docs/assets/screenshots/v1.1.1/model_lab_ru.png`
+- `docs/assets/screenshots/v1.1.1/settings_ru.png`
+- `docs/assets/screenshots/v1.1.1/help_ru.png`
+- `docs/assets/screenshots/v1.1.1/home_en.png`
+- `docs/assets/screenshots/v1.1.1/project_creation_en.png`
+- `docs/assets/screenshots/v1.1.1/mat_import_en.png`
+- `docs/assets/screenshots/v1.1.1/data_audit_en.png`
+- `docs/assets/screenshots/v1.1.1/instrument_profile_en.png`
+- `docs/assets/screenshots/v1.1.1/ionogram_viewer_en.png`
+- `docs/assets/screenshots/v1.1.1/contact_sheet_en.png`
+- `docs/assets/screenshots/v1.1.1/batch_analysis_en.png`
+- `docs/assets/screenshots/v1.1.1/results_en.png`
+- `docs/assets/screenshots/v1.1.1/parameters_en.png`
+- `docs/assets/screenshots/v1.1.1/expert_review_en.png`
+- `docs/assets/screenshots/v1.1.1/reports_en.png`
+- `docs/assets/screenshots/v1.1.1/reference_atlas_en.png`
+- `docs/assets/screenshots/v1.1.1/scientific_basis_en.png`
+- `docs/assets/screenshots/v1.1.1/rule_builder_en.png`
+- `docs/assets/screenshots/v1.1.1/rule_testing_en.png`
+- `docs/assets/screenshots/v1.1.1/matlab_studio_en.png`
+- `docs/assets/screenshots/v1.1.1/method_comparison_en.png`
+- `docs/assets/screenshots/v1.1.1/pipeline_builder_en.png`
+- `docs/assets/screenshots/v1.1.1/model_lab_en.png`
+- `docs/assets/screenshots/v1.1.1/settings_en.png`
+- `docs/assets/screenshots/v1.1.1/help_en.png`

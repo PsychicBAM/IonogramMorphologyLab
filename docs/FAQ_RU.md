@@ -49,7 +49,7 @@ PNG в документации сняты только с **учебных си
 
 ## Где зафиксирована версия 1.1.1?
 
-[CHANGELOG.md](../CHANGELOG.md), диалог About, [DOCUMENTATION_COMPLETENESS_REPORT.md](DOCUMENTATION_COMPLETENESS_REPORT.md).
+[CHANGELOG.md](../CHANGELOG.md), диалог About, [DOCUMENTATION_FILE_AUDIT.md](DOCUMENTATION_FILE_AUDIT.md).
 
 ## Можно ли разрабатывать на Linux?
 
@@ -65,7 +65,7 @@ SVG-макеты — в `docs/assets/schematics/`. Их пересоздаёт `
 
 ## Связанные документы
 
-- [QUICK_START_RU.md](QUICK_START_RU.md)
-- [SCIENTIFIC_LIMITATIONS_RU.md](SCIENTIFIC_LIMITATIONS_RU.md)
+- [Руководство пользователя](USER_GUIDE_RU.md)
+- [Научное руководство](SCIENTIFIC_GUIDE_RU.md)
 - [TROUBLESHOOTING_RU.md](TROUBLESHOOTING_RU.md)
 - [CUSTOM_RULE_BUILDER_RU.md](CUSTOM_RULE_BUILDER_RU.md)

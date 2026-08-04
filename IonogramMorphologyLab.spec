@@ -5,7 +5,7 @@ a = Analysis(
     ['src\\ionogram_morphology_lab\\app\\main.py'],
     pathex=['src'],
     binaries=[],
-    datas=[('src/ionogram_morphology_lab/i18n', 'ionogram_morphology_lab/i18n'), ('config', 'config'), ('knowledge_base', 'knowledge_base'), ('matlab_builtin', 'matlab_builtin'), ('rule_packs', 'rule_packs'), ('synthetic_data', 'synthetic_data'), ('docs', 'docs'), ('matlab_helpers', 'matlab_helpers'), ('matlab_studio_library', 'matlab_studio_library')],
+    datas=[('src/ionogram_morphology_lab/i18n', 'ionogram_morphology_lab/i18n'), ('config', 'config'), ('knowledge_base', 'knowledge_base'), ('matlab_builtin', 'matlab_builtin'), ('rule_packs', 'rule_packs'), ('synthetic_data', 'synthetic_data'), ('docs', 'docs'), ('assets', 'assets'), ('matlab_helpers', 'matlab_helpers'), ('matlab_studio_library', 'matlab_studio_library')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
@@ -32,6 +32,7 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
+    icon=['E:\\ionog\\conference_presentation\\IonogramMorphologyLab\\assets\\IonogramMorphologyLab.ico'],
 )
 coll = COLLECT(
     exe,

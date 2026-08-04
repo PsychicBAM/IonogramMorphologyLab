@@ -82,7 +82,7 @@ python scripts/validate_docs.py
 
 ## Связанные документы
 
-- [QUICK_START_RU.md](QUICK_START_RU.md)
-- [COMPLETE_USER_MANUAL_RU.md](COMPLETE_USER_MANUAL_RU.md)
+- [Руководство пользователя](USER_GUIDE_RU.md)
+- [Научное руководство](SCIENTIFIC_GUIDE_RU.md)
 - [FAQ_RU.md](FAQ_RU.md)
 - [SECURITY.md](../SECURITY.md)

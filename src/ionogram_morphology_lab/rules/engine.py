@@ -16,6 +16,7 @@ CANONICAL_MORPHOLOGY = (
     "range",
     "mixed",
     "none",
+    "diffuse",
     "indeterminate",
     "artifact",
     "not_assessable",
@@ -66,6 +67,9 @@ class RuleResult:
     abstention_reason: str | None
     explanations_ru: list[str] = field(default_factory=list)
     explanations_en: list[str] = field(default_factory=list)
+    # Separate from morphology: none|present|significant|dominant|prevents_assessment
+    interference_assessment: str = "none"
+    near_threshold_rules: list[str] = field(default_factory=list)
     prohibited_causal_claims: list[str] = field(
         default_factory=lambda: [
             "confirmed physical mechanism",
@@ -77,6 +81,53 @@ class RuleResult:
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
+
+
+def assess_interference(features: dict[str, float]) -> dict[str, Any]:
+    """Separate interference presence from morphology blocking.
+
+    Levels:
+      none | present | significant | dominant | prevents_assessment
+    Morphology must not be replaced by an interference label unless assessment
+    is genuinely prevented.
+    """
+    inter_dom = float(features.get("interference_dominance", 0) or 0)
+    stripe_den = float(features.get("vertical_stripe_density", 0) or 0)
+    full_h = float(features.get("full_height_stripe_count", 0) or 0)
+    tpf = float(features.get("trace_pixel_fraction", 0) or 0)
+    stripe_interference = full_h >= 3.0 and inter_dom >= 0.25
+    present = inter_dom >= 0.15 or stripe_den >= 0.08 or full_h >= 2.0
+    significant = inter_dom >= 0.35 or stripe_den >= 0.20 or stripe_interference
+    dominant = inter_dom >= 0.55
+    # Prevent assessment only when interference leaves no reliable trace to score.
+    prevents = (
+        inter_dom >= 0.70
+        or (dominant and tpf < 0.008)
+        or (stripe_den > 0.45 and inter_dom >= 0.40 and tpf < 0.015)
+    )
+    if prevents:
+        level = "prevents_assessment"
+    elif dominant:
+        level = "dominant"
+    elif significant:
+        level = "significant"
+    elif present:
+        level = "present"
+    else:
+        level = "none"
+    return {
+        "level": level,
+        "interference_dominance": inter_dom,
+        "vertical_stripe_density": stripe_den,
+        "full_height_stripe_count": full_h,
+        "stripe_interference": stripe_interference,
+        "trace_pixel_fraction": tpf,
+        "prevents_assessment": prevents,
+        # Range-like vertical clutter can still invalidate range-only claims.
+        "blocks_range_alone": prevents
+        or (stripe_interference and inter_dom >= 0.30)
+        or (stripe_den > 0.30 and inter_dom >= 0.40),
+    }
 
 
 def load_rule_pack(path: Path | str | None = None) -> list[Rule]:
@@ -125,15 +176,23 @@ def _builtin_rules() -> list[Rule]:
             source_id="A3L018",
             source_page="241",
             source_wording_summary="Frequency-aspect of midlatitude SF observational definition",
-            measurable_features=["median_horizontal_width", "horizontal_broadening_persistence"],
-            thresholds={"median_horizontal_width": 5.0, "horizontal_broadening_persistence": 0.25},
+            measurable_features=[
+                "frequency_evidence_passed",
+                "median_horizontal_width",
+                "horizontal_broadening_persistence",
+            ],
+            thresholds={
+                "frequency_evidence_passed": 1.0,
+                "median_horizontal_width": 6.0,
+                "horizontal_broadening_persistence": 0.35,
+            },
             threshold_origin="development_calibration",
-            assumptions="Segmentation threshold adequate; axes comparable",
+            assumptions="Local ridge thickness; axes comparable",
             applicable_domain="midlatitude_vertical_sounding",
             exclusions="interference_dominance>0.5; low_signal",
             limitations="Candidate morphology only; not confirmed physical Spread-F",
-            explanation_ru="Горизонтальное уширение трассы визуально совместимо с частотным рассеянием.",
-            explanation_en="Horizontal trace broadening is visually compatible with frequency spread.",
+            explanation_ru="Горизонтальное локальное уширение трассы совместимо с частотным рассеянием.",
+            explanation_en="Local horizontal ridge thickening is compatible with frequency spread.",
             claim_id="C03",
         ),
         Rule(
@@ -142,15 +201,23 @@ def _builtin_rules() -> list[Rule]:
             source_id="A3L018",
             source_page="241",
             source_wording_summary="Range-diffuse aspect of midlatitude SF definition",
-            measurable_features=["median_vertical_width", "vertical_broadening_persistence"],
-            thresholds={"median_vertical_width": 8.0, "vertical_broadening_persistence": 0.25},
+            measurable_features=[
+                "range_evidence_passed",
+                "median_vertical_width",
+                "vertical_broadening_persistence",
+            ],
+            thresholds={
+                "range_evidence_passed": 1.0,
+                "median_vertical_width": 6.0,
+                "vertical_broadening_persistence": 0.35,
+            },
             threshold_origin="development_calibration",
-            assumptions="Nominal virtual-height axis",
+            assumptions="Local ridge thickness; nominal virtual-height axis",
             applicable_domain="midlatitude_vertical_sounding",
-            exclusions="vertical_stripe_density>0.3 (interference may mimic range)",
-            limitations="Nominal height; interference may mimic range spread",
-            explanation_ru="Вертикальное уширение совместимо с высотным/дальностным рассеянием (номинальная ось).",
-            explanation_en="Vertical broadening is compatible with range/virtual-height spread (nominal axis).",
+            exclusions="vertical_stripe_density>0.3; interference_dominance>=0.55",
+            limitations="Nominal height; interference must not satisfy range alone",
+            explanation_ru="Вертикальное локальное уширение совместимо с высотным рассеянием (номинальная ось).",
+            explanation_en="Local vertical ridge thickening is compatible with range/virtual-height spread.",
             claim_id="C03",
         ),
         Rule(
@@ -158,16 +225,24 @@ def _builtin_rules() -> list[Rule]:
             category="mixed",
             source_id="A2_PROTOCOL",
             source_page="n/a",
-            source_wording_summary="Article 2: mixed if both frequency and range flags",
-            measurable_features=["mixed_width_score", "mixed_coverage"],
-            thresholds={"mixed_width_score": 0.8, "mixed_coverage": 0.5},
+            source_wording_summary="Mixed only when independent frequency AND range evidence co-locate",
+            measurable_features=[
+                "frequency_evidence_absolute",
+                "range_evidence_absolute",
+                "colocated_spread_fraction",
+            ],
+            thresholds={
+                "frequency_evidence_absolute": 1.0,
+                "range_evidence_absolute": 1.0,
+                "colocated_spread_fraction": 0.20,
+            },
             threshold_origin="derived_from_verified_definition",
-            assumptions="Article 2 morphology protocol for human review",
+            assumptions="Article 2: mixed requires both axes with co-location",
             applicable_domain="project_article2_compatible",
-            exclusions="",
-            limitations="Development aggregation of compatible features",
-            explanation_ru="Одновременные признаки частотного и высотного уширения → смешанное рассеяние (кандидат).",
-            explanation_en="Simultaneous frequency- and range-compatible broadening → mixed (candidate).",
+            exclusions="either axis evidence alone",
+            limitations="Never emit mixed from slope-span or single-axis evidence",
+            explanation_ru="Одновременные независимые признаки частотного и высотного уширения с со-локализацией → смешанное (кандидат).",
+            explanation_en="Independent co-located frequency- and range-compatible broadening → mixed (candidate).",
             claim_id="C03",
         ),
         Rule(
@@ -175,20 +250,26 @@ def _builtin_rules() -> list[Rule]:
             category="none",
             source_id="A2_PROTOCOL",
             source_page="n/a",
-            source_wording_summary="No confirmed compatible feature when widths low and coverage low",
-            measurable_features=["trace_pixel_fraction", "median_horizontal_width", "median_vertical_width"],
+            source_wording_summary="Assessable frame without independent spread evidence (canonical: clean)",
+            measurable_features=[
+                "frequency_evidence_passed",
+                "range_evidence_passed",
+                "interference_dominance",
+                "possible_ox_compatibility",
+            ],
             thresholds={
-                "trace_pixel_fraction_max": 0.02,
-                "median_horizontal_width_max": 3.0,
-                "median_vertical_width_max": 4.0,
+                "frequency_evidence_passed_max": 0.0,
+                "range_evidence_passed_max": 0.0,
+                "interference_dominance_max": 0.55,
+                "possible_ox_compatibility_max": 0.5,
             },
             threshold_origin="development_calibration",
-            assumptions="Adequate SNR",
+            assumptions="Local thickness evidence gates",
             applicable_domain="general",
             exclusions="not_assessable quality",
-            limitations="Absence of visible compatible feature ≠ physical proof of quiet ionosphere",
-            explanation_ru="Убедительных признаков частотного/высотного рассеяния не выявлено.",
-            explanation_en="No confirmed compatible frequency/range-spread feature detected.",
+            limitations="Canonical serialized morphology is clean (no visible spread)",
+            explanation_ru="Явное рассеяние не обнаружено (чистая трасса или отсутствие уширения).",
+            explanation_en="No visible spread feature detected (clean / no_visible_spread candidate).",
             claim_id="C03",
         ),
         Rule(
@@ -196,16 +277,25 @@ def _builtin_rules() -> list[Rule]:
             category="artifact",
             source_id="A2_PROTOCOL",
             source_page="n/a",
-            source_wording_summary="Interference-dominated frames",
-            measurable_features=["interference_dominance", "vertical_stripe_density"],
-            thresholds={"interference_dominance": 0.55, "vertical_stripe_density": 0.2},
+            source_wording_summary="Interference indicators (separate from morphology)",
+            measurable_features=[
+                "interference_dominance",
+                "vertical_stripe_density",
+                "full_height_stripe_count",
+            ],
+            thresholds={
+                "interference_dominance": 0.55,
+                "vertical_stripe_density": 0.2,
+                "full_height_stripe_count": 3.0,
+                "stripe_interference_dominance_min": 0.25,
+            },
             threshold_origin="engineering_default",
-            assumptions="Vertical-stripe heuristic",
+            assumptions="R005 marks interference evidence; morphology retained unless assessment prevented",
             applicable_domain="general",
             exclusions="",
-            limitations="Heuristic interference detector",
-            explanation_ru="Доминируют признаки артефакта/помехи; морфотип рассеяния не назначается автоматически.",
-            explanation_en="Artifact/interference appears dominant; spread morphology not auto-assigned.",
+            limitations="Heuristic; does not replace morphology when a trace remains assessable",
+            explanation_ru="Признаки помехи (R005); морфология сохраняется если кадр оцениваем.",
+            explanation_en="Interference indicators (R005); morphology retained when assessable.",
             claim_id="",
         ),
         Rule(
@@ -306,36 +396,182 @@ class RuleEngine:
         ):
             disagreement.append("frequency_vs_ox_ambiguity")
 
-        # Interference must not auto-become range
-        if "range" in cats and features.get("vertical_stripe_density", 0) > 0.3:
+        # Interference is assessed separately from morphology (R005 revisit).
+        # Presence/significance → warning on the interference axis.
+        # Morphology becomes not_assessable only when assessment is prevented.
+        inter_info = assess_interference(features)
+        inter_dom = float(inter_info["interference_dominance"])
+        stripe_den = float(inter_info["vertical_stripe_density"])
+        stripe_interference = bool(inter_info["stripe_interference"])
+        interference_level = str(inter_info["level"])
+        interference_prevents = bool(inter_info["prevents_assessment"])
+        blocks_range_alone = bool(inter_info["blocks_range_alone"])
+        if interference_level in ("present", "significant", "dominant"):
+            disagreement.append(f"interference_{interference_level}")
+        if "artifact" in cats and not interference_prevents:
+            disagreement.append("interference_present_morphology_still_assessable")
+
+        # Range-only claims remain vulnerable to vertical stripe clutter.
+        if "range" in cats and (
+            blocks_range_alone
+            or float(features.get("range_evidence_passed", 0) or 0) < 1.0
+        ):
             disagreement.append("range_vs_vertical_interference")
             cats.discard("range")
             activated = [r for r in activated if r.category != "range"]
+        # Full-height stripe clutter can also fabricate horizontal ridge width.
+        stripe_blocks_frequency = bool(
+            stripe_interference and float(inter_info["full_height_stripe_count"]) >= 3.0
+        )
+        if "frequency" in cats and (interference_prevents or stripe_blocks_frequency):
+            disagreement.append(
+                "frequency_vs_blocking_interference"
+                if interference_prevents
+                else "frequency_vs_vertical_stripe_clutter"
+            )
+            cats.discard("frequency")
+            activated = [r for r in activated if r.category != "frequency"]
+        if "mixed" in cats and (interference_prevents or stripe_blocks_frequency):
+            disagreement.append("mixed_vs_blocking_interference")
+            cats.discard("mixed")
+            activated = [r for r in activated if r.category != "mixed"]
 
-        if "artifact" in cats and features.get("interference_dominance", 0) >= 0.55:
-            candidate, status = "artifact", "proposed"
-        elif any(r.category == "abstain" for r in activated) and features.get(
-            "possible_ox_compatibility", 0
+        # Mixed requires substantial, comparable evidence on BOTH axes + co-location.
+        # If one axis clearly dominates, prefer that single-axis morphology.
+        freq_dom = (
+            float(features.get("frequency_evidence_passed", 0) or 0) >= 1.0
+            and not stripe_blocks_frequency
+        )
+        range_dom = float(features.get("range_evidence_passed", 0) or 0) >= 1.0
+        freq_abs = (
+            float(features.get("frequency_evidence_absolute", 0) or 0) >= 1.0
+            and not stripe_blocks_frequency
+        )
+        range_abs = float(features.get("range_evidence_absolute", 0) or 0) >= 1.0
+        colocated_ok = float(features.get("colocated_spread_fraction", 0) or 0) >= 0.20
+        med_h = float(features.get("median_horizontal_width", 0) or 0)
+        med_v = float(features.get("median_vertical_width", 0) or 0)
+        axis_ratio = max(med_h, med_v) / max(min(med_h, med_v), 1e-6)
+        balanced = axis_ratio <= 1.85
+        mixed_ok = (
+            not interference_prevents
+            and not blocks_range_alone
+            and freq_abs
+            and range_abs
+            and colocated_ok
+            and balanced
+            and min(med_h, med_v) >= 8.0
+        )
+        if "mixed" in cats and not mixed_ok:
+            cats.discard("mixed")
+            activated = [r for r in activated if r.category != "mixed"]
+            disagreement.append("mixed_requires_both_balanced_axes")
+
+        near_threshold: list[str] = []
+        if interference_prevents:
+            # Do not replace a visible morphology with "interference_dominated".
+            candidate, status = "not_assessable", "not_assessable"
+            abstention_reason = "interference_prevents_assessment"
+            disagreement.append("interference_prevents_assessment")
+        elif any(r.category == "abstain" for r in activated) and float(
+            features.get("possible_ox_compatibility", 0) or 0
         ) >= 0.5:
             candidate, status = "abstain", "abstain"
             abstention_reason = "possible_ox_ambiguity"
-        elif "mixed" in cats or (("frequency" in cats) and ("range" in cats)):
+        elif mixed_ok:
             candidate, status = "mixed", "proposed"
-        elif "frequency" in cats:
+            if "mixed" not in cats:
+                cats.add("mixed")
+        elif freq_abs and range_abs and not balanced:
+            candidate, status = "diffuse", "uncertain"
+            abstention_reason = "dual_axis_thickening_unbalanced_not_mixed"
+            disagreement.append("unbalanced_dual_axis_thickening")
+            activated = [r for r in activated if r.category not in ("frequency", "range", "mixed", "none")]
+            cats = {r.category for r in activated}
+        elif (
+            not interference_prevents
+            and (
+                ("frequency" in cats and freq_dom)
+                or (freq_abs and not range_abs and med_h >= med_v * 1.15)
+            )
+        ):
             candidate, status = "frequency", "proposed"
-        elif "range" in cats:
+        elif (
+            not interference_prevents
+            and not blocks_range_alone
+            and (
+                ("range" in cats and range_dom)
+                or (range_abs and not freq_abs and med_v >= med_h * 1.15)
+            )
+        ):
             candidate, status = "range", "proposed"
-        elif "none" in cats:
-            candidate, status = "none", "proposed"
         else:
-            candidate, status = "abstain", "uncertain"
-            abstention_reason = "no_rule_confidently_activated"
-            disagreement.append("none_vs_low_signal")
+            # Near-threshold / residual diffuseness: do not claim clean absence.
+            h_persist = float(features.get("horizontal_broadening_persistence", 0) or 0)
+            v_persist = float(features.get("vertical_broadening_persistence", 0) or 0)
+            near_freq = (5.0 <= med_h < 6.0 and h_persist >= 0.25) or (
+                med_h >= 6.0 and 0.20 <= h_persist < 0.35
+            )
+            near_range = (5.0 <= med_v < 6.0 and v_persist >= 0.25) or (
+                med_v >= 6.0 and 0.20 <= v_persist < 0.35
+            )
+            colocated = float(features.get("colocated_spread_fraction", 0) or 0)
+            diffuse_visible = (
+                (max(med_h, med_v) >= 5.0 and max(h_persist, v_persist) >= 0.25)
+                or colocated >= 0.12
+                or (med_h >= 5.0 and h_persist >= 0.30)
+                or (med_v >= 5.0 and v_persist >= 0.30)
+            )
+            if near_freq:
+                near_threshold.append("R001_near_threshold")
+            if near_range:
+                near_threshold.append("R002_near_threshold")
+            if near_freq or near_range:
+                candidate, status = "diffuse", "uncertain"
+                abstention_reason = (
+                    "near_threshold_frequency"
+                    if near_freq and not near_range
+                    else ("near_threshold_range" if near_range and not near_freq else "near_threshold_spread")
+                )
+                disagreement.append(abstention_reason)
+            elif diffuse_visible and not interference_prevents:
+                candidate, status = "diffuse", "uncertain"
+                abstention_reason = "diffuse_structure_type_undetermined"
+                disagreement.append("diffuse_unspecified")
+            elif "none" in cats or (not freq_abs and not range_abs and not interference_prevents):
+                candidate, status = "none", "proposed"
+                abstention_reason = None
+            else:
+                candidate, status = "abstain", "uncertain"
+                abstention_reason = "no_rule_confidently_activated"
+                disagreement.append("none_vs_low_signal")
+
+        # Significant/dominant interference with a still-assessable morphology → uncertain.
+        if (
+            interference_level in ("significant", "dominant")
+            and candidate not in ("not_assessable", "abstain")
+            and status == "proposed"
+        ):
+            status = "uncertain"
+            disagreement.append("interference_warning_with_morphology")
 
         if disagreement and status == "proposed":
             status = "uncertain"
 
-        # Contradictions: activated rules with different categories
+        # Supporting rules match the final candidate; others are contradictions / rejected.
+        supporting = [r for r in activated if r.category == candidate]
+        if not supporting and candidate in ("none", "mixed", "artifact", "frequency", "range", "diffuse"):
+            supporting = [r for r in self.active_rules() if r.category == candidate][:1]
+        # R005 remains as contradicting/supporting interference evidence, not morphology winner.
+        if "artifact" in cats and candidate != "artifact":
+            for r in activated:
+                if r.category == "artifact" and r.rule_id not in [
+                    x.rule_id for x in supporting
+                ]:
+                    if r.rule_id not in [
+                        rr.rule_id for rr in activated if rr.category != candidate
+                    ]:
+                        pass
         contradicting = [
             r.rule_id
             for r in activated
@@ -352,46 +588,90 @@ class RuleEngine:
                 "applicability": r.applicable_domain,
                 "limitations": r.limitations,
             }
-            for r in activated
+            for r in (supporting or activated)
         ]
         return RuleResult(
             candidate_morphology=candidate,
             confidence_status=status,
-            activated_rules=[r.rule_id for r in activated],
+            activated_rules=[r.rule_id for r in (supporting or activated)],
             contradicting_rules=contradicting,
             measured_features=features,
             source_citations=citations,
             alternative_categories=alternatives,
             disagreement_flags=disagreement,
             abstention_reason=abstention_reason,
-            explanations_ru=[r.explanation_ru for r in activated],
-            explanations_en=[r.explanation_en for r in activated],
+            explanations_ru=[r.explanation_ru for r in (supporting or activated)],
+            explanations_en=[r.explanation_en for r in (supporting or activated)],
+            interference_assessment=interference_level,
+            near_threshold_rules=near_threshold,
         )
+
+    @staticmethod
+    def _finite(features: dict[str, float], key: str, default: float) -> float | None:
+        """Return finite feature value, or None if missing/non-finite (never treat NaN as evidence)."""
+        if key not in features and default is None:  # pragma: no cover
+            return None
+        raw = features.get(key, default)
+        try:
+            val = float(raw)  # type: ignore[arg-type]
+        except (TypeError, ValueError):
+            return None
+        if val != val:  # NaN
+            return None
+        return val
 
     def _fires(self, rule: Rule, features: dict[str, float]) -> bool:
         thr = rule.thresholds
         if rule.category == "none":
+            # Canonical non-spread path: no absolute frequency/range evidence,
+            # and not interference/O-X dominated. Visible clean traces are allowed.
+            f_ev = self._finite(features, "frequency_evidence_absolute", 0.0)
+            r_ev = self._finite(features, "range_evidence_absolute", 0.0)
+            # Fall back to dominance flags if absolute gates are absent (older vectors).
+            if f_ev is None:
+                f_ev = self._finite(features, "frequency_evidence_passed", 0.0)
+            if r_ev is None:
+                r_ev = self._finite(features, "range_evidence_passed", 0.0)
+            inter = self._finite(features, "interference_dominance", 0.0)
+            ox = self._finite(features, "possible_ox_compatibility", 0.0)
+            if None in (f_ev, r_ev, inter, ox):
+                return False
             return (
-                features.get("trace_pixel_fraction", 1) <= thr.get("trace_pixel_fraction_max", 0.02)
-                and features.get("median_horizontal_width", 99)
-                <= thr.get("median_horizontal_width_max", 3.0)
-                and features.get("median_vertical_width", 99)
-                <= thr.get("median_vertical_width_max", 4.0)
+                f_ev <= thr.get("frequency_evidence_passed_max", 0.0)
+                and r_ev <= thr.get("range_evidence_passed_max", 0.0)
+                and inter < thr.get("interference_dominance_max", 0.55)
+                and ox < thr.get("possible_ox_compatibility_max", 0.5)
             )
         if rule.category == "artifact":
-            return features.get("interference_dominance", 0) >= thr.get(
-                "interference_dominance", 0.55
-            ) or features.get("vertical_stripe_density", 0) >= thr.get("vertical_stripe_density", 0.2)
+            inter = self._finite(features, "interference_dominance", 0.0)
+            stripe = self._finite(features, "vertical_stripe_density", 0.0)
+            full_h = self._finite(features, "full_height_stripe_count", 0.0)
+            if inter is None and stripe is None and full_h is None:
+                return False
+            stripe_combo = (
+                full_h is not None
+                and inter is not None
+                and full_h >= thr.get("full_height_stripe_count", 3.0)
+                and inter >= thr.get("stripe_interference_dominance_min", 0.25)
+            )
+            return (
+                (inter is not None and inter >= thr.get("interference_dominance", 0.55))
+                or (stripe is not None and stripe >= thr.get("vertical_stripe_density", 0.2))
+                or stripe_combo
+            )
         if rule.category == "abstain":
-            return features.get("possible_ox_compatibility", 0) >= thr.get(
-                "possible_ox_compatibility", 0.5
-            ) and features.get("parallel_branch_count", 0) >= thr.get("parallel_branch_count", 2.0)
-        # generic: all listed feature thresholds must be met as minimums
-        ok = True
+            ox = self._finite(features, "possible_ox_compatibility", 0.0)
+            branches = self._finite(features, "parallel_branch_count", 0.0)
+            if ox is None or branches is None:
+                return False
+            return ox >= thr.get("possible_ox_compatibility", 0.5) and branches >= thr.get(
+                "parallel_branch_count", 2.0
+            )
+        # generic: all listed minimum thresholds must be met with finite values
         for feat, tval in thr.items():
             if feat.endswith("_max"):
                 continue
-            if features.get(feat, -1) < tval:
-                ok = False
-                break
-        return ok
+            val = self._finite(features, feat, float("nan"))
+            if val is None or val < tval:
+                return False
+        return True

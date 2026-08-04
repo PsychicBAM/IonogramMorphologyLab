@@ -57,5 +57,5 @@ Describe:
 
 - [Custom Rule Builder](CUSTOM_RULE_BUILDER_EN.md)
 - [Morphology methods](MORPHOLOGY_METHODS_EN.md)
-- [Scientific method](SCIENTIFIC_METHOD_EN.md)
+- [Scientific Guide](SCIENTIFIC_GUIDE_EN.md)
 - [Troubleshooting](TROUBLESHOOTING_EN.md)

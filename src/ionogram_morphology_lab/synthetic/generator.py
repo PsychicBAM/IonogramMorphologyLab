@@ -44,11 +44,30 @@ def generate_synthetic_case(kind: str, height: int = 256, width: int = 400, seed
     if kind == "smooth_trace":
         add_trace(50, 80, 0.15, 80, 1.2, 1.0)
     elif kind == "horizontally_diffuse":
-        add_trace(50, 90, 0.12, 70, 1.5, 6.0)
+        # Near-flat ridge so frequency broadening is not a slope chord artifact.
+        add_trace(50, 90, 0.02, 70, 1.5, 8.0)
     elif kind == "vertically_diffuse":
-        add_trace(60, 100, 0.1, 70, 10.0, 1.2)
+        # Compact tall echo: range thickness without a long frequency ridge.
+        for i in range(70, 165):
+            for j in range(188, 208):
+                frame[i, j] += 85.0 * np.exp(
+                    -0.5
+                    * (
+                        ((i - 117) / 28.0) ** 2
+                        + ((j - 198) / 4.0) ** 2
+                    )
+                )
     elif kind == "mixed_diffuse":
-        add_trace(55, 95, 0.12, 75, 8.0, 5.0)
+        # Compact filled blob: substantial thickness on both axes without a long ridge.
+        for i in range(85, 135):
+            for j in range(140, 220):
+                frame[i, j] += 90.0 * np.exp(
+                    -0.5
+                    * (
+                        ((i - 110) / 18.0) ** 2
+                        + ((j - 180) / 28.0) ** 2
+                    )
+                )
     elif kind == "clean_double_branch":
         add_trace(50, 85, 0.14, 70, 1.2, 1.0)
         add_trace(50, 110, 0.14, 65, 1.2, 1.0)
