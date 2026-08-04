@@ -188,8 +188,18 @@ Differs from prior `F8690809606B013E5A51A52564FBF1A8994FE06C4F1B42AF9DE6A4B65EF0
 - No production RuleEngine wiring.
 - No Phase 4C.2 work.
 
-## Git / CI (filled after push)
+## Git / CI
 
-- Commit / push results recorded in the final agent summary after `git push origin main`.
-- Local `HEAD` must equal `origin/main` after push.
-- GitHub CI monitored via `gh` when available.
+| Item | Value |
+|---|---|
+| Branch | `main` |
+| Remote | `https://github.com/PsychicBAM/IonogramMorphologyLab.git` |
+| Previous commit | `6fc7de0a03cb640f40622af15a17bcb1bf7095f5` |
+| Hotfix commit | `aded8b5cf367e96616936654e68a35ff4ff5e045` |
+| Subject | `fix: close CI hygiene and docs fixture gaps` |
+| Push | `6fc7de0..aded8b5` → `origin/main` (no force) |
+| HEAD == origin/main | yes |
+| GitHub Test workflow | **success** (run `30953935404`) |
+| GitHub Security checks | **success** (run `30953935392`) |
+
+Phase 4C.2 was not started.
