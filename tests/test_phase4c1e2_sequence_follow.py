@@ -487,7 +487,7 @@ def test_build_identity_phase_4c1e2d():
 
     ident = collect_build_identity(compute_sha=False)
     # Phase advanced; sequence Follow contracts remain unchanged
-    assert ident.get("release_phase") == "4C.3a.2"
+    assert ident.get("release_phase") == "4C.4a"
 
 
 def test_progress_status_while_running():

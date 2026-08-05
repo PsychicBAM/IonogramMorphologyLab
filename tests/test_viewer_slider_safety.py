@@ -195,3 +195,9 @@ def test_duplicate_cache_build_rejected(viewer_window, tmp_path, monkeypatch):
     assert starts["n"] == 1
     text = win.viewer_status.text().lower()
     assert "cache" in text or "кэш" in text
+    # FakeWorker never starts a real OS thread; clear the running flag so Qt
+    # session teardown does not wait forever on a phantom QThread.
+    worker = getattr(win, "_cache_worker", None)
+    if worker is not None:
+        worker._running = False
+        win._cache_worker = None

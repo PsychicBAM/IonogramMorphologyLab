@@ -1040,6 +1040,35 @@ HELP_SECTIONS: list[dict[str, str]] = [
             "не являются метками морфологии. Связано: Диагностика следа и геометрии, Кандидатная морфология (shadow)."
         ),
     },
+    {
+        "id": "disagreement_analysis",
+        "title_en": "88. Disagreement Analysis (Phase 4C.4a)",
+        "title_ru": "88. Анализ расхождений (фаза 4C.4a)",
+        "body_en": (
+            "Purpose: descriptive inspection of expert↔candidate label transitions after blind review and reveal. "
+            "This is not scientific validation and not ground truth for either side.\n\n"
+            "Workflow: select revealed corpora/campaigns → preview inclusions/exclusions → freeze an immutable "
+            "analysis snapshot → dashboard and case explorer → optional analyst hypotheses → Decision Gate → export.\n\n"
+            "Frozen snapshots do not silently change when the source corpus later receives corrected reviews; "
+            "create a new analysis revision instead. Items frozen into an analysis are marked development-exposed "
+            "and must not be described as an untouched holdout for evaluating a future modified ruleset.\n\n"
+            "The Decision Gate records a formal outcome (A–F). Outcome F only authorizes preparing a separate "
+            "proposal phase after an untouched holdout plan exists — it does not change candidate rules.\n\n"
+            "Related: Expert Review Corpora, Expert Review Campaigns."
+        ),
+        "body_ru": (
+            "Назначение: описательный просмотр переходов меток эксперт↔кандидат после слепой оценки и раскрытия. "
+            "Это не научная валидация и не ground truth ни для одной из сторон.\n\n"
+            "Процесс: выбрать раскрытые корпусы/кампании → предпросмотр включений/исключений → заморозить "
+            "неизменяемый снимок анализа → сводка и просмотр случаев → гипотезы аналитика → Decision Gate → экспорт.\n\n"
+            "Замороженные снимки не меняются молча при поздних исправлениях в корпусе; создайте новую ревизию анализа. "
+            "Элементы, попавшие в анализ, помечаются как development-exposed и не могут считаться нетронутым holdout "
+            "для оценки будущего изменённого набора правил.\n\n"
+            "Decision Gate фиксирует исход (A–F). Исход F лишь разрешает готовить отдельную фазу предложения после "
+            "плана нетронутого holdout — он не меняет правила кандидата.\n\n"
+            "Связано: Корпусы экспертной оценки, Кампании экспертной оценки."
+        ),
+    },
 ]
 
 

@@ -154,7 +154,7 @@ class BlindReviewRecord:
     rationale: str = ""
     created_at: str = field(default_factory=_utc_now)
     ui_language: str = "en"
-    build_identity: str = "4C.3a.2"
+    build_identity: str = "4C.4a"
     schema_version: int = REVIEW_RECORD_SCHEMA_VERSION
     record_hash: str = ""
     prior_review_id: str = ""
@@ -213,7 +213,7 @@ class BlindReviewRecord:
         rationale: str = "",
         observations: dict[str, Any] | None = None,
         ui_language: str = "en",
-        build_identity: str = "4C.3a.2",
+        build_identity: str = "4C.4a",
         prior_review_id: str = "",
         revision_reason: str = "",
         post_reveal_revision: bool = False,
@@ -257,7 +257,7 @@ class RevealComparison:
     reviewer_note_codes: list[str] = field(default_factory=list)
     comparison_comment: str = ""
     created_at: str = field(default_factory=_utc_now)
-    build_identity: str = "4C.3a.2"
+    build_identity: str = "4C.4a"
     record_hash: str = ""
     # Append-only revision linkage (Phase 4C.3)
     prior_comparison_id: str = ""
@@ -293,7 +293,7 @@ class AdjudicationRecord:
     rationale: str
     created_at: str = field(default_factory=_utc_now)
     schema_version: int = ADJUDICATION_SCHEMA_VERSION
-    build_identity: str = "4C.3a.2"
+    build_identity: str = "4C.4a"
     record_hash: str = ""
     locked: bool = True
     label: str = "adjudicated_expert_reference"
@@ -325,7 +325,7 @@ class CohortManifest:
     manifest_schema_version: int = REVIEW_CORPUS_SCHEMA_VERSION
     review_schema_version: int = REVIEW_RECORD_SCHEMA_VERSION
     created_at: str = field(default_factory=_utc_now)
-    creation_tool_version: str = "4C.3a.2"
+    creation_tool_version: str = "4C.4a"
     candidate_engine_version: str = CANDIDATE_ENGINE_VERSION
     ruleset_id: str = "iml-morph-candidate-rules"
     ruleset_hash: str = ""
@@ -374,7 +374,7 @@ class AuditEvent:
     actor_id: str = ""
     prior_record_hash: str = ""
     new_record_hash: str = ""
-    build_identity: str = "4C.3a.2"
+    build_identity: str = "4C.4a"
     details: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -391,7 +391,7 @@ class AuditEvent:
         prior_record_hash: str = "",
         new_record_hash: str = "",
         details: dict[str, Any] | None = None,
-        build_identity: str = "4C.3a.2",
+        build_identity: str = "4C.4a",
     ) -> "AuditEvent":
         return cls(
             event_id=str(uuid4()),
