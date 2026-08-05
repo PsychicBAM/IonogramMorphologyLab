@@ -981,6 +981,65 @@ HELP_SECTIONS: list[dict[str, str]] = [
             "Связано: Кэш, Просмотр, Устранение неисправностей."
         ),
     },
+    {
+        "id": "expert_review_corpus",
+        "title_en": "87. Expert Morphology Review Corpus (Phase 4C.2b)",
+        "title_ru": "87. Корпус экспертной оценки морфологии (фаза 4C.2b)",
+        "body_en": (
+            "Purpose: collect trustworthy independent expert morphology assessments before any later scientific "
+            "validation or candidate tuning. This is a pilot expert-review corpus — not a scientific validation set "
+            "and not ground truth.\n\n"
+            "Guided review (default): composition → blind review → comparison → summary/export. "
+            "Rapid Review Table supports inline editing with a shared draft and structured comment builder. "
+            "Default reveal policy is strict cohort blinding: finish the full first blind round before any "
+            "candidate reveal. Editable revisions mint new item IDs and never copy reviews/comparisons.\n\n"
+            "Shortcuts: Ctrl+Enter save and next; Ctrl+S save; Ctrl+Shift+Enter next unfinished; "
+            "Alt+1–6 morphology classes; Up/Down rows; Esc close inline editor.\n\n"
+            "Blind review: the first decision must be independent of the morphology candidate. Candidate class, "
+            "strength, evidence ledger, thresholds, agreement indicators, and candidate columns stay hidden until "
+            "the blind decision is locked. Blinding is procedural UI protection, not cryptography.\n\n"
+            "Human labels: frequency_spread, range_spread, mixed_spread, no_supported_visible_spread, indeterminate, "
+            "not_assessable. no_supported_visible_spread means no supported visible spread in the assessable image — "
+            "not proof the physical phenomenon was absent. Indeterminate means the reviewer cannot choose reliably; "
+            "not_assessable means the frame cannot be evaluated adequately.\n\n"
+            "Separate axes: morphology, assessability, interference/artifact, ambiguity, and reviewer confidence "
+            "(self-report, not probability). Freeze the cohort before review so identity, sampling seed, and "
+            "candidate/ruleset snapshots stay immutable.\n\n"
+            "After lock: Reveal candidate result, record a comparison without altering the blind decision. Optional "
+            "second independent review and adjudication produce an adjudicated expert reference — still not absolute "
+            "ground truth. One reviewer is never automatic ground truth.\n\n"
+            "Phase 4C.2 exports descriptive counts only (distributions, exact agreement counts, disagreement matrix). "
+            "It does not report accuracy, precision, recall, sensitivity, specificity, or F1. Geometry reviews are "
+            "not morphology labels. Related: Trace and Geometry Diagnostics, Candidate morphology (shadow)."
+        ),
+        "body_ru": (
+            "Назначение: собрать надёжные независимые экспертные оценки морфологии до последующей научной валидации "
+            "или настройки кандидата. Это пилотный корпус экспертной разметки — не научно валидированный контрольный "
+            "набор и не ground truth.\n\n"
+            "Пошаговая разметка (по умолчанию): состав → слепая оценка → сравнение → сводка/экспорт. "
+            "Быстрая таблица оценки и конструктор структурированных комментариев. "
+            "По умолчанию — строгое ослепление корпуса: полный первый круг слепых оценок до показа кандидата. "
+            "Редактируемая ревизия создаёт новые item_id и не копирует оценки/сравнения.\n\n"
+            "Горячие клавиши: Ctrl+Enter сохранить и далее; Ctrl+S сохранить; Ctrl+Shift+Enter к незавершённому; "
+            "Alt+1–6 классы морфологии; ↑/↓ строки; Esc закрыть редактор.\n\n"
+            "Слепая оценка: первое решение должно быть независимым от кандидата морфологии. Класс кандидата, сила, "
+            "журнал свидетельств, пороги, индикаторы согласия и столбцы кандидата скрыты до фиксации слепой оценки. "
+            "Ослепление — процедурная защита UI, не криптография.\n\n"
+            "Метки человека: frequency_spread, range_spread, mixed_spread, no_supported_visible_spread, indeterminate, "
+            "not_assessable. no_supported_visible_spread означает отсутствие подтверждённого видимого расплывания на "
+            "оцениваемом изображении — не доказательство отсутствия физического явления. Indeterminate — нельзя "
+            "надёжно выбрать; not_assessable — кадр нельзя адекватно оценить.\n\n"
+            "Отдельные оси: морфология, оценимость, помехи/артефакты, неоднозначность и уверенность рецензента "
+            "(самоотчёт, не вероятность). Зафиксируйте корпус до оценки, чтобы идентичность, seed выборки и снимки "
+            "кандидата/правил оставались неизменяемыми.\n\n"
+            "После фиксации: «Показать результат кандидата», записать сравнение без изменения слепой оценки. "
+            "Опциональные вторая независимая оценка и арбитраж дают арбитражный экспертный ориентир — всё ещё не "
+            "абсолютную истину. Один рецензент никогда не является автоматическим ground truth.\n\n"
+            "Фаза 4C.2 экспортирует только описательные счётчики (распределения, число точных совпадений, матрицу "
+            "расхождений). Не сообщает accuracy/precision/recall/sensitivity/specificity/F1. Геометрические рецензии "
+            "не являются метками морфологии. Связано: Диагностика следа и геометрии, Кандидатная морфология (shadow)."
+        ),
+    },
 ]
 
 

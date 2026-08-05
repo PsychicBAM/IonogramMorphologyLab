@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import re
 from dataclasses import asdict, dataclass, field
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, Literal
 
 MorphologyToken = Literal[
@@ -107,7 +107,7 @@ def validate_review_label(label: ReviewLabel) -> None:
 
 def new_label_id(source_sha256: str, source_frame_id: str) -> str:
     """Generate a filesystem-safe label id."""
-    ts = datetime.utcnow().strftime("%Y%m%dT%H%M%SZ")
+    ts = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     sha_short = source_sha256.lower()[:12]
     frame_safe = re.sub(r"[^\w.-]+", "_", source_frame_id.strip())[:48]
     return f"{sha_short}_{frame_safe}_{ts}"

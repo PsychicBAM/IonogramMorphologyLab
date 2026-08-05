@@ -210,9 +210,25 @@ class AppSession:
             self.events.frame_changed.emit()
 
     def ensure_store(self) -> FrameStore:
+        from ionogram_morphology_lab.ui.active_source import paths_equal
+        from ionogram_morphology_lab.ui.active_source_authority import resolve_project_source_path
+
         if self.active_mat is None:
             raise RuntimeError("no_active_mat")
-        if self.frame_store is not None and self.frame_store.source_path == self.active_mat.resolve():
+        # Canonical path: project-relative restore + Windows path equality
+        resolved = resolve_project_source_path(self.project, self.active_mat)
+        if resolved is not None and resolved.is_file():
+            if not paths_equal(self.active_mat, resolved):
+                self.active_mat = resolved
+        if not self.active_mat.is_file():
+            raise RuntimeError("active_mat_missing")
+        if self.frame_store is not None and (
+            paths_equal(self.frame_store.source_path, self.active_mat)
+            or (
+                self.active_mat.exists()
+                and paths_equal(self.frame_store.source_path, self.active_mat.resolve())
+            )
+        ):
             return self.frame_store
         cache_root = self.settings.cache_dir()
         known = self.get_source_sha(allow_compute=False)
@@ -280,23 +296,28 @@ class AppSession:
         return rebuild_active_source_snapshot(self)
 
     def restore_inventory_from_project(self) -> None:
-        """Restore selected_mats / active_mat from persisted project fields."""
+        """Restore selected_mats / active_mat from persisted project fields.
+
+        Phase 4C.2a: never silently activate the first inventory MAT when the
+        saved active source is missing — require explicit user selection.
+        """
+        from ionogram_morphology_lab.ui.active_source_authority import resolve_project_source_path
+
         if self.project is None:
             return
         restored: list[Path] = []
         for s in self.project.source_paths or []:
-            p = Path(s)
+            p = resolve_project_source_path(self.project, s) or Path(s)
             restored.append(p)
         self.selected_mats = restored
         active = getattr(self.project, "active_source_path", None)
         if active:
-            ap = Path(active)
-            if ap.is_file():
+            ap = resolve_project_source_path(self.project, active)
+            if ap is not None and ap.is_file():
                 self.set_active_mat(ap, emit=False)
                 return
-        # Fallback: first existing inventory path
-        for p in restored:
-            if p.is_file():
-                self.set_active_mat(p, emit=False)
-                return
+            # Saved active path is unavailable — keep inventory, clear active
+            self.set_active_mat(None, emit=False)
+            return
+        # No saved active source: do not imply first inventory entry
         self.set_active_mat(None, emit=False)

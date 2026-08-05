@@ -486,7 +486,8 @@ def test_build_identity_phase_4c1e2d():
     from ionogram_morphology_lab.ui.build_identity import collect_build_identity
 
     ident = collect_build_identity(compute_sha=False)
-    assert ident.get("release_phase") == "4C.1e.3a"
+    # Phase advanced; sequence Follow contracts remain unchanged
+    assert ident.get("release_phase") == "4C.3a.2"
 
 
 def test_progress_status_while_running():

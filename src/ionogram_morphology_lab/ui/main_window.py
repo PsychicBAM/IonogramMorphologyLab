@@ -159,6 +159,7 @@ NAV_KEYS = [
     ("batch", "nav.batch"),
     ("results", "nav.results"),
     ("parameters", "nav.parameters"),
+    ("campaigns", "nav.campaigns"),
     ("expert", "nav.expert"),
     ("atlas", "nav.atlas"),
     ("science", "nav.science"),
@@ -178,7 +179,7 @@ NAV_KEYS = [
 NAV_GROUPS = [
     ("start", "nav_group.start", ("home", "projects", "import")),
     ("data", "nav_group.data", ("profile", "audit", "viewer", "sequences")),
-    ("analysis", "nav_group.analysis", ("batch", "results", "parameters", "expert")),
+    ("analysis", "nav_group.analysis", ("batch", "results", "parameters", "campaigns", "expert")),
     ("reports", "nav_group.reports", ("reports",)),
     ("methods", "nav_group.methods", ("matlab", "rules", "rule_test", "compare", "pipeline", "models")),
     ("resources", "nav_group.resources", ("atlas", "science", "raw_signals", "feature_diagnostics", "settings", "help")),
@@ -186,7 +187,7 @@ NAV_GROUPS = [
 NAV_LABELS = dict(NAV_KEYS)
 GUIDED_NAV_KEYS = {
     "home", "projects", "import", "profile", "audit", "viewer", "sequences",
-    "batch", "results", "parameters", "expert", "reports", "settings", "help",
+    "batch", "results", "parameters", "campaigns", "expert", "reports", "settings", "help",
 }
 
 
@@ -317,6 +318,7 @@ class MainWindow(QMainWindow):
             "batch": self._page_batch,
             "results": self._page_results,
             "parameters": self._page_parameters,
+            "campaigns": self._page_campaigns,
             "expert": self._page_expert,
             "atlas": self._page_atlas,
             "science": self._page_science,
@@ -345,6 +347,7 @@ class MainWindow(QMainWindow):
             "pipeline",
             "models",
             "rule_test",
+            "expert",
         }
         self._page_builders = dict(builders)
         self.intro_panels: dict[str, object] = {}
@@ -527,23 +530,21 @@ class MainWindow(QMainWindow):
         lay.addStretch(1)
         return w
 
+    def _page_campaigns(self) -> QWidget:
+        from ionogram_morphology_lab.ui.expert_review_campaign_page import (
+            ExpertReviewCampaignPage,
+        )
+
+        page = ExpertReviewCampaignPage(self.session, self.i18n, main_window=self)
+        self._expert_review_campaign_page = page
+        return page
+
     def _page_expert(self) -> QWidget:
-        w = QWidget()
-        lay = QVBoxLayout(w)
-        self.expert_empty = EmptyStatePanel()
-        self.expert_empty.action_requested.connect(self._navigate_key)
-        lay.addWidget(self.expert_empty, 1)
-        lab = QLabel()
-        lab.setObjectName("expert_help")
-        lab.setWordWrap(True)
-        lab.hide()
-        btn = QPushButton()
-        btn.setObjectName("btn_goto_results")
-        btn.clicked.connect(lambda: self._navigate_key("results"))
-        btn.hide()
-        lay.addWidget(lab)
-        lay.addWidget(btn)
-        return w
+        from ionogram_morphology_lab.ui.expert_review_corpus_page import ExpertReviewCorpusPage
+
+        page = ExpertReviewCorpusPage(self.session, self.i18n)
+        self._expert_review_corpus_page = page
+        return page
 
     def _page_matlab(self) -> QWidget:
         from ionogram_morphology_lab.ui.matlab_studio_page import MatlabStudioPage
@@ -966,8 +967,11 @@ class MainWindow(QMainWindow):
         playback_layout.addWidget(self.speed_combo)
         playback_layout.addWidget(self.speed_unit)
 
+        self.btn_add_to_corpus = QPushButton()
+        self.btn_add_to_corpus.setObjectName("btn_add_to_corpus")
+        self.btn_add_to_corpus.clicked.connect(self._viewer_add_current_to_corpus)
         render_layout = QHBoxLayout(self.viewer_group_render)
-        for b in (self.btn_cache, self.btn_contact, self.btn_save_img):
+        for b in (self.btn_cache, self.btn_contact, self.btn_save_img, self.btn_add_to_corpus):
             render_layout.addWidget(b)
         render_layout.addWidget(self.view_mode_label)
         render_layout.addWidget(self.view_mode)
@@ -1814,6 +1818,7 @@ class MainWindow(QMainWindow):
             (self.btn_cache, "viewer.build_cache"),
             (self.btn_contact, "viewer.contact"),
             (self.btn_save_img, "viewer.save_image"),
+            (self.btn_add_to_corpus, "expert_corpus.add_to_corpus"),
         ]
         for btn, key in viewer_btn_map:
             btn.setText(t(key))
@@ -3642,20 +3647,33 @@ class MainWindow(QMainWindow):
             for key, (label, field) in self.batch_form_rows.items():
                 label.setVisible(key in visible)
                 field.setVisible(key in visible)
+            from ionogram_morphology_lab.ui.active_source_authority import (
+                active_source_label,
+                authoritative_active_source,
+                batch_mats_from_active,
+            )
+
+            auth = authoritative_active_source(self.session)
+            mats, batch_err = batch_mats_from_active(self.session)
             self.btn_batch_start.setEnabled(
                 bool(sel.frame_ids)
                 and self.session.project is not None
-                and bool(self.session.selected_mats)
+                and bool(mats)
+                and not batch_err
             )
             project = getattr(self.session.project, "name", "—") if self.session.project else "—"
             profile = self.session.profile_id or "—"
             stages = ", ".join(c.text() for c in self.op_checks.values() if c.isChecked()) or "—"
             ru = self.i18n.language == "ru"
+            lang = "ru" if ru else "en"
+            mat_line = active_source_label(auth, lang)
+            if auth.is_active and auth.short_sha:
+                mat_line += f" | SHA {auth.short_sha}"
             self.batch_preview.setPlainText(
                 f"{expl}\n\n"
                 f"{self.t('batch.confirm_title')}\n"
                 f"{self.t('batch.summary_project')}: {project}\n"
-                f"{self.t('batch.summary_mat')}: {len(self.session.selected_mats)} | "
+                f"{self.t('batch.summary_mat')}: {mat_line}\n"
                 f"{self.t('batch.summary_profile')}: {profile}\n"
                 f"{self.t('batch.expected')}: {est['expected_frames']}\n"
                 f"{self.t('batch.summary_frames_time')}: "
@@ -3674,13 +3692,65 @@ class MainWindow(QMainWindow):
             if hasattr(self, "batch_preview"):
                 self.batch_preview.setPlainText(str(exc))
 
+    def _viewer_add_current_to_corpus(self) -> None:
+        """Viewer: Add current frame to Expert Review Corpus (explicit action)."""
+        from ionogram_morphology_lab.morphology_review_corpus.project_items import (
+            current_viewer_frame_item,
+        )
+
+        try:
+            self._ensure_page_materialized("expert")
+            page = getattr(self, "_expert_review_corpus_page", None)
+            if page is None:
+                QMessageBox.warning(self, "IML", self.t("expert_corpus.empty_no_project"))
+                return
+            item = current_viewer_frame_item(self.session)
+            result = page.add_items_to_current_or_new([item])
+            QMessageBox.information(
+                self,
+                "IML",
+                f"{self.t('expert_corpus.add_to_corpus')}\n"
+                f"cohort={result.get('cohort_id')} added={result.get('added')}",
+            )
+            self._navigate_key("expert")
+        except Exception as exc:  # noqa: BLE001
+            QMessageBox.critical(self, "IML", str(exc))
+
     def _batch_start(self) -> None:
+        from ionogram_morphology_lab.ui.active_source_authority import (
+            active_source_label,
+            authoritative_active_source,
+            batch_mats_from_active,
+            freeze_batch_source_snapshot,
+        )
+
         if self.session.project is None:
             QMessageBox.warning(self, "IML", self.t("nav.new_project"))
             return
-        mats = self.session.selected_mats
-        if not mats:
-            QMessageBox.information(self, "IML", self.t("viewer.no_import"))
+        mats, batch_err = batch_mats_from_active(self.session)
+        lang = "ru" if self.i18n.language == "ru" else "en"
+        auth = authoritative_active_source(self.session)
+        if batch_err or not mats:
+            if batch_err == "active_source_unavailable":
+                msg = (
+                    f"{active_source_label(auth, lang)}\n"
+                    + (
+                        "Выполнение заблокировано: активный источник недоступен."
+                        if lang == "ru"
+                        else "Blocked: active source is unavailable."
+                    )
+                )
+            elif batch_err == "active_source_required":
+                msg = (
+                    "Выберите активный MAT-источник. Пакетный анализ не использует "
+                    "первый файл из списка автоматически."
+                    if lang == "ru"
+                    else "Select an active MAT source. Batch Analysis does not "
+                    "silently use the first inventory file."
+                )
+            else:
+                msg = self.t("viewer.no_import")
+            QMessageBox.information(self, "IML", msg)
             return
         sel = self._current_selection()
         # This selects the existing analysis profile; it does not alter rule thresholds.
@@ -3688,14 +3758,26 @@ class MainWindow(QMainWindow):
         self.settings.save()
         ops = [k for k, c in self.op_checks.items() if c.isChecked()] or ["full_pipeline"]
         expl = sel.explanation_ru if self.i18n.language == "ru" else sel.explanation_en
+        frozen = freeze_batch_source_snapshot(self.session)
+        self._batch_frozen_source = frozen
+        confirm_extra = (
+            f"\n\n{active_source_label(auth, lang)}"
+            f"\nSHA: {auth.source_sha256 or '—'}"
+            f"\nFrames: {sel.frame_ids[0] if sel.frame_ids else '—'}…"
+            f"{sel.frame_ids[-1] if sel.frame_ids else '—'}"
+        )
         if (
-            QMessageBox.question(self, "IML", expl + "\n\n" + self.t("batch.confirm"))
+            QMessageBox.question(
+                self, "IML", expl + confirm_extra + "\n\n" + self.t("batch.confirm")
+            )
             != QMessageBox.StandardButton.Yes
         ):
             return
         self.batch_controller = BatchController()
         self.batch_progress.setValue(0)
-        self.batch_status.setText("")
+        self.batch_status.setText(
+            f"{frozen.get('display_name', '')} | rev={frozen.get('activation_revision')}"
+        )
 
         def factory(path, profile):
             return FrameStore(
@@ -3704,6 +3786,7 @@ class MainWindow(QMainWindow):
                 cache_root=self.settings.cache_dir(),
                 prefetch_radius=int(self.settings.get("viewer", "prefetch_count", 2)),
                 lru_capacity=int(self.settings.get("performance", "lru_capacity", 16)),
+                source_sha256=frozen.get("source_sha256") or None,
             )
 
         def progress(info: dict) -> None:
@@ -3711,6 +3794,7 @@ class MainWindow(QMainWindow):
             if info.get("event") == "progress":
                 self.batch_progress.setValue(int(info.get("percent", 0)))
                 self.batch_status.setText(
+                    f"[frozen:{frozen.get('display_name')}] "
                     f"{info.get('file')} f{info.get('frame')} | "
                     f"{info.get('completed')}/{info.get('total')} | "
                     f"ETA {info.get('eta_s')}s | op={info.get('operation')} | "
@@ -3719,6 +3803,7 @@ class MainWindow(QMainWindow):
             self.session.background_task = info.get("operation", "")
             self._update_status_bar()
 
+        # Frozen mats list — active source only; never full inventory order
         summary = batch_analyze(
             self.session.project,
             mats,

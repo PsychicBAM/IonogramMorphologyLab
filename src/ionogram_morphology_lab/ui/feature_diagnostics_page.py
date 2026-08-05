@@ -579,6 +579,10 @@ class FeatureDiagnosticsPage(QWidget):
         controls = QHBoxLayout()
         self.btn_run = QPushButton()
         self.btn_run.clicked.connect(self.run_shadow)
+        self.btn_add_to_corpus = QPushButton()
+        self.btn_add_to_corpus.clicked.connect(self._add_frame_to_corpus)
+        self.btn_add_selected_to_corpus = QPushButton()
+        self.btn_add_selected_to_corpus.clicked.connect(self._add_selected_sequence_to_corpus)
         self.btn_cancel = QPushButton()
         self.btn_cancel.clicked.connect(self._cancel_run)
         self.btn_cancel.setEnabled(False)
@@ -616,7 +620,8 @@ class FeatureDiagnosticsPage(QWidget):
         self.cache_label = QLabel()
         # Primary actions stay visible; secondary go under More…
         for w in (
-            self.btn_run, self.btn_cancel,
+            self.btn_run, self.btn_add_to_corpus, self.btn_add_selected_to_corpus,
+            self.btn_cancel,
             self.btn_layers, self.view_preset, self.btn_more,
         ):
             controls.addWidget(w)
@@ -1174,6 +1179,16 @@ class FeatureDiagnosticsPage(QWidget):
         self.lbl_seq_custom.setText("Список кадров" if ru else "Frame list")
         self.btn_contact.setText("Контактный лист…" if ru else "Contact sheet…")
         self.btn_run.setText("Запустить V2 (теневой режим)" if ru else "Run V2 (shadow)")
+        self.btn_add_to_corpus.setText(
+            self.i18n.t("expert_corpus.add_frame_fd")
+            if hasattr(self.i18n, "t")
+            else ("Добавить кадр в корпус" if ru else "Add frame to corpus")
+        )
+        self.btn_add_selected_to_corpus.setText(
+            self.i18n.t("expert_corpus.add_selected_seq")
+            if hasattr(self.i18n, "t")
+            else ("Добавить выбранные кадры в корпус" if ru else "Add selected frames to corpus")
+        )
         self.btn_cancel.setText("Отмена" if ru else "Cancel")
         self.btn_recalc.setText("Пересчитать кадр" if ru else "Recalculate this frame")
         self.btn_clear_cache.setText("Очистить кэш V2 источника" if ru else "Clear V2 cache for source")
@@ -2499,6 +2514,96 @@ class FeatureDiagnosticsPage(QWidget):
         self.seq_summary.setText(
             (f"Последовательность: {len(frames)} кадров" if ru else f"Sequence: {len(frames)} frames")
         )
+
+    def _add_frame_to_corpus(self) -> None:
+        """Explicit Add frame to corpus — Diagnostics alone never auto-adds."""
+        from PySide6.QtWidgets import QMessageBox
+
+        from ionogram_morphology_lab.morphology_review_corpus.project_items import (
+            items_from_active_source_frames,
+        )
+        from ionogram_morphology_lab.morphology_review_corpus.store import MorphologyReviewCorpusStore
+        from ionogram_morphology_lab.ui.active_source_authority import authoritative_active_source
+
+        try:
+            root = getattr(getattr(self.session, "project", None), "root", None)
+            if not root:
+                QMessageBox.warning(self, "IML", self.i18n.t("expert_corpus.empty_no_project"))
+                return
+            frame = int(self.frame_spin.value()) if hasattr(self, "frame_spin") else int(
+                getattr(self.session, "current_frame", 1) or 1
+            )
+            items = items_from_active_source_frames(
+                self.session, [frame], inclusion_reason="diagnostics_frame"
+            )
+            store = MorphologyReviewCorpusStore(root)
+            cohorts = store.list_cohorts()
+            draft = None
+            for cid in cohorts:
+                m = store.load_manifest(cid)
+                if not m.frozen:
+                    draft = cid
+                    break
+            auth = authoritative_active_source(self.session)
+            if draft is None:
+                m = store.create_cohort(
+                    items=items,
+                    sampling_method="manual",
+                    feature_version="iml2-0.2.0",
+                    source_inventory_snapshot={
+                        "inventory_id": auth.inventory_id,
+                        "display_name": auth.display_name,
+                        "source_sha256": auth.source_sha256,
+                    },
+                )
+                msg = f"cohort={m.cohort_id} added={len(items)}"
+            else:
+                result = store.add_items_to_draft(draft, items)
+                msg = f"cohort={draft} added={result['added']} dup={result['duplicates']}"
+            QMessageBox.information(self, "IML", msg)
+            self.navigate_requested.emit("expert")
+        except Exception as exc:  # noqa: BLE001
+            QMessageBox.critical(self, "IML", str(exc))
+
+    def _add_selected_sequence_to_corpus(self) -> None:
+        from PySide6.QtWidgets import QMessageBox
+
+        from ionogram_morphology_lab.morphology_review_corpus.project_items import (
+            items_from_active_source_frames,
+        )
+        from ionogram_morphology_lab.morphology_review_corpus.store import MorphologyReviewCorpusStore
+        from ionogram_morphology_lab.ui.active_source_authority import authoritative_active_source
+
+        try:
+            root = getattr(getattr(self.session, "project", None), "root", None)
+            if not root:
+                QMessageBox.warning(self, "IML", self.i18n.t("expert_corpus.empty_no_project"))
+                return
+            frames = self._selected_sequence_frames()
+            if not frames:
+                QMessageBox.information(self, "IML", "No frames selected")
+                return
+            items = items_from_active_source_frames(
+                self.session, frames, inclusion_reason="sequence_selected_frames"
+            )
+            store = MorphologyReviewCorpusStore(root)
+            auth = authoritative_active_source(self.session)
+            m = store.create_cohort(
+                items=items,
+                sampling_method="manual",
+                feature_version="iml2-0.2.0",
+                source_inventory_snapshot={
+                    "inventory_id": auth.inventory_id,
+                    "display_name": auth.display_name,
+                    "source_sha256": auth.source_sha256,
+                },
+            )
+            QMessageBox.information(
+                self, "IML", f"{self.i18n.t('expert_corpus.create_from_selected')}: {m.cohort_id}"
+            )
+            self.navigate_requested.emit("expert")
+        except Exception as exc:  # noqa: BLE001
+            QMessageBox.critical(self, "IML", str(exc))
 
     def _selected_sequence_frames(self) -> list[int]:
         kind = self.seq_type.currentData() or "frame_range"

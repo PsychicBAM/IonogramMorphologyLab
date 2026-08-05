@@ -40,6 +40,11 @@ IML_Phase*_Verification*.zip
 IML_Phase*_Verification*.sha256
 _t/
 _tmp*/
+# Runtime expert morphology review corpora (project-local; not fixtures)
+**/review_dataset/morphology_corpora/
+**/review_dataset/morphology_campaigns/
+# Keep deterministic test fixtures tracked
+!tests/fixtures/morphology_corpora/
 # Temporary docs dumps / profiler outputs.
 # Product fixture docs/_control_reference_phase3c.json remains tracked (not ignored).
 docs/_fd_*

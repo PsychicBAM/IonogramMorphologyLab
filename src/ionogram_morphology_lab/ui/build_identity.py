@@ -59,6 +59,16 @@ def collect_build_identity(
         CANDIDATE_ENGINE_VERSION,
         EVIDENCE_LEDGER_SCHEMA_VERSION,
     )
+    from ionogram_morphology_lab.morphology_review_campaign.constants import (
+        CAMPAIGN_SCHEMA_VERSION,
+    )
+    from ionogram_morphology_lab.morphology_review_corpus.constants import (
+        ADJUDICATION_SCHEMA_VERSION,
+        CORPUS_INTEGRITY_CONTRACT_VERSION,
+        PROTOCOL_SCHEMA_VERSION,
+        REVIEW_CORPUS_SCHEMA_VERSION,
+        REVIEW_RECORD_SCHEMA_VERSION,
+    )
     from ionogram_morphology_lab.ui.sequence_frame_state import (
         FD_LAYOUT_SCHEMA_VERSION,
         SEQUENCE_STATE_CONTRACT_VERSION,
@@ -92,13 +102,21 @@ def collect_build_identity(
         "frozen": bool(getattr(sys, "frozen", False)),
         "feature_version": FEATURE_VERSION,
         "display_transform_version": TRANSFORM_VERSION,
-        # Phase / packaging identity — distinguishes next EXE from 4C.1d CE301D…
-        "release_phase": "4C.1e.3a",
+        # Phase / packaging identity — Phase 4C.2 expert morphology review corpus
+        "release_phase": "4C.3a.2",
         "candidate_engine_version": CANDIDATE_ENGINE_VERSION,
         "candidate_cache_schema_version": CANDIDATE_CACHE_SCHEMA_VERSION,
         "evidence_ledger_schema_version": EVIDENCE_LEDGER_SCHEMA_VERSION,
         "fd_layout_schema_version": FD_LAYOUT_SCHEMA_VERSION,
         "sequence_state_contract_version": SEQUENCE_STATE_CONTRACT_VERSION,
+        "review_corpus_schema_version": REVIEW_CORPUS_SCHEMA_VERSION,
+        "review_record_schema_version": REVIEW_RECORD_SCHEMA_VERSION,
+        "adjudication_schema_version": ADJUDICATION_SCHEMA_VERSION,
+        "protocol_schema_version": PROTOCOL_SCHEMA_VERSION,
+        "corpus_integrity_contract_version": CORPUS_INTEGRITY_CONTRACT_VERSION,
+        "campaign_schema_version": CAMPAIGN_SCHEMA_VERSION,
+        "shadow_only": True,
+        "scientifically_validated": False,
         "cache_root": str(cache_root or info.get("resolved_cache_root") or ""),
         "resolved_cache_root": info.get("resolved_cache_root", str(cache_root or "")),
         "cache_resolution_source": info.get("cache_resolution_source", ""),
@@ -140,6 +158,12 @@ def format_build_identity(identity: dict[str, Any], language: str = "en") -> str
         f"{'Схема evidence ledger' if ru else 'Evidence ledger schema'}: {identity.get('evidence_ledger_schema_version', '')}",
         f"{'Схема макета Diagnostics' if ru else 'Diagnostics layout schema'}: {identity.get('fd_layout_schema_version', '')}",
         f"{'Контракт состояний последовательности' if ru else 'Sequence-state contract'}: {identity.get('sequence_state_contract_version', '')}",
+        f"{'Схема корпуса рецензий' if ru else 'Review corpus schema'}: {identity.get('review_corpus_schema_version', '')}",
+        f"{'Схема записи рецензии' if ru else 'Review record schema'}: {identity.get('review_record_schema_version', '')}",
+        f"{'Схема арбитража' if ru else 'Adjudication schema'}: {identity.get('adjudication_schema_version', '')}",
+        f"{'Схема протокола' if ru else 'Protocol schema'}: {identity.get('protocol_schema_version', '')}",
+        f"{'Контракт целостности корпуса' if ru else 'Corpus integrity contract'}: {identity.get('corpus_integrity_contract_version', '')}",
+        f"{'Только shadow' if ru else 'Shadow-only'}: {identity.get('shadow_only', True)}",
         f"{'Display transform'}: {identity.get('display_transform_version', '')}",
         f"{'Корень кэша' if ru else 'Cache root'}: {identity.get('resolved_cache_root') or identity.get('cache_root', '')}",
         f"{'Источник пути кэша' if ru else 'Cache resolution source'}: {identity.get('cache_resolution_source', '')}",
