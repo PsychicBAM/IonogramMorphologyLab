@@ -43,6 +43,8 @@ _tmp*/
 # Runtime expert morphology review corpora (project-local; not fixtures)
 **/review_dataset/morphology_corpora/
 **/review_dataset/morphology_campaigns/
+**/review_dataset/morphology_analyses/
+**/review_dataset/exports/
 # Keep deterministic test fixtures tracked
 !tests/fixtures/morphology_corpora/
 # Temporary docs dumps / profiler outputs.

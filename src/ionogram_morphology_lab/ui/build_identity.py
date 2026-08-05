@@ -103,7 +103,7 @@ def collect_build_identity(
         "feature_version": FEATURE_VERSION,
         "display_transform_version": TRANSFORM_VERSION,
         # Phase / packaging identity — Phase 4C.2 expert morphology review corpus
-        "release_phase": "4C.3a.2",
+        "release_phase": "4C.4a",
         "candidate_engine_version": CANDIDATE_ENGINE_VERSION,
         "candidate_cache_schema_version": CANDIDATE_CACHE_SCHEMA_VERSION,
         "evidence_ledger_schema_version": EVIDENCE_LEDGER_SCHEMA_VERSION,

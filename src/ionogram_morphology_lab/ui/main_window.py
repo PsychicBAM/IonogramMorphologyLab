@@ -161,6 +161,7 @@ NAV_KEYS = [
     ("parameters", "nav.parameters"),
     ("campaigns", "nav.campaigns"),
     ("expert", "nav.expert"),
+    ("disagreement", "nav.disagreement"),
     ("atlas", "nav.atlas"),
     ("science", "nav.science"),
     ("raw_signals", "nav.raw_signals"),
@@ -179,7 +180,7 @@ NAV_KEYS = [
 NAV_GROUPS = [
     ("start", "nav_group.start", ("home", "projects", "import")),
     ("data", "nav_group.data", ("profile", "audit", "viewer", "sequences")),
-    ("analysis", "nav_group.analysis", ("batch", "results", "parameters", "campaigns", "expert")),
+    ("analysis", "nav_group.analysis", ("batch", "results", "parameters", "campaigns", "expert", "disagreement")),
     ("reports", "nav_group.reports", ("reports",)),
     ("methods", "nav_group.methods", ("matlab", "rules", "rule_test", "compare", "pipeline", "models")),
     ("resources", "nav_group.resources", ("atlas", "science", "raw_signals", "feature_diagnostics", "settings", "help")),
@@ -187,7 +188,7 @@ NAV_GROUPS = [
 NAV_LABELS = dict(NAV_KEYS)
 GUIDED_NAV_KEYS = {
     "home", "projects", "import", "profile", "audit", "viewer", "sequences",
-    "batch", "results", "parameters", "campaigns", "expert", "reports", "settings", "help",
+    "batch", "results", "parameters", "campaigns", "expert", "disagreement", "reports", "settings", "help",
 }
 
 
@@ -320,6 +321,7 @@ class MainWindow(QMainWindow):
             "parameters": self._page_parameters,
             "campaigns": self._page_campaigns,
             "expert": self._page_expert,
+            "disagreement": self._page_disagreement,
             "atlas": self._page_atlas,
             "science": self._page_science,
             "raw_signals": self._page_raw_signals,
@@ -348,6 +350,7 @@ class MainWindow(QMainWindow):
             "models",
             "rule_test",
             "expert",
+            "disagreement",
         }
         self._page_builders = dict(builders)
         self.intro_panels: dict[str, object] = {}
@@ -544,6 +547,15 @@ class MainWindow(QMainWindow):
 
         page = ExpertReviewCorpusPage(self.session, self.i18n)
         self._expert_review_corpus_page = page
+        return page
+
+    def _page_disagreement(self) -> QWidget:
+        from ionogram_morphology_lab.ui.disagreement_analysis_page import (
+            DisagreementAnalysisPage,
+        )
+
+        page = DisagreementAnalysisPage(self.session, self.i18n)
+        self._disagreement_analysis_page = page
         return page
 
     def _page_matlab(self) -> QWidget:
