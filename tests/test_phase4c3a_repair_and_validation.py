@@ -191,7 +191,7 @@ def test_valid_source_validation_and_preview_identities(tmp_path: Path):
 
 def test_build_identity_4c3a():
     ident = collect_build_identity(compute_sha=False)
-    assert ident["release_phase"] == "4C.4a"
+    assert ident["release_phase"] == "ML-A.1a.2"
     assert ident["shadow_only"] is True
 
 

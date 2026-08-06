@@ -477,7 +477,7 @@ def test_exports_utf8_no_abs_no_candidate_leak(tmp_path: Path):
     md = (out / "summary.md").read_text(encoding="utf-8")
     assert "Not a scientific validation" in md or "not a scientific" in md.lower()
     bundle = json.loads((out / "cohort_bundle.json").read_text(encoding="utf-8"))
-    assert bundle["build_identity"] == "4C.4a"
+    assert bundle["build_identity"] == "ML-A.1a.2"
     assert "accuracy" not in bundle.get("summary", {})
 
 
@@ -550,7 +550,7 @@ def test_build_identity_phase_4c2():
     from ionogram_morphology_lab.ui.build_identity import collect_build_identity
 
     info = collect_build_identity(compute_sha=False)
-    assert info["release_phase"] == "4C.4a"
+    assert info["release_phase"] == "ML-A.1a.2"
     assert info["candidate_engine_version"] == "iml-morph-candidate-0.1.1"
     assert info["review_corpus_schema_version"] == 1
     assert info.get("scientifically_validated") is False

@@ -1,54 +1,53 @@
 # Screenshot Assets (PNG)
 
-Documentation **screenshots** are PNG captures from the live Qt UI using **synthetic teaching data only** (`synthetic_data/`, EvidenceQA workspace). They contain no real user paths, usernames, restricted ionograms, tokens, or personal information.
+Documentation **screenshots** are PNG captures from the live Qt UI using **synthetic teaching data only**. They contain no real user paths, usernames, restricted ionograms, tokens, or personal information.
 
 Schematic **layout mocks** (SVG) live in [`../schematics/`](../schematics/) — those are not screenshots.
 
-## Regenerate PNG captures
+## Current README set (ML-A.1a.2)
 
-```bash
-python scripts/capture_release_screenshots.py
-```
-
-Requires PySide6 and a display or offscreen Qt platform. The script moves legacy SVG mocks to `docs/assets/schematics/` automatically.
-
-See [`CAPTURE_LOG.md`](CAPTURE_LOG.md) for the latest capture metadata.
-
-## PNG inventory (v1.1.1)
+Directory: [`ml-a1a2/`](ml-a1a2/)
 
 | File | Description |
 |------|-------------|
 | `home_en.png` / `home_ru.png` | Home dashboard with recommended workflow |
-| `project_creation_en.png` / `project_creation_ru.png` | New project dialog / flow |
-| `mat_import_en.png` / `mat_import_ru.png` | Import Data page |
-| `data_audit_en.png` / `data_audit_ru.png` | Data Audit summary |
-| `instrument_profile_en.png` / `instrument_profile_ru.png` | Instrument profile |
 | `ionogram_viewer_en.png` / `ionogram_viewer_ru.png` | Ionogram viewer |
-| `contact_sheet_en.png` / `contact_sheet_ru.png` | Contact sheet builder |
-| `batch_analysis_en.png` / `batch_analysis_ru.png` | Batch analysis |
-| `results_en.png` / `results_ru.png` | Results table |
-| `expert_review_en.png` / `expert_review_ru.png` | Expert review |
-| `rule_builder_en.png` / `rule_builder_ru.png` | Rule Builder wizard |
-| `rule_testing_en.png` / `rule_testing_ru.png` | Rule Testing Lab |
-| `matlab_studio_en.png` / `matlab_studio_ru.png` | MATLAB Studio |
-| `method_comparison_en.png` / `method_comparison_ru.png` | Method comparison |
-| `pipeline_builder_en.png` / `pipeline_builder_ru.png` | Pipeline builder |
-| `parameters_en.png` / `parameters_ru.png` | Ionogram parameters |
-| `settings_en.png` / `settings_ru.png` | Settings |
-| `help_en.png` / `help_ru.png` | Help search |
+| `campaigns_en.png` / `campaigns_ru.png` | Expert Review Campaigns |
+| `expert_review_en.png` / `expert_review_ru.png` | Expert Review Corpora |
+| `disagreement_analysis_en.png` / `disagreement_analysis_ru.png` | Disagreement Analysis |
+| `ml_data_readiness_en.png` / `ml_data_readiness_ru.png` | ML Data Readiness |
+| `results_en.png` / `results_ru.png` | Results |
 
-Total: **36** PNG files (18 screens × EN/RU).
+Total: **14** PNG files (7 screens × EN/RU), 1600×900. See [`ml-a1a2/CAPTURE_LOG.md`](ml-a1a2/CAPTURE_LOG.md).
+
+Root READMEs (`README.md`, `README_RU.md`) use this set.
+
+## Historical page gallery (v1.1.1)
+
+Directory: [`v1.1.1/`](v1.1.1/)
+
+Older full-page tour (36+ PNGs) retained for secondary docs (`CUSTOM_RULE_BUILDER_*`, archive guides). Do not delete while those references remain.
+
+## Regenerate
+
+Preferred for ML-A.1a.2 README set: ephemeral capture under a local workspace (not committed), writing into `docs/assets/screenshots/ml-a1a2/`.
+
+Legacy full-gallery script (writes `v1.1.1/`):
+
+```bash
+python scripts/capture_release_screenshots.py
+```
 
 ## Usage in markdown
 
 From repository root README:
 
 ```markdown
-![Home (English)](docs/assets/screenshots/home_en.png)
+![Home (English)](docs/assets/screenshots/ml-a1a2/home_en.png)
 ```
 
 From `docs/*.md`:
 
 ```markdown
-![Home](../assets/screenshots/home_ru.png)
+![Home](../assets/screenshots/ml-a1a2/home_ru.png)
 ```

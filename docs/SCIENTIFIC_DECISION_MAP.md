@@ -222,3 +222,7 @@ flowchart LR
 - `docs/MORPHOLOGY_DECISION_AUDIT_V1_1_1.md` — rule-path QA on approved MAT archives
 - `docs/REFERENCE_ATLAS_CAPABILITY_AUDIT.md` — atlas case rights and comparability
 - `knowledge_base/RULE_PACK_IML1.csv` — rule provenance and threshold origins
+
+## ML-A.1 readiness gate (governance)
+
+Before any ML-B dataset manifests: freeze a candidate-independent label inventory under an explicit task contract; treat disagreement-analysis items as development-exposed; assess holdout feasibility by related-frame group / sequence (never random frames); record Readiness Gate A-F. Expert labels are not ground truth. Parameter-scaling contracts are unsupported by morphology labels alone.
