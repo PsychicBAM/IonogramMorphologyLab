@@ -81,7 +81,7 @@ Captures were taken from the live Qt `MainWindow` in the **ML-A.1a.2 source tree
 | `git diff --check` (touched docs/images) | **clean** (no whitespace errors) |
 | Image path links in READMEs | **resolve** |
 | EN/RU parity | **equivalent section structure and screenshot twins** |
-| Private data in README text | **none** (`E:\`, `C:\Users\`, credentials absent) |
+| Private data in README text | **none** (no drive-letter absolute paths, no home-directory paths, credentials absent) |
 | Private data in screenshots | **none observed** (demo labels only; no owner paths) |
 | Full pytest re-run | **not performed** (docs-only supplemental) |
 

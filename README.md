@@ -132,6 +132,20 @@ Packaged EXE (when distributed): run `IonogramMorphologyLab.exe` from the portab
 
 ## Projects and MAT data
 
+<details>
+<summary><strong>Projects</strong></summary>
+
+- **Purpose:** Create, open, and switch analysis projects safely.
+- **When to use:** Before importing MAT data, or when changing workspace context.
+- **Prerequisites:** Writable workspace path for create; existing project path for open.
+- **Controls:** Current project card (name, path, created, last opened, active source, active run, unsaved changes); Open Project; Choose Project Folder; Open Recent Project; Remove from recent list; Create Project.
+- **Effect:** Loads or creates project metadata; before switching — stops/resolves active jobs, warns about unsaved edits, clears stale UI state so results from two projects are never mixed.
+- **Output:** Project directory and database rows; recent-projects list in settings.
+- **Common mistake:** Creating inside the portable EXE folder; ignoring unsaved-change or active-job warnings.
+- **Scientific limitation:** Project creation does not validate science.
+
+</details>
+
 - Projects store metadata, caches, runs, review corpora/campaigns, and readiness audits under the project tree.
 - Import registers a user-selected `.mat` path; IML does not rewrite `Amp_all` or other source arrays.
 - Prefer synthetic teaching files under `synthetic_data/` for demos and documentation.

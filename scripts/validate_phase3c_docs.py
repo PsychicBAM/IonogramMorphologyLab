@@ -108,13 +108,17 @@ def check_control_reference() -> None:
 def check_readme_projects() -> None:
     en = (ROOT / "README.md").read_text(encoding="utf-8")
     ru = (ROOT / "README_RU.md").read_text(encoding="utf-8")
-    # Extract Projects details block
+    # Prefer Projects details block; fall back to Projects and MAT section.
     def block(text: str, title: str) -> str:
         m = re.search(rf"<summary><strong>{title}</strong></summary>(.*?)</details>", text, re.S)
         return m.group(1) if m else ""
 
-    en_b = block(en, "Projects")
-    ru_b = block(ru, "Проекты")
+    def section(text: str, heading: str) -> str:
+        m = re.search(rf"^## {re.escape(heading)}\s*\n(.*?)(?=^## |\Z)", text, re.S | re.M)
+        return m.group(1) if m else ""
+
+    en_b = block(en, "Projects") or section(en, "Projects and MAT data")
+    ru_b = block(ru, "Проекты") or section(ru, "Проекты и данные MAT")
     if "Project name; Create project" in en_b or en_b.strip() == "":
         err("README.md Projects section still lists only Create project / missing Open controls")
     for marker in PROJECTS_README_MARKERS_EN:
@@ -141,13 +145,14 @@ def check_screenshots() -> None:
         p = shot_dir / name
         if not p.is_file() or p.stat().st_size < 1000:
             err(f"Missing/too-small screenshot: {p.relative_to(ROOT)}")
-    # All README image links under v1.1.1 must exist
+    # README featured gallery may use ml-a1a2; historical assets remain under v1.1.1.
+    allowed_dirs = ("v1.1.1", "ml-a1a2")
     for readme in (ROOT / "README.md", ROOT / "README_RU.md"):
         text = readme.read_text(encoding="utf-8")
         for m in re.finditer(r"!\[[^\]]*\]\((docs/assets/screenshots/[^)]+)\)", text):
             rel = m.group(1)
-            if "v1.1.1" not in rel:
-                err(f"{readme.name}: screenshot not under v1.1.1: {rel}")
+            if not any(f"/{d}/" in f"/{rel}" or f"screenshots/{d}/" in rel for d in allowed_dirs):
+                err(f"{readme.name}: screenshot not under allowed gallery ({'/'.join(allowed_dirs)}): {rel}")
             path = ROOT / rel
             if not path.is_file():
                 err(f"{readme.name}: broken screenshot link: {rel}")
