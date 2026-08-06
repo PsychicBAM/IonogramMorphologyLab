@@ -405,8 +405,8 @@ def test_build_identity_includes_phase_4c1e2d():
 
     ident = collect_build_identity(compute_sha=False)
     # Phase advanced; layout/sequence-state schema versions unchanged
-    assert ident.get("release_phase") == "4C.4a"
+    assert ident.get("release_phase") == "ML-A.1a.2"
     assert ident.get("fd_layout_schema_version") == FD_LAYOUT_SCHEMA_VERSION
     assert ident.get("sequence_state_contract_version") == SEQUENCE_STATE_CONTRACT_VERSION
     text = format_build_identity(ident, "en")
-    assert "4C.4a" in text
+    assert "ML-A.1a.2" in text

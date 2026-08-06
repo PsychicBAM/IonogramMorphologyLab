@@ -1,4 +1,4 @@
-﻿# Phase 4C.4a Acceptance Report
+# Phase 4C.4a Acceptance Report
 
 **Build Identity:** `4C.4a`
 **Mode:** shadow-only
@@ -17,18 +17,18 @@ Read-only analytical layer above completed/revealed expert review corpora and ca
 - Immutable analysis snapshots under `{project}/review_dataset/morphology_analyses/<id>/`
 - Eligibility with explicit exclusion denominators
 - Candidate engine/ruleset version stratification warnings
-- Descriptive dashboard + Expertâ†’Candidate transition matrix (not a confusion/accuracy matrix)
+- Descriptive dashboard + Expert→Candidate transition matrix (not a confusion/accuracy matrix)
 - Case explorer (post-reveal / frozen analysis only)
 - Append-only analyst hypotheses (do not alter labels/counts)
 - Development-exposed contamination tracking
 - Holdout planning with overlap checks; Outcome F requires untouched holdout plan
-- Ruleset Decision Gate outcomes Aâ€“F
+- Ruleset Decision Gate outcomes A–F
 - Exports (MD/JSON/CSV) without absolute owner paths
 - UI navigation EN â€œDisagreement Analysisâ€ / RU Â«ÐÐ½Ð°Ð»Ð¸Ð· Ñ€Ð°ÑÑ…Ð¾Ð¶Ð´ÐµÐ½Ð¸Ð¹Â»
 - Background freeze worker with progress/cancel
 - Validator `scripts/validate_morphology_disagreement_analysis.py`
 - Focused tests `tests/test_phase4c4a_disagreement_analysis.py`
-- Help topic Â§88 Disagreement Analysis
+- Help topic §88 Disagreement Analysis
 
 ## Scientific contracts preserved
 
@@ -54,7 +54,7 @@ Read-only analytical layer above completed/revealed expert review corpora and ca
 | i18n / docs | **OK / PASS** |
 | Repository hygiene | **0 violations** |
 | Packaged EXE start | **OK** |
-| Domain smoke (synthetic) | **OK** â€” freeze, 5 disagreements / 1 match, small-sample warning, exposed holdout rejected, Decision Gate F + export, integrity OK |
+| Domain smoke (synthetic) | **OK** — freeze, 5 disagreements / 1 match, small-sample warning, exposed holdout rejected, Decision Gate F + export, integrity OK |
 
 ### Suite note
 

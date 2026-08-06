@@ -1,6 +1,6 @@
-﻿# Phase 4C.4a â€” Owner QA Checklist
+# Phase 4C.4a — Owner QA Checklist
 
-Pilot disagreement analysis â€” **not** a scientific validation study.
+Pilot disagreement analysis — **not** a scientific validation study.
 ÐŸÐ¸Ð»Ð¾Ñ‚Ð½Ñ‹Ð¹ Ð°Ð½Ð°Ð»Ð¸Ð· Ñ€Ð°ÑÑ…Ð¾Ð¶Ð´ÐµÐ½Ð¸Ð¹ â€” **Ð½Ðµ** ÑÐ²Ð»ÑÐµÑ‚ÑÑ Ð½Ð°ÑƒÑ‡Ð½Ð¾Ð¹ Ð²Ð°Ð»Ð¸Ð´Ð°Ñ†Ð¸ÐµÐ¹.
 
 **Expected Build Identity:** `4C.4a`
@@ -8,7 +8,7 @@ Pilot disagreement analysis â€” **not** a scientific validation study.
 
 ## Visual / interactive checks
 
-| # | Step (EN) | Ð¨Ð°Ð³ (RU) | Pass? |
+| # | Step (EN) | Шаг (RU) | Pass? |
 |---|-----------|----------|-------|
 | 1 | Open Disagreement Analysis | ÐžÑ‚ÐºÑ€Ñ‹Ñ‚ÑŒ Â«ÐÐ½Ð°Ð»Ð¸Ð· Ñ€Ð°ÑÑ…Ð¾Ð¶Ð´ÐµÐ½Ð¸Ð¹Â» | â˜ |
 | 2 | Select revealed corpus/campaign | Ð’Ñ‹Ð±Ñ€Ð°Ñ‚ÑŒ Ñ€Ð°ÑÐºÑ€Ñ‹Ñ‚Ñ‹Ð¹ ÐºÐ¾Ñ€Ð¿ÑƒÑ/ÐºÐ°Ð¼Ð¿Ð°Ð½Ð¸ÑŽ | â˜ |

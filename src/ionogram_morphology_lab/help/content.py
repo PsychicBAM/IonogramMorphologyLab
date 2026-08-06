@@ -1069,6 +1069,37 @@ HELP_SECTIONS: list[dict[str, str]] = [
             "Связано: Корпусы экспертной оценки, Кампании экспертной оценки."
         ),
     },
+    {
+        "id": "ml_data_readiness",
+        "title_en": "89. ML Data Readiness (Phase ML-A.1)",
+        "title_ru": "89. Готовность данных для ML (фаза ML-A.1)",
+        "body_en": (
+            "Purpose: candidate-independent audit of expert-labelled data readiness before any ML-B "
+            "manifest planning. This phase does not train models, does not tune candidate rules, and "
+            "does not wire into the production RuleEngine.\n\n"
+            "Workflow: select a task contract → select corpora → preview unique current labels → "
+            "freeze an immutable readiness audit → inspect coverage, missingness, reviewer "
+            "independence, contamination → run holdout feasibility assessment → record Readiness Gate → export.\n\n"
+            "Task contracts separate morphology, assessability, interference, and parameter-scaling "
+            "readiness. Parameter scaling is normally unsupported by current IML morphology labels.\n\n"
+            "Holdout feasibility is an assessment only — not a holdout dataset. Outcome F authorizes "
+            "ML-B manifest planning only.\n\n"
+            "Related: Disagreement Analysis, Expert Review Corpora, Ionogram ML Literature Audit."
+        ),
+        "body_ru": (
+            "Назначение: независимый от кандидата аудит готовности экспертных меток до планирования "
+            "манифестов ML-B. Эта фаза не обучает модели, не настраивает правила кандидата и не "
+            "подключает production RuleEngine.\n\n"
+            "Процесс: выбрать контракт задачи → выбрать корпусы → предпросмотр уникальных текущих меток → "
+            "заморозить неизменяемый аудит → покрытие, пропуски, независимость рецензентов, контаминация → "
+            "оценка возможности holdout → Readiness Gate → экспорт.\n\n"
+            "Контракты задач разделяют морфологию, оценимость, помехи и готовность к масштабированию "
+            "параметров. Масштабирование параметров обычно не поддерживается текущими метками морфологии IML.\n\n"
+            "Оценка holdout — только feasibility, не holdout-набор. Исход F разрешает только планирование "
+            "манифестов ML-B.\n\n"
+            "Связано: Анализ расхождений, Корпусы экспертной оценки, аудит литературы по ML."
+        ),
+    },
 ]
 
 
