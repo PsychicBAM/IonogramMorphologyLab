@@ -1,4 +1,4 @@
-"""Phase ML-A.1a.2 — localization, audit reload, source/date, contract coverage."""
+"""Phase ML-B.1 — localization, audit reload, source/date, contract coverage."""
 
 from __future__ import annotations
 
@@ -194,7 +194,7 @@ class _FakeSession:
 
 def test_build_identity_mla1a():
     ident = collect_build_identity(compute_sha=False)
-    assert ident["release_phase"] == "ML-A.1a.2"
+    assert ident["release_phase"] == "ML-B.1d"
     assert ident["ml_dataset_readiness_protocol_version"] == "iml-ml-dataset-readiness-0.1.0"
     assert ident["disagreement_analysis_protocol_version"] == "iml-disagreement-analysis-0.1.0"
 

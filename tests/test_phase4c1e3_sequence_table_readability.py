@@ -380,8 +380,8 @@ def test_build_identity_phase_4c1e3():
 
     ident = collect_build_identity()
     # Phase advanced; sequence table contracts remain unchanged
-    assert ident.get("release_phase") == "ML-A.1a.2"
-    assert "ML-A.1a.2" in format_build_identity(ident, "en")
+    assert ident.get("release_phase") == "ML-B.1d"
+    assert "ML-B.1" in format_build_identity(ident, "en")
 
 
 def test_ru_en_retranslate_column_headers(qtbot, session):

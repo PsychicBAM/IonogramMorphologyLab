@@ -316,7 +316,7 @@ class CommentRecord:
     timestamp: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
     record_hash: str = ""
     supersedes_comment_id: str = ""
-    build_identity: str = "ML-A.1a.2"
+    build_identity: str = "ML-B.1d"
 
     def __post_init__(self) -> None:
         if self.comment_type not in COMMENT_TYPES:

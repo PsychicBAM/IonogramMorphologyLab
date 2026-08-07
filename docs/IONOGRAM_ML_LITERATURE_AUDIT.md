@@ -219,7 +219,7 @@ and forbid:
 
 ## 10. Future ML roadmap (ML-A…ML-E) — planning only
 
-**ML-A…ML-E is a research planning roadmap.** Phase **ML-A.1** implements only the **ML-A** stage as a candidate-independent dataset/label readiness audit and Readiness Gate (no training, no ML runtime dependencies, no RuleEngine wiring, no accuracy/F1 claims). Stages **ML-B…ML-E** remain future planning and are **not** authorized by ML-A.1.
+**ML-A…ML-E is a research planning roadmap.** Phase **ML-A.1** implements the **ML-A** stage (readiness audit + Gate). Phase **ML-B.1** implements the **ML-B** stage as immutable identity manifests and leakage-safe role reservation (still no training, no ML runtime dependencies, no RuleEngine wiring, no accuracy/F1 claims). Stages **ML-C…ML-E** remain future planning and are **not** authorized by ML-B.1.
 
 Preserved governance concepts across all stages:
 

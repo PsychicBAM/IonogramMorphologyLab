@@ -1,4 +1,4 @@
-"""Phase ML-A.1a.2 — readiness worker progress completion lifecycle."""
+"""Phase ML-B.1 — readiness worker progress completion lifecycle."""
 
 from __future__ import annotations
 
@@ -51,7 +51,7 @@ def _page(qtbot, tmp_path: Path, lang: str = "en") -> MLDataReadinessPage:
 
 
 def test_build_identity_mla1a2():
-    assert collect_build_identity(compute_sha=False)["release_phase"] == "ML-A.1a.2"
+    assert collect_build_identity(compute_sha=False)["release_phase"] == "ML-B.1d"
 
 
 def test_freeze_store_emits_100(tmp_path: Path):
