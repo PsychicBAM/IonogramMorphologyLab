@@ -1,14 +1,14 @@
 # Ionogram Morphology Lab
 
-[English](README.md) | [Русский](README_RU.md) · **Release 1.1.1** · **Build Identity: ML-A.1a.2**
+[English](README.md) | [Русский](README_RU.md) · **Release 1.1.1** · **Build Identity: ML-B.1d**
 
-Ionogram Morphology Lab (IML) is a bilingual (EN/RU) desktop research application for **source-traceable ionogram morphology analysis**, expert review campaigns, disagreement analysis, dataset readiness audits, rule testing, and report export. It imports user-selected MATLAB (`.mat`) data, preserves provenance, and keeps morphology, ambiguity, quality, and parameter proposals on **separate scientific axes**.
+Ionogram Morphology Lab (IML) is a bilingual (EN/RU) desktop research application for **source-traceable ionogram morphology analysis**, expert review campaigns, disagreement analysis, dataset readiness audits, leakage-safe dataset manifests, rule testing, and report export. It imports user-selected MATLAB (`.mat`) data, preserves provenance, and keeps morphology, ambiguity, quality, and parameter proposals on **separate scientific axes**.
 
-> **Scientific status:** Output is a **candidate** morphology or parameter proposal compatible with image evidence. It does **not** establish a physical mechanism, replace expert scaling, or validate a model. Expert labels are human decisions, not ground truth. Development models and custom rules require independent, domain-appropriate validation before operational use. **ML Data Readiness** is a descriptive audit only — it does **not** authorize model training.
+> **Scientific status:** Output is a **candidate** morphology or parameter proposal compatible with image evidence. It does **not** establish a physical mechanism, replace expert scaling, or validate a model. Expert labels are human decisions, not ground truth. Development models and custom rules require independent, domain-appropriate validation before operational use. **ML Data Readiness** and **ML Dataset Manifests** are planning/governance surfaces only — they do **not** authorize model training. **ML-C has not started.**
 
-![Home dashboard (English, ML-A.1a.2)](docs/assets/screenshots/ml-a1a2/home_en.png)
+![ML Dataset Manifests compact overview (English, ML-B.1d)](docs/assets/screenshots/ml-b1d/manifests_overview_en.png)
 
-*Home — recommended workflow with synthetic demo data (`DemoSynthetic` / `demo_smooth_trace.mat`). Captures under `docs/assets/screenshots/ml-a1a2/`.*
+*ML Dataset Manifests — frozen synthetic Gate-F teaching example (compact layout). Gallery: `docs/assets/screenshots/ml-b1d/`.*
 
 ## Capabilities
 
@@ -18,6 +18,7 @@ Ionogram Morphology Lab (IML) is a bilingual (EN/RU) desktop research applicatio
 - Expert review corpora and campaigns with blind rounds, reveal/compare, and adjudication
 - Disagreement analysis (descriptive; neither expert nor candidate is ground truth)
 - **ML Data Readiness (ML-A.1a.2):** inventory, class coverage, sources/dates, contamination, holdout feasibility assessment, Readiness Gate A–F (F = ML-B planning only)
+- **ML Dataset Manifests (ML-B.1d):** immutable role manifests, leakage-safe atomic groups, train / development / untouched-holdout reservation (workflow-sealed labels); still **no training**; **ML-C not started**
 - EN/RU UI, Help, and documentation
 
 ## Module comparison
@@ -31,6 +32,7 @@ Ionogram Morphology Lab (IML) is a bilingual (EN/RU) desktop research applicatio
 | Expert Review Campaigns | Multi-date/source campaign operations | Campaign manifests / progress | Scientific validation claims |
 | Disagreement Analysis | Describe expert↔candidate / expert↔expert patterns | Frozen descriptive snapshot + gate | Accuracy/F1; declare a winner |
 | ML Data Readiness | Dataset/label readiness for a task contract | Frozen readiness audit + exports | Model training; final holdout manifests |
+| ML Dataset Manifests | Leakage-safe train/dev/holdout identity reservation | Frozen manifest set + public exports | Model training; holdout unlock; ML-C |
 | MATLAB Studio / Model Lab | Optional method / research prototyping | Studio or model-lab artifacts | Default automatic analysis |
 | Rule Builder / Testing | Author and test versioned rule packs | Packs / test reports | External validation by itself |
 
@@ -44,76 +46,68 @@ Ionogram Morphology Lab (IML) is a bilingual (EN/RU) desktop research applicatio
 6. Build an **expert review corpus**, complete **blind** rounds, then reveal/compare (campaigns when operating across many sources/dates).
 7. Optionally run **Disagreement Analysis** on revealed corpora (descriptive only).
 8. Run **ML Data Readiness** for a chosen task contract; freeze an audit; read the Gate. Outcome **F** means ML-B *planning* only — still **no training**.
-9. Export bilingual reports / readiness exports as needed. Keep research MAT and runtime audits out of git.
+9. When Gate F permits, open **ML Dataset Manifests**, build atomic groups, reserve roles, freeze a manifest set (holdout labels remain sealed). Still **no training** / no ML-C.
+10. Export bilingual reports / readiness / public manifest exports as needed. Keep research MAT and runtime audits out of git.
 
-## Featured screenshots (ML-A.1a.2)
+## Featured screenshots (ML-B.1d)
 
-PNG captures at 1600×900 from the ML-A.1a.2 UI with synthetic/demo labels only. No owner private paths or credentials. Each scene has an EN and RU twin under `docs/assets/screenshots/ml-a1a2/`.
+PNG captures at 1600×900 from the **ML-B.1d** UI with a sanitized synthetic Gate-F teaching example only. No owner private paths or credentials. Each scene has an EN and RU twin under `docs/assets/screenshots/ml-b1d/`.
 
 <details>
-<summary><strong>Home</strong></summary>
+<summary><strong>ML Dataset Manifests — compact overview</strong></summary>
 
-![Home dashboard with recommended workflow (English)](docs/assets/screenshots/ml-a1a2/home_en.png)
+![ML Dataset Manifests compact overview (English)](docs/assets/screenshots/ml-b1d/manifests_overview_en.png)
 
-*Home — entry dashboard and recommended workflow. RU: `home_ru.png`.*
+*Frozen teaching example — compact status, freeze status, Technical Details collapsed. RU: `manifests_overview_ru.png`.*
 
 </details>
 
 <details>
-<summary><strong>Ionogram Viewer</strong></summary>
+<summary><strong>Atomic Groups</strong></summary>
 
-![Ionogram Viewer showing synthetic demo frame (English)](docs/assets/screenshots/ml-a1a2/ionogram_viewer_en.png)
+![Atomic Groups tab (English)](docs/assets/screenshots/ml-b1d/atomic_groups_en.png)
 
-*Ionogram Viewer — inspect frames before/after analysis. RU: `ionogram_viewer_ru.png`.*
-
-</details>
-
-<details>
-<summary><strong>Expert Review Campaigns</strong></summary>
-
-![Expert Review Campaigns page (English)](docs/assets/screenshots/ml-a1a2/campaigns_en.png)
-
-*Campaigns — multi-source/date pilot operations. RU: `campaigns_ru.png`.*
+*Leakage-safe atomic groups — never split across roles. RU: `atomic_groups_ru.png`.*
 
 </details>
 
 <details>
-<summary><strong>Expert Review Corpora</strong></summary>
+<summary><strong>Role Assignment</strong></summary>
 
-![Expert Review Corpora page (English)](docs/assets/screenshots/ml-a1a2/expert_review_en.png)
+![Role Assignment tab (English)](docs/assets/screenshots/ml-b1d/role_assignment_en.png)
 
-*Corpora — blind review, reveal/compare entry. RU: `expert_review_ru.png`.*
-
-</details>
-
-<details>
-<summary><strong>Disagreement Analysis</strong></summary>
-
-![Disagreement Analysis selection tab (English)](docs/assets/screenshots/ml-a1a2/disagreement_analysis_en.png)
-
-*Disagreement Analysis — descriptive snapshot only. RU: `disagreement_analysis_ru.png`.*
+*Train / development / untouched holdout reservation (sealed targets when Frozen). RU: `role_assignment_ru.png`.*
 
 </details>
 
 <details>
-<summary><strong>ML Data Readiness</strong></summary>
+<summary><strong>Coverage (human-readable)</strong></summary>
 
-![ML Data Readiness selection and freeze tab (English)](docs/assets/screenshots/ml-a1a2/ml_data_readiness_en.png)
+![Coverage tab (English)](docs/assets/screenshots/ml-b1d/coverage_en.png)
 
-*ML Data Readiness — audit selection/freeze (example pilot title). RU: `ml_data_readiness_ru.png`.*
+*Per-role item/group/sequence/date/source/target counts; shortened source IDs. RU: `coverage_ru.png`.*
 
 </details>
 
 <details>
-<summary><strong>Results</strong></summary>
+<summary><strong>Holdout Reservation (frozen / sealed)</strong></summary>
 
-![Results page for candidate predictions (English)](docs/assets/screenshots/ml-a1a2/results_en.png)
+![Holdout Reservation tab (English)](docs/assets/screenshots/ml-b1d/holdout_reservation_en.png)
 
-*Results — automatic candidates are not expert-confirmed. RU: `results_ru.png`.*
+*Holdout reserved; reference labels sealed; unlock in ML-B unavailable. RU: `holdout_reservation_ru.png`.*
 
 </details>
 
-Additional historical page captures remain under [`docs/assets/screenshots/v1.1.1/`](docs/assets/screenshots/v1.1.1/) (still referenced by some secondary docs).
+<details>
+<summary><strong>Manifest Summary</strong></summary>
+
+![Manifest Summary tab (English)](docs/assets/screenshots/ml-b1d/validation_summary_en.png)
+
+*Frozen summary — integrity / roles / protocol; no training claim. RU: `validation_summary_ru.png`.*
+
+</details>
+
+Prior readiness / home tour captures remain under [`docs/assets/screenshots/ml-a1a2/`](docs/assets/screenshots/ml-a1a2/) (not overwritten). Older page captures: [`docs/assets/screenshots/v1.1.1/`](docs/assets/screenshots/v1.1.1/).
 
 ## Quick start
 
@@ -126,7 +120,7 @@ pip install -e ".[dev]"
 python -m ionogram_morphology_lab.app.main
 ```
 
-Packaged EXE (when distributed): run `IonogramMorphologyLab.exe` from the portable folder. Accepted Build Identity for this readiness phase: **ML-A.1a.2**.
+Packaged EXE (when distributed): run `IonogramMorphologyLab.exe` from the portable folder. Current Build Identity: **ML-B.1d**.
 
 1. Choose language · 2. New Project · 3. Start with `synthetic_data/` · 4. Follow Home recommended steps.
 
@@ -181,9 +175,23 @@ Protocol: `iml-ml-dataset-readiness-0.1.0`. Shadow-only audit and governance:
 
 *ML Data Readiness — Selection and Freeze. Caption on page states audit limits.*
 
-### Pilot example (labelled example only)
+## ML Dataset Manifests (ML-B.1d)
 
-The screenshots show a **synthetic teaching example** titled `Demo pilot readiness (example)` on cohort `demo_pilot_example`. It is **not** a scientific claim about any research corpus. A small concentrated pilot with limited dates/sources and few independent second reviews typically lands on Gate outcomes such as A, C, D, or E — that is an expected readiness result, not a software failure.
+Protocol: `iml-ml-dataset-manifests-0.1.0`. Shadow-only planning above a frozen readiness audit:
+
+- Deterministic leakage graph → **atomic groups** that must never split across dataset roles
+- Roles: **train**, **development**, **untouched holdout**, excluded (identity reservation only — not training)
+- Final freeze only when readiness Gate is **F** (planning-only); non-F audits allow draft simulation and correctly block freeze
+- Public holdout identity manifest without item-level targets; reference labels are **workflow-sealed** (not cryptographic secrecy); ML-B cannot unlock them
+- Always: `authorizes_training=False`; **ML-C not started**; no accuracy/F1 claims
+
+### Scenario A — scientifically blocked pilot (example)
+
+A one-sequence, fully development-exposed pilot (acquisition date `2014-10-15`) correctly yields **no untouched holdout groups** and **blocks freeze**. That is expected science, not a software failure.
+
+### Scenario B — synthetic Gate F (teaching example only)
+
+README screenshots use a **sanitized synthetic Gate-F teaching example** (multi-sequence, multi-date). Illustrative frozen counts: train 4 items / 4 groups; development 2 / 2; untouched holdout 3 / 2; Integrity PASS. It is **not** a scientific claim about any research corpus and does **not** authorize training.
 
 ## Integrity and contamination posture
 
@@ -211,13 +219,14 @@ python -m pytest
 python scripts/validate_feature_registry_v2.py
 python scripts/validate_synthetic_geometry_v2.py
 python scripts/validate_ml_dataset_readiness.py
+python scripts/validate_ml_dataset_manifests.py
 python scripts/validate_morphology_disagreement_analysis.py
 python scripts/validate_i18n.py
 python scripts/validate_docs.py
 python scripts/check_repository_hygiene.py
 ```
 
-Release-gate evidence for ML-A.1a.2 (already completed): **769** pytest passed; validators + hygiene OK; owner visual QA PASS; accepted EXE SHA-256 `67FBB83E6BCECF2A58C719A57AF5E60B9E74FCB31EB1FC130B8BD8DAE6A6A246`. See [`docs/MLA1_FINAL_RELEASE_GATE_REPORT.md`](docs/MLA1_FINAL_RELEASE_GATE_REPORT.md).
+Release-gate evidence for **ML-B.1d**: **834** pytest passed; all release validators + hygiene OK; owner visual QA PASS; accepted EXE SHA-256 `132242FAFAA5C30D09C8FAE13C0795CEECD6B7CDDDB68CC56C0CCC03C4C32E80`. See [`docs/MLB1_FINAL_RELEASE_GATE_REPORT.md`](docs/MLB1_FINAL_RELEASE_GATE_REPORT.md).
 
 ## Repository structure (high level)
 
@@ -248,8 +257,9 @@ Do **not** commit: owner MAT files, `review_dataset/` runtime data, readiness/di
 
 ## Roadmap
 
-- **Done (this phase):** ML-A.1 → ML-A.1a.2 dataset readiness (shadow-only).
-- **Not started:** **ML-B** (train/development/holdout manifests and any training workflow).
+- **Done:** ML-A.1 → ML-A.1a.2 dataset readiness (shadow-only).
+- **Done (this release):** **ML-B.1 → ML-B.1d** immutable dataset manifests and leakage-safe role reservation (shadow-only; no training).
+- **Not started:** **ML-C** (any model experiment / training workflow).
 - MATLAB Studio / Model Lab remain optional research surfaces, not default analysis.
 
 ## Documentation map
@@ -257,11 +267,11 @@ Do **not** commit: owner MAT files, `review_dataset/` runtime data, readiness/di
 | Document | Role |
 |----------|------|
 | [USER_GUIDE_EN.md](docs/USER_GUIDE_EN.md) | Complete control reference |
-| [USER_GUIDE_RU.md](docs/USER_GUIDE_RU.md) | Полный справочник элементов |
+| [USER_GUIDE_EN.md](docs/USER_GUIDE_EN.md) | Full control reference |
 | [SCIENTIFIC_DECISION_MAP.md](docs/SCIENTIFIC_DECISION_MAP.md) | Default analysis path |
-| [MLA1_FINAL_RELEASE_GATE_REPORT.md](docs/MLA1_FINAL_RELEASE_GATE_REPORT.md) | ML-A.1a.2 release gate |
-| [MLA1_README_SCREENSHOT_REFRESH_REPORT.md](docs/MLA1_README_SCREENSHOT_REFRESH_REPORT.md) | This README/screenshot refresh |
+| [MLB1_FINAL_RELEASE_GATE_REPORT.md](docs/MLB1_FINAL_RELEASE_GATE_REPORT.md) | ML-B.1d release gate |
+| [MLA1_FINAL_RELEASE_GATE_REPORT.md](docs/MLA1_FINAL_RELEASE_GATE_REPORT.md) | Prior ML-A.1a.2 release gate |
 
 ## License / citation
 
-See repository `LICENSE` and science claim packs. Cite IML version **1.1.1** with Build Identity **ML-A.1a.2** and the analysis run id from Reports when reproducing a run.
+See repository `LICENSE` and science claim packs. Cite IML version **1.1.1** with Build Identity **ML-B.1d** and the analysis run id from Reports when reproducing a run.

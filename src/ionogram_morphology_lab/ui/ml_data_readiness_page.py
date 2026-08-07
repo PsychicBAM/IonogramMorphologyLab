@@ -1276,7 +1276,13 @@ class MLDataReadinessPage(QWidget):
             self._render_gate(self._last_gate)
             self._refresh_saved()
         except Exception as exc:  # noqa: BLE001
-            QMessageBox.warning(self, self.t("readiness.record_gate"), str(exc))
+            msg = str(exc)
+            # Keep domain English message for tests/logs; show localized next-action UX.
+            if "explicit analyst rationale" in msg.lower():
+                msg = self.t("readiness.gate_f_needs_rationale")
+            elif "holdout feasibility" in msg.lower() and "outcome f" in msg.lower():
+                msg = self.t("readiness.gate_f_needs_holdout")
+            QMessageBox.warning(self, self.t("readiness.record_gate"), msg)
 
     def _on_export(self) -> None:
         """Export requires an existing selected saved audit; never creates a new audit."""

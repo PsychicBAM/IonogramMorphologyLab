@@ -1,4 +1,4 @@
-"""Phase ML-A.1a.2 — acquisition date authority, legacy diagnostics, gate B evidence."""
+"""Phase ML-B.1 — acquisition date authority, legacy diagnostics, gate B evidence."""
 
 from __future__ import annotations
 
@@ -142,7 +142,7 @@ def no_msgbox(monkeypatch):
 
 def test_build_identity_mla1a1():
     ident = collect_build_identity(compute_sha=False)
-    assert ident["release_phase"] == "ML-A.1a.2"
+    assert ident["release_phase"] == "ML-B.1d"
     assert ident["ml_dataset_readiness_protocol_version"] == "iml-ml-dataset-readiness-0.1.0"
 
 

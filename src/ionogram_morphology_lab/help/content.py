@@ -1100,6 +1100,33 @@ HELP_SECTIONS: list[dict[str, str]] = [
             "Связано: Анализ расхождений, Корпусы экспертной оценки, аудит литературы по ML."
         ),
     },
+    {
+        "id": "ml_dataset_manifests",
+        "title_en": "90. ML Dataset Manifests (Phase ML-B.1)",
+        "title_ru": "90. Манифесты наборов данных ML (фаза ML-B.1)",
+        "body_en": (
+            "Purpose: immutable identity manifests, leakage-safe atomic-group assignment, and "
+            "untouched-holdout reservation above a frozen ML-A readiness audit. This phase does not "
+            "train, evaluate, or unlock holdout labels.\n\n"
+            "Workflow: select a frozen readiness audit → inspect Gate → choose grouping policy → "
+            "build leakage graph → deterministic or manual role assignment → validate → freeze when "
+            "Gate F permits → export public manifests (reference holdout labels remain workflow-sealed).\n\n"
+            "Non-F audits allow draft simulation only. A one-sequence development-exposed pilot correctly "
+            "blocks holdout reservation — that is not a software failure.\n\n"
+            "Related: ML Data Readiness, Disagreement Analysis, Expert Review Corpora."
+        ),
+        "body_ru": (
+            "Назначение: неизменяемые манифесты идентичностей, назначение атомарных групп без утечек и "
+            "резервирование незатронутого holdout поверх замороженного аудита готовности ML-A. Фаза не "
+            "обучает, не оценивает и не разблокирует метки holdout.\n\n"
+            "Процесс: выбрать замороженный аудит → Gate → политика группировки → граф утечек → "
+            "детерминированное или ручное назначение ролей → проверка → заморозка при Gate F → "
+            "экспорт публичных манифестов (эталонные метки holdout остаются запечатанными процессом).\n\n"
+            "Аудиты не-F допускают только черновик. Пилот с одной последовательностью и "
+            "development-exposed корректно блокирует holdout — это не сбой ПО.\n\n"
+            "Связано: Готовность данных ML, Анализ расхождений, Корпусы экспертной оценки."
+        ),
+    },
 ]
 
 

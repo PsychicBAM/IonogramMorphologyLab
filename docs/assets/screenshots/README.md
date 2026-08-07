@@ -4,50 +4,35 @@ Documentation **screenshots** are PNG captures from the live Qt UI using **synth
 
 Schematic **layout mocks** (SVG) live in [`../schematics/`](../schematics/) — those are not screenshots.
 
-## Current README set (ML-A.1a.2)
+## Current README set (ML-B.1d)
 
-Directory: [`ml-a1a2/`](ml-a1a2/)
+Directory: [`ml-b1d/`](ml-b1d/)
 
 | File | Description |
 |------|-------------|
-| `home_en.png` / `home_ru.png` | Home dashboard with recommended workflow |
-| `ionogram_viewer_en.png` / `ionogram_viewer_ru.png` | Ionogram viewer |
-| `campaigns_en.png` / `campaigns_ru.png` | Expert Review Campaigns |
-| `expert_review_en.png` / `expert_review_ru.png` | Expert Review Corpora |
-| `disagreement_analysis_en.png` / `disagreement_analysis_ru.png` | Disagreement Analysis |
-| `ml_data_readiness_en.png` / `ml_data_readiness_ru.png` | ML Data Readiness |
-| `results_en.png` / `results_ru.png` | Results |
+| `manifests_overview_en.png` / `_ru.png` | ML Dataset Manifests compact overview (Frozen teaching example) |
+| `atomic_groups_en.png` / `_ru.png` | Atomic Groups |
+| `role_assignment_en.png` / `_ru.png` | Role Assignment |
+| `coverage_en.png` / `_ru.png` | Human-readable Coverage |
+| `holdout_reservation_en.png` / `_ru.png` | Holdout Reservation frozen/sealed |
+| `validation_summary_en.png` / `_ru.png` | Manifest Summary |
 
-Total: **14** PNG files (7 screens × EN/RU), 1600×900. See [`ml-a1a2/CAPTURE_LOG.md`](ml-a1a2/CAPTURE_LOG.md).
+Total: **12** PNG files (6 screens × EN/RU), 1600×900. See [`ml-b1d/CAPTURE_LOG.md`](ml-b1d/CAPTURE_LOG.md).
 
-Root READMEs (`README.md`, `README_RU.md`) use this set.
+Root READMEs (`README.md`, `README_RU.md`) use this set as the primary tour.
+
+## Prior readiness / home tour (ML-A.1a.2)
+
+Directory: [`ml-a1a2/`](ml-a1a2/) — **preserved**, not overwritten. See [`ml-a1a2/CAPTURE_LOG.md`](ml-a1a2/CAPTURE_LOG.md).
 
 ## Historical page gallery (v1.1.1)
 
 Directory: [`v1.1.1/`](v1.1.1/)
 
-Older full-page tour (36+ PNGs) retained for secondary docs (`CUSTOM_RULE_BUILDER_*`, archive guides). Do not delete while those references remain.
-
-## Regenerate
-
-Preferred for ML-A.1a.2 README set: ephemeral capture under a local workspace (not committed), writing into `docs/assets/screenshots/ml-a1a2/`.
-
-Legacy full-gallery script (writes `v1.1.1/`):
-
-```bash
-python scripts/capture_release_screenshots.py
-```
+Older full-page tour retained for secondary docs. Do not delete while those references remain.
 
 ## Usage in markdown
 
-From repository root README:
-
 ```markdown
-![Home (English)](docs/assets/screenshots/ml-a1a2/home_en.png)
-```
-
-From `docs/*.md`:
-
-```markdown
-![Home](../assets/screenshots/ml-a1a2/home_ru.png)
+![Manifests overview (English)](docs/assets/screenshots/ml-b1d/manifests_overview_en.png)
 ```

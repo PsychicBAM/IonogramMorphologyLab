@@ -327,4 +327,4 @@ def test_build_identity_4c3a2():
     from ionogram_morphology_lab.ui.build_identity import collect_build_identity
 
     ident = collect_build_identity()
-    assert ident["release_phase"] == "ML-A.1a.2"
+    assert ident["release_phase"] == "ML-B.1d"

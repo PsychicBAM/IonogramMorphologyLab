@@ -40,7 +40,7 @@ def _meta(store: MorphologyReviewCorpusStore, cohort_id: str) -> dict[str, Any]:
         "ruleset_hash": manifest.ruleset_hash,
         "feature_version": manifest.feature_version,
         "generation_timestamp": datetime.now(timezone.utc).isoformat(),
-        "build_identity": "ML-A.1a.2",
+        "build_identity": "ML-B.1d",
         "scientific_non_claims": [
             "Not a scientific validation set",
             "Not ground truth",

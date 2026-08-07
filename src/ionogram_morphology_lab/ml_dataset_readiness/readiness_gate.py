@@ -15,7 +15,7 @@ from ionogram_morphology_lab.ml_dataset_readiness.models import (
 GATE_LABELS: dict[str, dict[str, str]] = {
     "A_collect_more_expert_labels": {
         "en": "A. Not ready — collect more expert labels",
-        "ru": "A. Не готово — собрать больше экспертных меток",
+        "ru": "A. Не готово — требуется больше экспертных меток",
     },
     "B_repair_label_contract_or_missing_data": {
         "en": "B. Not ready — repair label contract or missing data",

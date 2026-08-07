@@ -226,3 +226,7 @@ flowchart LR
 ## ML-A.1 readiness gate (governance)
 
 Before any ML-B dataset manifests: freeze a candidate-independent label inventory under an explicit task contract; treat disagreement-analysis items as development-exposed; assess holdout feasibility by related-frame group / sequence (never random frames); record Readiness Gate A-F. Expert labels are not ground truth. Parameter-scaling contracts are unsupported by morphology labels alone.
+
+## ML-B.1 dataset manifests (governance)
+
+Above a frozen ML-A audit: build a deterministic leakage graph into atomic groups; reserve train/development/untouched-holdout/excluded roles without splitting protected groups; freeze only when Gate F permits. Public holdout manifests omit item-level targets; reference labels are workflow-sealed until a future ML-E unlock protocol. ML-B does not authorize training or start ML-C.

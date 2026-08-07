@@ -173,6 +173,7 @@ NAV_KEYS = [
     ("pipeline", "nav.pipeline"),
     ("models", "nav.models"),
     ("ml_readiness", "nav.ml_readiness"),
+    ("ml_manifests", "nav.ml_manifests"),
     ("reports", "nav.reports"),
     ("settings", "nav.settings"),
     ("help", "nav.help"),
@@ -183,14 +184,14 @@ NAV_GROUPS = [
     ("data", "nav_group.data", ("profile", "audit", "viewer", "sequences")),
     ("analysis", "nav_group.analysis", ("batch", "results", "parameters", "campaigns", "expert", "disagreement")),
     ("reports", "nav_group.reports", ("reports",)),
-    ("methods", "nav_group.methods", ("matlab", "rules", "rule_test", "compare", "pipeline", "models", "ml_readiness")),
+    ("methods", "nav_group.methods", ("matlab", "rules", "rule_test", "compare", "pipeline", "models", "ml_readiness", "ml_manifests")),
     ("resources", "nav_group.resources", ("atlas", "science", "raw_signals", "feature_diagnostics", "settings", "help")),
 ]
 NAV_LABELS = dict(NAV_KEYS)
 GUIDED_NAV_KEYS = {
     "home", "projects", "import", "profile", "audit", "viewer", "sequences",
     "batch", "results", "parameters", "campaigns", "expert", "disagreement",
-    "ml_readiness", "reports", "settings", "help",
+    "ml_readiness", "ml_manifests", "reports", "settings", "help",
 }
 
 
@@ -335,6 +336,7 @@ class MainWindow(QMainWindow):
             "pipeline": self._page_pipeline,
             "models": self._page_models,
             "ml_readiness": self._page_ml_readiness,
+            "ml_manifests": self._page_ml_manifests,
             "reports": self._page_reports,
             "settings": self._page_settings,
             "help": self._page_help,
@@ -352,6 +354,7 @@ class MainWindow(QMainWindow):
             "pipeline",
             "models",
             "ml_readiness",
+            "ml_manifests",
             "rule_test",
             "expert",
             "disagreement",
@@ -567,6 +570,13 @@ class MainWindow(QMainWindow):
 
         page = MLDataReadinessPage(self.session, self.i18n)
         self._ml_data_readiness_page = page
+        return page
+
+    def _page_ml_manifests(self) -> QWidget:
+        from ionogram_morphology_lab.ui.ml_dataset_manifests_page import MLDatasetManifestsPage
+
+        page = MLDatasetManifestsPage(self.session, self.i18n)
+        self._ml_dataset_manifests_page = page
         return page
 
     def _page_matlab(self) -> QWidget:
