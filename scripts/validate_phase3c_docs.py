@@ -145,8 +145,8 @@ def check_screenshots() -> None:
         p = shot_dir / name
         if not p.is_file() or p.stat().st_size < 1000:
             err(f"Missing/too-small screenshot: {p.relative_to(ROOT)}")
-    # README featured gallery may use ml-b1d / ml-a1a2; historical assets remain under v1.1.1.
-    allowed_dirs = ("v1.1.1", "ml-a1a2", "ml-b1d")
+    # README featured gallery may use ml-c1b / ml-b1d / ml-a1a2; historical assets remain under v1.1.1.
+    allowed_dirs = ("v1.1.1", "ml-a1a2", "ml-b1d", "ml-c1b")
     for readme in (ROOT / "README.md", ROOT / "README_RU.md"):
         text = readme.read_text(encoding="utf-8")
         for m in re.finditer(r"!\[[^\]]*\]\((docs/assets/screenshots/[^)]+)\)", text):

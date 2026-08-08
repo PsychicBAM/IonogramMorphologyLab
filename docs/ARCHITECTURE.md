@@ -10,4 +10,8 @@ Source MAT files are input-only in normal workflows. Workspaces contain project 
 
 ## ML dataset manifests (Phase ML-B.1)
 
-`ml_dataset_manifests` builds immutable train/development/untouched-holdout/excluded identity manifests above a frozen readiness audit. Runtime sets live under `review_dataset/ml_manifests/` (gitignored). Atomic groups are formed by a deterministic leakage graph (related-frame, sequence, source-date, and related policies). Final freeze requires Gate F; holdout reference labels are workflow-sealed (not cryptographic). No training, no ML-C, no RuleEngine wiring, no accuracy/F1 claims.
+`ml_dataset_manifests` builds immutable train/development/untouched-holdout/excluded identity manifests above a frozen readiness audit. Runtime sets live under `review_dataset/ml_manifests/` (gitignored). Atomic groups are formed by a deterministic leakage graph (related-frame, sequence, source-date, and related policies). Final freeze requires Gate F; holdout reference labels are workflow-sealed (not cryptographic). No production RuleEngine wiring. Holdout unlock remains ML-E-only.
+
+## Offline ML baselines (Phase ML-C.1)
+
+`ml_offline_baselines` fits simple candidate-independent single-frame baselines on the TRAIN role of a **frozen** ML-B manifest and evaluates them only on DEVELOPMENT. Runtime experiments live under `model_lab/ml_c_baselines/` (gitignored). Protocol `iml-ml-offline-baselines-0.1.0`. Untouched holdout remains sealed and unused — no holdout frames, labels, predictions, or metrics. Development metrics are agreement against selected expert reference labels for model development only, not independent validation. No temporal models (ML-D), no holdout evaluation (ML-E), no production RuleEngine wiring.

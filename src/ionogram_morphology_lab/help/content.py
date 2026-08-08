@@ -1113,7 +1113,7 @@ HELP_SECTIONS: list[dict[str, str]] = [
             "Gate F permits → export public manifests (reference holdout labels remain workflow-sealed).\n\n"
             "Non-F audits allow draft simulation only. A one-sequence development-exposed pilot correctly "
             "blocks holdout reservation — that is not a software failure.\n\n"
-            "Related: ML Data Readiness, Disagreement Analysis, Expert Review Corpora."
+            "Related: ML Data Readiness, Offline ML Baselines, Disagreement Analysis, Expert Review Corpora."
         ),
         "body_ru": (
             "Назначение: неизменяемые манифесты идентичностей, назначение атомарных групп без утечек и "
@@ -1124,7 +1124,37 @@ HELP_SECTIONS: list[dict[str, str]] = [
             "экспорт публичных манифестов (эталонные метки holdout остаются запечатанными процессом).\n\n"
             "Аудиты не-F допускают только черновик. Пилот с одной последовательностью и "
             "development-exposed корректно блокирует holdout — это не сбой ПО.\n\n"
-            "Связано: Готовность данных ML, Анализ расхождений, Корпусы экспертной оценки."
+            "Связано: Готовность данных ML, Офлайн-базовые модели ML, Анализ расхождений, "
+            "Корпусы экспертной оценки."
+        ),
+    },
+    {
+        "id": "ml_offline_baselines",
+        "title_en": "91. Offline ML Baselines (Phase ML-C.1)",
+        "title_ru": "91. Офлайн-базовые модели ML (фаза ML-C.1)",
+        "body_en": (
+            "Purpose: fit simple candidate-independent single-frame baselines on TRAIN from a frozen "
+            "ML-B manifest and report DEVELOPMENT agreement against selected expert reference labels. "
+            "Untouched holdout remains SEALED and unused.\n\n"
+            "Baselines: Majority Class, Nearest Centroid (pooled 16×16 image), optional multinomial "
+            "logistic regression (scikit-learn already declared). Features never use candidate outputs "
+            "or identity/leakage fields. Metrics are development-only — not independent validation.\n\n"
+            "UI: collapsible panels, View menu, More overflow, column visibility, resizable workspace. "
+            "Requires a frozen leakage-safe ML-B manifest; there is no workaround split.\n\n"
+            "Related: ML Dataset Manifests, ML Data Readiness. ML-D (temporal) and ML-E (holdout) are "
+            "not started."
+        ),
+        "body_ru": (
+            "Назначение: обучать простые независимые от кандидата покадровые базовые модели на TRAIN "
+            "из замороженного манифеста ML-B и сообщать согласие на DEVELOPMENT с выбранными экспертными "
+            "эталонными метками. Нетронутый holdout остаётся ЗАПЕЧАТАННЫМ и не используется.\n\n"
+            "Базовые модели: класс большинства, ближайший центроид (pooled 16×16), опционально "
+            "мультиномиальная логистическая регрессия. Признаки не используют выходы кандидата и "
+            "поля идентичности/утечек. Метрики только development — не независимая валидация.\n\n"
+            "Интерфейс: сворачиваемые панели, меню Вид, Ещё, видимость столбцов, изменяемый размер "
+            "рабочей области. Требуется замороженный leakage-safe манифест ML-B; обходного разбиения нет.\n\n"
+            "Связано: Манифесты наборов данных ML, Готовность данных ML. ML-D (временные модели) и "
+            "ML-E (holdout) не начаты."
         ),
     },
 ]

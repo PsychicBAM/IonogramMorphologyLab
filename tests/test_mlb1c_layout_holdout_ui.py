@@ -1,4 +1,4 @@
-"""ML-B.1d — collapsible layout, holdout wording consistency, frozen immutability UI."""
+"""ML-C.1 — collapsible layout, holdout wording consistency, frozen immutability UI."""
 
 from __future__ import annotations
 
@@ -81,7 +81,7 @@ def _prepare_frozen_scenario_b(tmp_path: Path) -> tuple[MLDatasetManifestStore, 
 
 def test_build_identity_mlb1c():
     info = collect_build_identity(compute_sha=False)
-    assert info["release_phase"] == "ML-B.1d"
+    assert info["release_phase"] == "ML-C.1b"
     assert info["ml_dataset_manifest_protocol_version"] == MANIFEST_PROTOCOL_VERSION
     assert info["shadow_only"] is True
 

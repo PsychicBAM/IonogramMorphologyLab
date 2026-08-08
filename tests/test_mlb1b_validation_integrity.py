@@ -1,4 +1,4 @@
-"""ML-B.1d — metric scan semantics, holdout group counts, validation lifecycle/UX."""
+"""ML-C.1 — metric scan semantics, holdout group counts, validation lifecycle/UX."""
 
 from __future__ import annotations
 
@@ -35,7 +35,7 @@ from tests.test_mlb1a_manifest_ux_dates import _build_scenario_b_gate_f
 
 def test_build_identity_mlb1b():
     info = collect_build_identity(compute_sha=False)
-    assert info["release_phase"] == "ML-B.1d"
+    assert info["release_phase"] == "ML-C.1b"
     assert info["ml_dataset_manifest_protocol_version"] == MANIFEST_PROTOCOL_VERSION
 
 

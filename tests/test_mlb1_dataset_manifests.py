@@ -244,7 +244,7 @@ def _freeze_readiness_with_gate(
 
 def test_build_identity_mlb1():
     info = collect_build_identity(compute_sha=False)
-    assert info["release_phase"] == "ML-B.1d"
+    assert info["release_phase"] == "ML-C.1b"
     assert info["ml_dataset_manifest_protocol_version"] == MANIFEST_PROTOCOL_VERSION
     assert info["ml_dataset_readiness_protocol_version"] == "iml-ml-dataset-readiness-0.1.0"
     assert info["shadow_only"] is True

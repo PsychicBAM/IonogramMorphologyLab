@@ -229,4 +229,8 @@ Before any ML-B dataset manifests: freeze a candidate-independent label inventor
 
 ## ML-B.1 dataset manifests (governance)
 
-Above a frozen ML-A audit: build a deterministic leakage graph into atomic groups; reserve train/development/untouched-holdout/excluded roles without splitting protected groups; freeze only when Gate F permits. Public holdout manifests omit item-level targets; reference labels are workflow-sealed until a future ML-E unlock protocol. ML-B does not authorize training or start ML-C.
+Above a frozen ML-A audit: build a deterministic leakage graph into atomic groups; reserve train/development/untouched-holdout/excluded roles without splitting protected groups; freeze only when Gate F permits. Public holdout manifests omit item-level targets; reference labels are workflow-sealed until a future ML-E unlock protocol. ML-B does not authorize production training or holdout unlock.
+
+## ML-C.1 offline experimental baselines
+
+Above a frozen ML-B manifest: fit simple candidate-independent single-frame baselines on TRAIN only; evaluate agreement against selected expert reference labels on DEVELOPMENT only. Untouched holdout remains sealed and unused (no frames, labels, predictions, or metrics). Development metrics are for model development only — not independent validation, not scientific validation, not production authorization. Temporal models (ML-D) and holdout evaluation (ML-E) are not started.

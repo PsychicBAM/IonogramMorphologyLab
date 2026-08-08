@@ -62,6 +62,9 @@ def collect_build_identity(
     from ionogram_morphology_lab.ml_dataset_manifests.constants import (
         MANIFEST_PROTOCOL_VERSION,
     )
+    from ionogram_morphology_lab.ml_offline_baselines.constants import (
+        OFFLINE_BASELINE_PROTOCOL_VERSION,
+    )
     from ionogram_morphology_lab.ml_dataset_readiness.constants import (
         READINESS_PROTOCOL_VERSION,
     )
@@ -111,8 +114,8 @@ def collect_build_identity(
         "frozen": bool(getattr(sys, "frozen", False)),
         "feature_version": FEATURE_VERSION,
         "display_transform_version": TRANSFORM_VERSION,
-        # Phase / packaging identity — ML-B.1d freeze-status / coverage presentation
-        "release_phase": "ML-B.1d",
+        # Phase / packaging identity — ML-C.1b prediction label integrity
+        "release_phase": "ML-C.1b",
         "candidate_engine_version": CANDIDATE_ENGINE_VERSION,
         "candidate_cache_schema_version": CANDIDATE_CACHE_SCHEMA_VERSION,
         "evidence_ledger_schema_version": EVIDENCE_LEDGER_SCHEMA_VERSION,
@@ -127,6 +130,7 @@ def collect_build_identity(
         "disagreement_analysis_protocol_version": ANALYSIS_PROTOCOL_VERSION,
         "ml_dataset_readiness_protocol_version": READINESS_PROTOCOL_VERSION,
         "ml_dataset_manifest_protocol_version": MANIFEST_PROTOCOL_VERSION,
+        "ml_offline_baseline_protocol_version": OFFLINE_BASELINE_PROTOCOL_VERSION,
         "shadow_only": True,
         "scientifically_validated": False,
         "cache_root": str(cache_root or info.get("resolved_cache_root") or ""),
@@ -178,6 +182,7 @@ def format_build_identity(identity: dict[str, Any], language: str = "en") -> str
         f"{'Протокол анализа расхождений' if ru else 'Disagreement analysis protocol'}: {identity.get('disagreement_analysis_protocol_version', '')}",
         f"{'Протокол готовности данных ML' if ru else 'ML dataset readiness protocol'}: {identity.get('ml_dataset_readiness_protocol_version', '')}",
         f"{'Протокол манифестов наборов данных ML' if ru else 'ML dataset manifest protocol'}: {identity.get('ml_dataset_manifest_protocol_version', '')}",
+        f"{'Протокол офлайн-бейзлайнов ML' if ru else 'ML offline baseline protocol'}: {identity.get('ml_offline_baseline_protocol_version', '')}",
         f"{'Только shadow' if ru else 'Shadow-only'}: {identity.get('shadow_only', True)}",
         f"{'Display transform'}: {identity.get('display_transform_version', '')}",
         f"{'Корень кэша' if ru else 'Cache root'}: {identity.get('resolved_cache_root') or identity.get('cache_root', '')}",

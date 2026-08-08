@@ -1,14 +1,14 @@
 # Ionogram Morphology Lab
 
-[English](README.md) | [Русский](README_RU.md) · **Релиз 1.1.1** · **Build Identity: ML-B.1d**
+[English](README.md) | [Русский](README_RU.md) · **Релиз 1.1.1** · **Build Identity: ML-C.1b**
 
 Ionogram Morphology Lab (IML) — двуязычное (EN/RU) настольное исследовательское приложение для **трассируемого анализа морфологии ионограмм**, экспертных кампаний проверки, анализа расхождений, аудитов готовности данных, манифестов наборов без утечек, тестирования правил и экспорта отчётов. Импортирует выбранные пользователем MATLAB (`.mat`) данные, сохраняет происхождение и держит морфологию, неоднозначность, качество и параметры на **раздельных научных осях**.
 
-> **Научный статус:** результат — **кандидат** морфологии или предложения параметра. Это **не** доказательство физического механизма, не замена экспертного скейлинга и не валидация модели. Экспертные метки — решения человека, а не ground truth. Модели разработки и пользовательские правила требуют независимой валидации. **Готовность данных для ML** и **манифесты наборов данных ML** — только планирование/управление и **не** разрешают обучение моделей. **ML-C не начат.**
+> **Научный статус:** результат — **кандидат** морфологии или предложения параметра. Это **не** доказательство физического механизма, не замена экспертного скейлинга и не валидация модели. Экспертные метки — решения человека, а не ground truth. Модели разработки и пользовательские правила требуют независимой валидации. **Готовность данных для ML** и **манифесты наборов данных ML** — только планирование/управление и **не** разрешают обучение моделей. **ML-C.1b** добавляет офлайн-экспериментальные бейзлайны (TRAIN fit / DEVELOPMENT evaluation; untouched holdout остаётся SEALED / UNUSED). Метрики development — **не** независимая валидация. **ML-D** и **ML-E** не начаты. Production RuleEngine не подключён к ML-C.
 
-![Манифесты наборов данных ML — компактный обзор (RU, ML-B.1d)](docs/assets/screenshots/ml-b1d/manifests_overview_ru.png)
+![Офлайн-бейзлайны ML — обзор (RU, ML-C.1b)](docs/assets/screenshots/ml-c1b/baselines_overview_ru.png)
 
-*Манифесты наборов данных ML — замороженный синтетический учебный пример Gate F (компактный вид). Галерея: `docs/assets/screenshots/ml-b1d/`.*
+*Офлайн-бейзлайны ML — завершённый Majority Class на синтетическом QA (Development n=9; holdout SEALED). Галерея: `docs/assets/screenshots/ml-c1b/`.*
 
 ## Возможности
 
@@ -18,7 +18,8 @@ Ionogram Morphology Lab (IML) — двуязычное (EN/RU) настольн�
 - Корпуса и кампании экспертной проверки со слепыми кругами, раскрытием/сравнением и арбитражем
 - Анализ расхождений (описательный; ни эксперт, ни кандидат не считаются ground truth)
 - **Готовность данных для ML (ML-A.1a.2):** инвентарь, покрытие классов, источники/даты, контаминация, оценка holdout, Gate A–F (F = только планирование ML-B)
-- **Манифесты наборов данных ML (ML-B.1d):** неизменяемые манифесты ролей, атомарные группы без утечек, роли train / development / untouched holdout (метки запечатаны процессом); по-прежнему **без обучения**; **ML-C не начат**
+- **Манифесты наборов данных ML (ML-B.1d):** неизменяемые манифесты ролей, атомарные группы без утечек, роли train / development / untouched holdout (метки запечатаны процессом).
+- **Офлайн-бейзлайны ML (ML-C.1 / ML-C.1b):** экспериментальные TRAIN-fit / DEVELOPMENT-eval бейзлайны; holdout запечатан; не независимая валидация / не production RuleEngine.
 - Интерфейс, справка и документация EN/RU
 
 ## Сравнение модулей
@@ -32,7 +33,8 @@ Ionogram Morphology Lab (IML) — двуязычное (EN/RU) настольн�
 | Кампании экспертной проверки | Операции пилота по многим источникам/датам | Манифесты / прогресс кампании | Заявления о научной валидации |
 | Анализ расхождений | Описать паттерны эксперт↔кандидат / эксперт↔эксперт | Замороженный описательный снимок + gate | Accuracy/F1; объявить победителя |
 | Готовность данных для ML | Готовность данных/меток для контракта задачи | Замороженный аудит + экспорт | Обучение моделей; финальные holdout-манифесты |
-| Манифесты наборов данных ML | Резервирование train/dev/holdout без утечек | Замороженный набор манифестов + публичный экспорт | Обучение; разблокировка holdout; ML-C |
+| Манифесты наборов данных ML | Резервирование train/dev/holdout без утечек | Замороженный набор манифестов + публичный экспорт | Обучение; разблокировка holdout |
+| Офлайн-бейзлайны ML (ML-C.1b) | Экспериментальные TRAIN-fit / DEVELOPMENT-eval бейзлайны над замороженными манифестами ML-B | Метрики development + неизменяемые артефакты | Оценка holdout; независимая валидация; wiring production RuleEngine; ML-D/E |
 | MATLAB Studio / Model Lab | Опциональные методы / прототипирование | Артефакты Studio / model_lab | Анализ по умолчанию |
 | Конструктор / Тест правил | Версионированные пакеты правил | Пакеты / отчёты тестов | Внешнюю валидацию сами по себе |
 
@@ -46,68 +48,105 @@ Ionogram Morphology Lab (IML) — двуязычное (EN/RU) настольн�
 6. Соберите **корпус экспертной проверки**, завершите **слепые** круги, затем раскрытие/сравнение (кампании — при многих источниках/датах).
 7. При необходимости выполните **Анализ расхождений** по раскрытым корпусам (только описание).
 8. Запустите **Готовность данных для ML** для выбранного контракта задачи; заморозьте аудит; прочитайте Gate. Исход **F** — только *планирование* ML-B, **без обучения**.
-9. При Gate F откройте **Манифесты наборов данных ML**, постройте атомарные группы, зарезервируйте роли, заморозьте набор (метки holdout остаются запечатанными). По-прежнему **без обучения** / без ML-C.
-10. Экспортируйте отчёты / аудиты готовности / публичные манифесты. Исследовательские MAT и runtime-аудиты не помещайте в git.
+9. При Gate F откройте **Манифесты наборов данных ML**, постройте атомарные группы, зарезервируйте роли, заморозьте набор (метки holdout остаются запечатанными).
+10. При необходимости откройте **Офлайн-бейзлайны ML (ML-C.1b)** на замороженном манифесте: обучение только на TRAIN, оценка только на DEVELOPMENT; untouched holdout остаётся SEALED / UNUSED. Метрики development — не независимая валидация.
+11. Экспортируйте отчёты / readiness / публичные манифесты / сводки бейзлайнов. Исследовательские MAT и runtime-аудиты не помещайте в git.
 
-## Избранные снимки (ML-B.1d)
+## Избранные снимки (ML-C.1b)
 
-PNG 1600×900 из UI **ML-B.1d** на санитизированном синтетическом учебном примере Gate F. Без личных путей и учётных данных. У каждой сцены есть пара EN/RU в `docs/assets/screenshots/ml-b1d/`.
+PNG 1600×900 из UI **ML-C.1b** Offline ML Baselines на синтетическом QA (`MLC1_Offline_Baselines_QA_*`). Без личных путей, абсолютных runtime-путей и учётных данных. У каждой сцены есть пара EN/RU в `docs/assets/screenshots/ml-c1b/`. Исторические эксперименты с меткой `m` не показаны.
 
 <details>
-<summary><strong>Манифесты — компактный обзор</strong></summary>
+<summary><strong>Офлайн-бейзлайны — обзор / Setup</strong></summary>
 
-![Компактный обзор манифестов (RU)](docs/assets/screenshots/ml-b1d/manifests_overview_ru.png)
+![Обзор Offline ML Baselines (RU)](docs/assets/screenshots/ml-c1b/baselines_overview_ru.png)
 
-*Замороженный учебный пример — компактный статус, статус заморозки, Технические детали свёрнуты. EN: `manifests_overview_en.png`.*
+*Завершённый Majority Class — Development n=9; holdout SEALED; Technical Details свёрнуты. EN: `baselines_overview_en.png`.*
 
 </details>
 
 <details>
-<summary><strong>Атомарные группы</strong></summary>
+<summary><strong>Черновик — Validate виден, Run отключён</strong></summary>
 
-![Вкладка атомарных групп (RU)](docs/assets/screenshots/ml-b1d/atomic_groups_ru.png)
+![Черновик Validate / Run (RU)](docs/assets/screenshots/ml-c1b/draft_validate_disabled_run_ru.png)
 
-*Атомарные группы без утечек — никогда не разделяются по ролям. EN: `atomic_groups_en.png`.*
-
-</details>
-
-<details>
-<summary><strong>Назначение ролей</strong></summary>
-
-![Вкладка назначения ролей (RU)](docs/assets/screenshots/ml-b1d/role_assignment_ru.png)
-
-*Резервирование train / development / untouched holdout (при Frozen цели запечатаны). EN: `role_assignment_en.png`.*
+*Жизненный цикл нового черновика. EN: `draft_validate_disabled_run_en.png`.*
 
 </details>
 
 <details>
-<summary><strong>Покрытие (человекочитаемое)</strong></summary>
+<summary><strong>Validated — Run включён</strong></summary>
 
-![Вкладка покрытия (RU)](docs/assets/screenshots/ml-b1d/coverage_ru.png)
+![Validated Run (RU)](docs/assets/screenshots/ml-c1b/validated_enabled_run_ru.png)
 
-*Счётчики по ролям; сокращённые идентификаторы источников. EN: `coverage_en.png`.*
-
-</details>
-
-<details>
-<summary><strong>Резервирование holdout (заморожено / запечатано)</strong></summary>
-
-![Вкладка резервирования holdout (RU)](docs/assets/screenshots/ml-b1d/holdout_reservation_ru.png)
-
-*Holdout зарезервирован; эталонные метки запечатаны; разблокировка в ML-B недоступна. EN: `holdout_reservation_en.png`.*
+*После Validate Setup. EN: `validated_enabled_run_en.png`.*
 
 </details>
 
 <details>
-<summary><strong>Сводка манифеста</strong></summary>
+<summary><strong>Dataset / holdout SEALED</strong></summary>
 
-![Вкладка сводки манифеста (RU)](docs/assets/screenshots/ml-b1d/validation_summary_ru.png)
+![Dataset holdout SEALED (RU)](docs/assets/screenshots/ml-c1b/dataset_holdout_sealed_ru.png)
 
-*Замороженная сводка — целостность / роли / протокол; без заявления об обучении. EN: `validation_summary_en.png`.*
+*Агрегаты TRAIN / DEVELOPMENT / SEALED holdout. EN: `dataset_holdout_sealed_en.png`.*
 
 </details>
 
-Предыдущие снимки готовности / главной сохранены в [`docs/assets/screenshots/ml-a1a2/`](docs/assets/screenshots/ml-a1a2/) (не перезаписаны). Более старые снимки: [`docs/assets/screenshots/v1.1.1/`](docs/assets/screenshots/v1.1.1/).
+<details>
+<summary><strong>Features</strong></summary>
+
+![Features (RU)](docs/assets/screenshots/ml-c1b/features_ru.png)
+
+*Независимый от кандидатов pool16 (256). EN: `features_en.png`.*
+
+</details>
+
+<details>
+<summary><strong>Baselines</strong></summary>
+
+![Baselines (RU)](docs/assets/screenshots/ml-c1b/baselines_ru.png)
+
+*Majority / Nearest Centroid / Logistic. EN: `baselines_en.png`.*
+
+</details>
+
+<details>
+<summary><strong>Development Evaluation</strong></summary>
+
+![Development Evaluation (RU)](docs/assets/screenshots/ml-c1b/development_evaluation_ru.png)
+
+*Согласие только development; Macro F1 «Не определено» при undefined; полные метки морфологии. EN: `development_evaluation_en.png`.*
+
+</details>
+
+<details>
+<summary><strong>Error Analysis</strong></summary>
+
+![Error Analysis (RU)](docs/assets/screenshots/ml-c1b/error_analysis_ru.png)
+
+*Элемент / Группа / Эталон / Дата / Прогноз / Верно? — только DEVELOPMENT. EN: `error_analysis_en.png`.*
+
+</details>
+
+<details>
+<summary><strong>Сводка завершённого эксперимента</strong></summary>
+
+![Сводка (RU)](docs/assets/screenshots/ml-c1b/completed_summary_ru.png)
+
+*Неизменяемая сводка; holdout не используется. EN: `completed_summary_en.png`.*
+
+</details>
+
+<details>
+<summary><strong>Меню View / More</strong></summary>
+
+![Меню View (RU)](docs/assets/screenshots/ml-c1b/view_menu_ru.png)
+
+*Локализованные View / More. Пары: `view_menu_en.png`, `more_menu_ru.png`, `more_menu_en.png`.*
+
+</details>
+
+Предыдущая галерея манифестов: [`docs/assets/screenshots/ml-b1d/`](docs/assets/screenshots/ml-b1d/) (не перезаписана). Readiness / home: [`docs/assets/screenshots/ml-a1a2/`](docs/assets/screenshots/ml-a1a2/). Старые страницы: [`docs/assets/screenshots/v1.1.1/`](docs/assets/screenshots/v1.1.1/).
 
 ## Быстрый старт
 
@@ -120,7 +159,7 @@ pip install -e ".[dev]"
 python -m ionogram_morphology_lab.app.main
 ```
 
-Упакованный EXE (при распространении): запускайте `IonogramMorphologyLab.exe` из portable-папки. Текущий Build Identity: **ML-B.1d**.
+Упакованный EXE (при распространении): запускайте `IonogramMorphologyLab.exe` из portable-папки. Текущий Build Identity: **ML-C.1b**.
 
 1. Выберите язык · 2. Новый проект · 3. Начните с `synthetic_data/` · 4. Следуйте шагам на Главной.
 
@@ -183,7 +222,7 @@ python -m ionogram_morphology_lab.app.main
 - Роли: **train**, **development**, **untouched holdout**, excluded (только резервирование идентичностей — не обучение)
 - Финальная заморозка только при Gate **F** (только планирование); при не-F допустима черновая симуляция, заморозка блокируется
 - Публичный holdout-манифест без целевых меток; эталонные метки **запечатаны процессом** (не криптография); ML-B не разблокирует их
-- Всегда: `authorizes_training=False`; **ML-C не начат**; без заявлений accuracy/F1
+- Всегда: `authorizes_training=False`; holdout остаётся запечатанным; без заявлений accuracy/F1. Офлайн-бейзлайны — отдельная поверхность ML-C.1b.
 
 ### Сценарий A — научно заблокированный пилот (пример)
 
@@ -226,7 +265,7 @@ python scripts/validate_docs.py
 python scripts/check_repository_hygiene.py
 ```
 
-Доказательства release gate для **ML-B.1d**: **834** pytest; все release-валидаторы + hygiene OK; owner visual QA PASS; принятый SHA-256 EXE `132242FAFAA5C30D09C8FAE13C0795CEECD6B7CDDDB68CC56C0CCC03C4C32E80`. См. [`docs/MLB1_FINAL_RELEASE_GATE_REPORT.md`](docs/MLB1_FINAL_RELEASE_GATE_REPORT.md).
+Доказательства release gate для **ML-C.1b**: **890** pytest; все release-валидаторы + hygiene OK; owner visual QA PASS; принятый SHA-256 EXE `1BA1E89E7B51C32992D7C3D00B807D4854EE2135DF5F25729CBA6322BDC3C484`. См. [`docs/MLC1_FINAL_RELEASE_GATE_REPORT.md`](docs/MLC1_FINAL_RELEASE_GATE_REPORT.md).
 
 ## Структура репозитория (кратко)
 
@@ -258,8 +297,9 @@ python scripts/check_repository_hygiene.py
 ## Дорожная карта
 
 - **Сделано:** ML-A.1 → ML-A.1a.2 готовность данных (shadow-only).
-- **Сделано (этот релиз):** **ML-B.1 → ML-B.1d** неизменяемые манифесты и резервирование ролей без утечек (shadow-only; без обучения).
-- **Не начато:** **ML-C** (любой эксперимент/обучение модели).
+- **Сделано:** **ML-B.1 → ML-B.1d** неизменяемые манифесты и резервирование ролей без утечек (shadow-only; без обучения).
+- **Выпущено (этот gate):** **ML-C.1 → ML-C.1b** офлайн-экспериментальные бейзлайны — TRAIN fit / DEVELOPMENT evaluation; holdout SEALED / UNUSED; метрики development не являются независимой валидацией.
+- **Не начато:** **ML-D / ML-E**.
 - MATLAB Studio / Model Lab остаются опциональными исследовательскими поверхностями.
 
 ## Карта документации
@@ -271,7 +311,12 @@ python scripts/check_repository_hygiene.py
 | [SCIENTIFIC_DECISION_MAP.md](docs/SCIENTIFIC_DECISION_MAP.md) | Путь анализа по умолчанию |
 | [MLB1_FINAL_RELEASE_GATE_REPORT.md](docs/MLB1_FINAL_RELEASE_GATE_REPORT.md) | Release gate ML-B.1d |
 | [MLA1_FINAL_RELEASE_GATE_REPORT.md](docs/MLA1_FINAL_RELEASE_GATE_REPORT.md) | Предыдущий release gate ML-A.1a.2 |
+| [MLC1_ACCEPTANCE_REPORT.md](docs/MLC1_ACCEPTANCE_REPORT.md) | Приёмка ML-C.1 |
+| [MLC1A_ACCEPTANCE_REPORT.md](docs/MLC1A_ACCEPTANCE_REPORT.md) | Приёмка ML-C.1a |
+| [MLC1B_ACCEPTANCE_REPORT.md](docs/MLC1B_ACCEPTANCE_REPORT.md) | Приёмка ML-C.1b |
+| [MLC1_OWNER_QA.md](docs/MLC1_OWNER_QA.md) | Owner QA ML-C.1 / ML-C.1b |
+| [MLC1_FINAL_RELEASE_GATE_REPORT.md](docs/MLC1_FINAL_RELEASE_GATE_REPORT.md) | Финальный release gate ML-C.1b |
 
 ## Лицензия / цитирование
 
-См. `LICENSE` и пакеты научных утверждений. Указывайте версию IML **1.1.1**, Build Identity **ML-B.1d** и id запуска из Отчётов.
+См. `LICENSE` и пакеты научных утверждений. Указывайте версию IML **1.1.1**, Build Identity **ML-C.1b** и id запуска из Отчётов.

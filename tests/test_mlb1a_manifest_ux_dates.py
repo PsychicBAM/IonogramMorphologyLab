@@ -1,4 +1,4 @@
-"""ML-B.1d — acquisition-date consistency, localization, graph feedback, Gate F."""
+"""ML-C.1 — acquisition-date consistency, localization, graph feedback, Gate F."""
 
 from __future__ import annotations
 
@@ -134,7 +134,7 @@ def _scenario_a_21() -> list[InventoryItemRecord]:
 
 def test_build_identity_mlb1a():
     info = collect_build_identity(compute_sha=False)
-    assert info["release_phase"] == "ML-B.1d"
+    assert info["release_phase"] == "ML-C.1b"
     assert info["ml_dataset_manifest_protocol_version"] == MANIFEST_PROTOCOL_VERSION
 
 

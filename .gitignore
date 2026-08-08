@@ -47,6 +47,7 @@ _tmp*/
 **/review_dataset/ml_readiness/
 **/review_dataset/ml_manifests/
 **/review_dataset/exports/
+**/model_lab/ml_c_baselines/
 # Keep deterministic test fixtures tracked
 !tests/fixtures/morphology_corpora/
 # Temporary docs dumps / profiler outputs.

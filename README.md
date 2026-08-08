@@ -1,14 +1,14 @@
 # Ionogram Morphology Lab
 
-[English](README.md) | [Русский](README_RU.md) · **Release 1.1.1** · **Build Identity: ML-B.1d**
+[English](README.md) | [Русский](README_RU.md) · **Release 1.1.1** · **Build Identity: ML-C.1b**
 
 Ionogram Morphology Lab (IML) is a bilingual (EN/RU) desktop research application for **source-traceable ionogram morphology analysis**, expert review campaigns, disagreement analysis, dataset readiness audits, leakage-safe dataset manifests, rule testing, and report export. It imports user-selected MATLAB (`.mat`) data, preserves provenance, and keeps morphology, ambiguity, quality, and parameter proposals on **separate scientific axes**.
 
-> **Scientific status:** Output is a **candidate** morphology or parameter proposal compatible with image evidence. It does **not** establish a physical mechanism, replace expert scaling, or validate a model. Expert labels are human decisions, not ground truth. Development models and custom rules require independent, domain-appropriate validation before operational use. **ML Data Readiness** and **ML Dataset Manifests** are planning/governance surfaces only — they do **not** authorize model training. **ML-C has not started.**
+> **Scientific status:** Output is a **candidate** morphology or parameter proposal compatible with image evidence. It does **not** establish a physical mechanism, replace expert scaling, or validate a model. Expert labels are human decisions, not ground truth. Development models and custom rules require independent, domain-appropriate validation before operational use. **ML Data Readiness** and **ML Dataset Manifests** are planning/governance surfaces only — they do **not** authorize model training. **ML-C.1b** adds offline experimental baselines (TRAIN fit / DEVELOPMENT evaluation only; untouched holdout remains SEALED / UNUSED). Development metrics are **not** independent validation. **ML-D** and **ML-E** are not started. Production RuleEngine remains unwired to ML-C.
 
-![ML Dataset Manifests compact overview (English, ML-B.1d)](docs/assets/screenshots/ml-b1d/manifests_overview_en.png)
+![Offline ML Baselines overview (English, ML-C.1b)](docs/assets/screenshots/ml-c1b/baselines_overview_en.png)
 
-*ML Dataset Manifests — frozen synthetic Gate-F teaching example (compact layout). Gallery: `docs/assets/screenshots/ml-b1d/`.*
+*Offline ML Baselines — completed Majority Class on synthetic QA (Development n=9; holdout SEALED). Gallery: `docs/assets/screenshots/ml-c1b/`.*
 
 ## Capabilities
 
@@ -18,7 +18,8 @@ Ionogram Morphology Lab (IML) is a bilingual (EN/RU) desktop research applicatio
 - Expert review corpora and campaigns with blind rounds, reveal/compare, and adjudication
 - Disagreement analysis (descriptive; neither expert nor candidate is ground truth)
 - **ML Data Readiness (ML-A.1a.2):** inventory, class coverage, sources/dates, contamination, holdout feasibility assessment, Readiness Gate A–F (F = ML-B planning only)
-- **ML Dataset Manifests (ML-B.1d):** immutable role manifests, leakage-safe atomic groups, train / development / untouched-holdout reservation (workflow-sealed labels); still **no training**; **ML-C not started**
+- **ML Dataset Manifests (ML-B.1d):** immutable role manifests, leakage-safe atomic groups, train / development / untouched-holdout reservation (workflow-sealed labels).
+- **Offline ML Baselines (ML-C.1 / ML-C.1b):** experimental TRAIN-fit / DEVELOPMENT-eval baselines; holdout sealed; not independent validation / not production RuleEngine.
 - EN/RU UI, Help, and documentation
 
 ## Module comparison
@@ -32,7 +33,8 @@ Ionogram Morphology Lab (IML) is a bilingual (EN/RU) desktop research applicatio
 | Expert Review Campaigns | Multi-date/source campaign operations | Campaign manifests / progress | Scientific validation claims |
 | Disagreement Analysis | Describe expert↔candidate / expert↔expert patterns | Frozen descriptive snapshot + gate | Accuracy/F1; declare a winner |
 | ML Data Readiness | Dataset/label readiness for a task contract | Frozen readiness audit + exports | Model training; final holdout manifests |
-| ML Dataset Manifests | Leakage-safe train/dev/holdout identity reservation | Frozen manifest set + public exports | Model training; holdout unlock; ML-C |
+| ML Dataset Manifests | Leakage-safe train/dev/holdout identity reservation | Frozen manifest set + public exports | Model training; holdout unlock |
+| Offline ML Baselines (ML-C.1b) | Experimental TRAIN-fit / DEVELOPMENT-eval baselines above frozen ML-B manifests | Development metrics + immutable experiment artifacts | Holdout evaluation; independent validation; production RuleEngine wiring; ML-D/E |
 | MATLAB Studio / Model Lab | Optional method / research prototyping | Studio or model-lab artifacts | Default automatic analysis |
 | Rule Builder / Testing | Author and test versioned rule packs | Packs / test reports | External validation by itself |
 
@@ -46,68 +48,105 @@ Ionogram Morphology Lab (IML) is a bilingual (EN/RU) desktop research applicatio
 6. Build an **expert review corpus**, complete **blind** rounds, then reveal/compare (campaigns when operating across many sources/dates).
 7. Optionally run **Disagreement Analysis** on revealed corpora (descriptive only).
 8. Run **ML Data Readiness** for a chosen task contract; freeze an audit; read the Gate. Outcome **F** means ML-B *planning* only — still **no training**.
-9. When Gate F permits, open **ML Dataset Manifests**, build atomic groups, reserve roles, freeze a manifest set (holdout labels remain sealed). Still **no training** / no ML-C.
-10. Export bilingual reports / readiness / public manifest exports as needed. Keep research MAT and runtime audits out of git.
+9. When Gate F permits, open **ML Dataset Manifests**, build atomic groups, reserve roles, freeze a manifest set (holdout labels remain sealed).
+10. Optionally open **Offline ML Baselines (ML-C.1b)** on a frozen manifest: fit on TRAIN only, evaluate on DEVELOPMENT only; untouched holdout stays SEALED / UNUSED. Development metrics are not independent validation.
+11. Export bilingual reports / readiness / public manifest / baseline summaries as needed. Keep research MAT and runtime audits out of git.
 
-## Featured screenshots (ML-B.1d)
+## Featured screenshots (ML-C.1b)
 
-PNG captures at 1600×900 from the **ML-B.1d** UI with a sanitized synthetic Gate-F teaching example only. No owner private paths or credentials. Each scene has an EN and RU twin under `docs/assets/screenshots/ml-b1d/`.
+PNG captures at 1600×900 from the **ML-C.1b** Offline ML Baselines UI on synthetic QA only (`MLC1_Offline_Baselines_QA_*`). No owner private paths, absolute runtime artifact paths, or credentials. Each scene has an EN and RU twin under `docs/assets/screenshots/ml-c1b/`. Historical malformed `m` experiments are not shown.
 
 <details>
-<summary><strong>ML Dataset Manifests — compact overview</strong></summary>
+<summary><strong>Offline ML Baselines — overview / Setup</strong></summary>
 
-![ML Dataset Manifests compact overview (English)](docs/assets/screenshots/ml-b1d/manifests_overview_en.png)
+![Offline ML Baselines overview (English)](docs/assets/screenshots/ml-c1b/baselines_overview_en.png)
 
-*Frozen teaching example — compact status, freeze status, Technical Details collapsed. RU: `manifests_overview_ru.png`.*
+*Completed Majority Class — Development n=9; holdout SEALED; Technical Details collapsed. RU: `baselines_overview_ru.png`.*
 
 </details>
 
 <details>
-<summary><strong>Atomic Groups</strong></summary>
+<summary><strong>Draft — Validate visible, Run disabled</strong></summary>
 
-![Atomic Groups tab (English)](docs/assets/screenshots/ml-b1d/atomic_groups_en.png)
+![Draft Validate disabled Run (English)](docs/assets/screenshots/ml-c1b/draft_validate_disabled_run_en.png)
 
-*Leakage-safe atomic groups — never split across roles. RU: `atomic_groups_ru.png`.*
-
-</details>
-
-<details>
-<summary><strong>Role Assignment</strong></summary>
-
-![Role Assignment tab (English)](docs/assets/screenshots/ml-b1d/role_assignment_en.png)
-
-*Train / development / untouched holdout reservation (sealed targets when Frozen). RU: `role_assignment_ru.png`.*
+*New draft lifecycle. RU: `draft_validate_disabled_run_ru.png`.*
 
 </details>
 
 <details>
-<summary><strong>Coverage (human-readable)</strong></summary>
+<summary><strong>Validated — Run enabled</strong></summary>
 
-![Coverage tab (English)](docs/assets/screenshots/ml-b1d/coverage_en.png)
+![Validated enabled Run (English)](docs/assets/screenshots/ml-c1b/validated_enabled_run_en.png)
 
-*Per-role item/group/sequence/date/source/target counts; shortened source IDs. RU: `coverage_ru.png`.*
-
-</details>
-
-<details>
-<summary><strong>Holdout Reservation (frozen / sealed)</strong></summary>
-
-![Holdout Reservation tab (English)](docs/assets/screenshots/ml-b1d/holdout_reservation_en.png)
-
-*Holdout reserved; reference labels sealed; unlock in ML-B unavailable. RU: `holdout_reservation_ru.png`.*
+*After Validate Setup. RU: `validated_enabled_run_ru.png`.*
 
 </details>
 
 <details>
-<summary><strong>Manifest Summary</strong></summary>
+<summary><strong>Dataset / holdout SEALED</strong></summary>
 
-![Manifest Summary tab (English)](docs/assets/screenshots/ml-b1d/validation_summary_en.png)
+![Dataset holdout SEALED (English)](docs/assets/screenshots/ml-c1b/dataset_holdout_sealed_en.png)
 
-*Frozen summary — integrity / roles / protocol; no training claim. RU: `validation_summary_ru.png`.*
+*TRAIN / DEVELOPMENT / SEALED holdout aggregates. RU: `dataset_holdout_sealed_ru.png`.*
 
 </details>
 
-Prior readiness / home tour captures remain under [`docs/assets/screenshots/ml-a1a2/`](docs/assets/screenshots/ml-a1a2/) (not overwritten). Older page captures: [`docs/assets/screenshots/v1.1.1/`](docs/assets/screenshots/v1.1.1/).
+<details>
+<summary><strong>Features</strong></summary>
+
+![Features tab (English)](docs/assets/screenshots/ml-c1b/features_en.png)
+
+*Candidate-independent pool16 (256). RU: `features_ru.png`.*
+
+</details>
+
+<details>
+<summary><strong>Baselines</strong></summary>
+
+![Baselines tab (English)](docs/assets/screenshots/ml-c1b/baselines_en.png)
+
+*Majority / Nearest Centroid / Logistic options. RU: `baselines_ru.png`.*
+
+</details>
+
+<details>
+<summary><strong>Development Evaluation</strong></summary>
+
+![Development Evaluation (English)](docs/assets/screenshots/ml-c1b/development_evaluation_en.png)
+
+*Development-only agreement; Macro F1 N/A when undefined; full morphology class labels. RU: `development_evaluation_ru.png`.*
+
+</details>
+
+<details>
+<summary><strong>Error Analysis</strong></summary>
+
+![Error Analysis (English)](docs/assets/screenshots/ml-c1b/error_analysis_en.png)
+
+*Item / Group / Expert reference / Date / Prediction / Correct? — DEVELOPMENT only. RU: `error_analysis_ru.png`.*
+
+</details>
+
+<details>
+<summary><strong>Completed Experiment Summary</strong></summary>
+
+![Completed Experiment Summary (English)](docs/assets/screenshots/ml-c1b/completed_summary_en.png)
+
+*Immutable completed summary; holdout unused. RU: `completed_summary_ru.png`.*
+
+</details>
+
+<details>
+<summary><strong>View / More menus</strong></summary>
+
+![View menu (English)](docs/assets/screenshots/ml-c1b/view_menu_en.png)
+
+*Localized View / More controls. Twins: `view_menu_ru.png`, `more_menu_en.png`, `more_menu_ru.png`.*
+
+</details>
+
+Prior manifests gallery: [`docs/assets/screenshots/ml-b1d/`](docs/assets/screenshots/ml-b1d/) (not overwritten). Readiness / home tour: [`docs/assets/screenshots/ml-a1a2/`](docs/assets/screenshots/ml-a1a2/). Older pages: [`docs/assets/screenshots/v1.1.1/`](docs/assets/screenshots/v1.1.1/).
 
 ## Quick start
 
@@ -120,7 +159,7 @@ pip install -e ".[dev]"
 python -m ionogram_morphology_lab.app.main
 ```
 
-Packaged EXE (when distributed): run `IonogramMorphologyLab.exe` from the portable folder. Current Build Identity: **ML-B.1d**.
+Packaged EXE (when distributed): run `IonogramMorphologyLab.exe` from the portable folder. Current Build Identity: **ML-C.1b**.
 
 1. Choose language · 2. New Project · 3. Start with `synthetic_data/` · 4. Follow Home recommended steps.
 
@@ -183,7 +222,7 @@ Protocol: `iml-ml-dataset-manifests-0.1.0`. Shadow-only planning above a frozen 
 - Roles: **train**, **development**, **untouched holdout**, excluded (identity reservation only — not training)
 - Final freeze only when readiness Gate is **F** (planning-only); non-F audits allow draft simulation and correctly block freeze
 - Public holdout identity manifest without item-level targets; reference labels are **workflow-sealed** (not cryptographic secrecy); ML-B cannot unlock them
-- Always: `authorizes_training=False`; **ML-C not started**; no accuracy/F1 claims
+- Always: `authorizes_training=False`; holdout remains sealed; no accuracy/F1 claims. Offline baselines are a separate ML-C.1b surface.
 
 ### Scenario A — scientifically blocked pilot (example)
 
@@ -226,7 +265,7 @@ python scripts/validate_docs.py
 python scripts/check_repository_hygiene.py
 ```
 
-Release-gate evidence for **ML-B.1d**: **834** pytest passed; all release validators + hygiene OK; owner visual QA PASS; accepted EXE SHA-256 `132242FAFAA5C30D09C8FAE13C0795CEECD6B7CDDDB68CC56C0CCC03C4C32E80`. See [`docs/MLB1_FINAL_RELEASE_GATE_REPORT.md`](docs/MLB1_FINAL_RELEASE_GATE_REPORT.md).
+Release-gate evidence for **ML-C.1b**: **890** pytest passed; all release validators + hygiene OK; owner visual QA PASS; accepted EXE SHA-256 `1BA1E89E7B51C32992D7C3D00B807D4854EE2135DF5F25729CBA6322BDC3C484`. See [`docs/MLC1_FINAL_RELEASE_GATE_REPORT.md`](docs/MLC1_FINAL_RELEASE_GATE_REPORT.md). Prior ML-B.1d gate: [`docs/MLB1_FINAL_RELEASE_GATE_REPORT.md`](docs/MLB1_FINAL_RELEASE_GATE_REPORT.md).
 
 ## Repository structure (high level)
 
@@ -258,8 +297,9 @@ Do **not** commit: owner MAT files, `review_dataset/` runtime data, readiness/di
 ## Roadmap
 
 - **Done:** ML-A.1 → ML-A.1a.2 dataset readiness (shadow-only).
-- **Done (this release):** **ML-B.1 → ML-B.1d** immutable dataset manifests and leakage-safe role reservation (shadow-only; no training).
-- **Not started:** **ML-C** (any model experiment / training workflow).
+- **Done:** **ML-B.1 → ML-B.1d** immutable dataset manifests and leakage-safe role reservation (shadow-only; no training).
+- **Released (this gate):** **ML-C.1 → ML-C.1b** offline experimental baselines — TRAIN fit / DEVELOPMENT evaluation; holdout SEALED / UNUSED; development metrics are not independent validation.
+- **Not started:** **ML-D / ML-E**.
 - MATLAB Studio / Model Lab remain optional research surfaces, not default analysis.
 
 ## Documentation map
@@ -271,7 +311,12 @@ Do **not** commit: owner MAT files, `review_dataset/` runtime data, readiness/di
 | [SCIENTIFIC_DECISION_MAP.md](docs/SCIENTIFIC_DECISION_MAP.md) | Default analysis path |
 | [MLB1_FINAL_RELEASE_GATE_REPORT.md](docs/MLB1_FINAL_RELEASE_GATE_REPORT.md) | ML-B.1d release gate |
 | [MLA1_FINAL_RELEASE_GATE_REPORT.md](docs/MLA1_FINAL_RELEASE_GATE_REPORT.md) | Prior ML-A.1a.2 release gate |
+| [MLC1_ACCEPTANCE_REPORT.md](docs/MLC1_ACCEPTANCE_REPORT.md) | ML-C.1 acceptance |
+| [MLC1A_ACCEPTANCE_REPORT.md](docs/MLC1A_ACCEPTANCE_REPORT.md) | ML-C.1a acceptance |
+| [MLC1B_ACCEPTANCE_REPORT.md](docs/MLC1B_ACCEPTANCE_REPORT.md) | ML-C.1b acceptance |
+| [MLC1_OWNER_QA.md](docs/MLC1_OWNER_QA.md) | ML-C.1 / ML-C.1b owner QA checklist |
+| [MLC1_FINAL_RELEASE_GATE_REPORT.md](docs/MLC1_FINAL_RELEASE_GATE_REPORT.md) | ML-C.1b final release gate |
 
 ## License / citation
 
-See repository `LICENSE` and science claim packs. Cite IML version **1.1.1** with Build Identity **ML-B.1d** and the analysis run id from Reports when reproducing a run.
+See repository `LICENSE` and science claim packs. Cite IML version **1.1.1** with Build Identity **ML-C.1b** and the analysis run id from Reports when reproducing a run.
