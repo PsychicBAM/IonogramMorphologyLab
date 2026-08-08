@@ -142,7 +142,7 @@ def no_msgbox(monkeypatch):
 
 def test_build_identity_mla1a1():
     ident = collect_build_identity(compute_sha=False)
-    assert ident["release_phase"] == "ML-B.1d"
+    assert ident["release_phase"] == "ML-C.1b"
     assert ident["ml_dataset_readiness_protocol_version"] == "iml-ml-dataset-readiness-0.1.0"
 
 

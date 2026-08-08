@@ -51,7 +51,7 @@ def _page(qtbot, tmp_path: Path, lang: str = "en") -> MLDataReadinessPage:
 
 
 def test_build_identity_mla1a2():
-    assert collect_build_identity(compute_sha=False)["release_phase"] == "ML-B.1d"
+    assert collect_build_identity(compute_sha=False)["release_phase"] == "ML-C.1b"
 
 
 def test_freeze_store_emits_100(tmp_path: Path):

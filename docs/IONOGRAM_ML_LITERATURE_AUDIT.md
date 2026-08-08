@@ -219,7 +219,7 @@ and forbid:
 
 ## 10. Future ML roadmap (ML-A…ML-E) — planning only
 
-**ML-A…ML-E is a research planning roadmap.** Phase **ML-A.1** implements the **ML-A** stage (readiness audit + Gate). Phase **ML-B.1** implements the **ML-B** stage as immutable identity manifests and leakage-safe role reservation (still no training, no ML runtime dependencies, no RuleEngine wiring, no accuracy/F1 claims). Stages **ML-C…ML-E** remain future planning and are **not** authorized by ML-B.1.
+**ML-A…ML-E is a research planning roadmap.** Phase **ML-A.1** implements the **ML-A** stage (readiness audit + Gate). Phase **ML-B.1** implements the **ML-B** stage as immutable identity manifests and leakage-safe role reservation. Phase **ML-C.1** implements offline experimental single-frame baselines on TRAIN with DEVELOPMENT-only evaluation above a frozen ML-B manifest (holdout remains sealed; no production RuleEngine wiring; development metrics are not independent validation). Stages **ML-D…ML-E** remain future planning.
 
 Preserved governance concepts across all stages:
 
@@ -246,10 +246,10 @@ Preserved governance concepts across all stages:
 
 ### ML-C — Offline Experimental Baselines
 
+- **Implemented in ML-C.1** as `ml_offline_baselines` / Offline ML Baselines UI.
 - Experiments **outside** the production RuleEngine.
-- Start with simple candidate-independent features and/or image baselines.
-- Pre-registered metrics and denominators.
-- Development data only.
+- Simple candidate-independent single-frame features (pooled 16×16) and baselines (majority, nearest centroid, optional logistic).
+- Pre-registered DEVELOPMENT metrics and denominators only.
 - No production wiring and **no holdout reveal**.
 
 ### ML-D — Temporal Sequence Experiment
@@ -284,12 +284,12 @@ Preserved governance concepts across all stages:
 
 ## 12. Explicit non-actions of this audit
 
-- No ML model implemented.
-- No candidate rules, thresholds, geometry versions, or engine versions changed.
-- No ML libraries added.
+- **At audit time:** no ML model was implemented in the product. **Later note:** phase **ML-C.1 / ML-C.1b** now implements offline experimental single-frame baselines (TRAIN fit / DEVELOPMENT evaluation; holdout sealed). That does not change the audit’s literature conclusions or authorize production RuleEngine wiring / ML-D / ML-E.
+- No candidate rules, thresholds, geometry versions, or engine versions were changed by this audit.
+- No ML libraries were added by this audit (scikit-learn was already a declared project dependency for Model Lab).
 - No PDFs copied into the repository.
-- No full pytest rerun (documentation-only task).
-- No commit / no push.
+- No full pytest rerun (documentation-only task at audit time).
+- No commit / no push for the audit itself.
 
 ---
 

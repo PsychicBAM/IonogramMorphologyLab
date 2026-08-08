@@ -60,7 +60,7 @@ def test_build_identity_phase():
     from ionogram_morphology_lab.ui.build_identity import collect_build_identity
 
     ident = collect_build_identity(compute_sha=False)
-    assert ident["release_phase"] == "ML-B.1d"
+    assert ident["release_phase"] == "ML-C.1b"
     assert ident["shadow_only"] is True
     assert ident["scientifically_validated"] is False
 

@@ -174,6 +174,7 @@ NAV_KEYS = [
     ("models", "nav.models"),
     ("ml_readiness", "nav.ml_readiness"),
     ("ml_manifests", "nav.ml_manifests"),
+    ("ml_baselines", "nav.ml_baselines"),
     ("reports", "nav.reports"),
     ("settings", "nav.settings"),
     ("help", "nav.help"),
@@ -184,14 +185,14 @@ NAV_GROUPS = [
     ("data", "nav_group.data", ("profile", "audit", "viewer", "sequences")),
     ("analysis", "nav_group.analysis", ("batch", "results", "parameters", "campaigns", "expert", "disagreement")),
     ("reports", "nav_group.reports", ("reports",)),
-    ("methods", "nav_group.methods", ("matlab", "rules", "rule_test", "compare", "pipeline", "models", "ml_readiness", "ml_manifests")),
+    ("methods", "nav_group.methods", ("matlab", "rules", "rule_test", "compare", "pipeline", "models", "ml_readiness", "ml_manifests", "ml_baselines")),
     ("resources", "nav_group.resources", ("atlas", "science", "raw_signals", "feature_diagnostics", "settings", "help")),
 ]
 NAV_LABELS = dict(NAV_KEYS)
 GUIDED_NAV_KEYS = {
     "home", "projects", "import", "profile", "audit", "viewer", "sequences",
     "batch", "results", "parameters", "campaigns", "expert", "disagreement",
-    "ml_readiness", "ml_manifests", "reports", "settings", "help",
+    "ml_readiness", "ml_manifests", "ml_baselines", "reports", "settings", "help",
 }
 
 
@@ -337,6 +338,7 @@ class MainWindow(QMainWindow):
             "models": self._page_models,
             "ml_readiness": self._page_ml_readiness,
             "ml_manifests": self._page_ml_manifests,
+            "ml_baselines": self._page_ml_baselines,
             "reports": self._page_reports,
             "settings": self._page_settings,
             "help": self._page_help,
@@ -355,6 +357,7 @@ class MainWindow(QMainWindow):
             "models",
             "ml_readiness",
             "ml_manifests",
+            "ml_baselines",
             "rule_test",
             "expert",
             "disagreement",
@@ -577,6 +580,15 @@ class MainWindow(QMainWindow):
 
         page = MLDatasetManifestsPage(self.session, self.i18n)
         self._ml_dataset_manifests_page = page
+        return page
+
+    def _page_ml_baselines(self) -> QWidget:
+        from ionogram_morphology_lab.ui.ml_offline_baselines_page import (
+            MLOfflineBaselinesPage,
+        )
+
+        page = MLOfflineBaselinesPage(self.session, self.i18n)
+        self._ml_offline_baselines_page = page
         return page
 
     def _page_matlab(self) -> QWidget:
@@ -1698,6 +1710,7 @@ class MainWindow(QMainWindow):
         # Retranslate materialized child pages only (never force data reload).
         for key in (
             "parameters", "rules", "rule_test", "compare", "pipeline", "matlab", "models",
+            "ml_baselines",
             "raw_signals", "feature_diagnostics",
         ):
             if not self._page_materialized.get(key, True):

@@ -1,4 +1,4 @@
-"""ML-B.1d — freeze-status consistency and human-readable Coverage presentation."""
+"""ML-C.1 — freeze-status consistency and human-readable Coverage presentation."""
 
 from __future__ import annotations
 
@@ -33,7 +33,7 @@ def _page(qtbot, root: Path, lang: str = "en") -> MLDatasetManifestsPage:
 
 def test_build_identity_mlb1d():
     info = collect_build_identity(compute_sha=False)
-    assert info["release_phase"] == "ML-B.1d"
+    assert info["release_phase"] == "ML-C.1b"
     assert info["ml_dataset_manifest_protocol_version"] == MANIFEST_PROTOCOL_VERSION
 
 

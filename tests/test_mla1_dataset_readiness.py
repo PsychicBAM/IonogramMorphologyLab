@@ -268,7 +268,7 @@ def _build_readiness_corpus(tmp_path: Path, cid: str = "mla1_pilot") -> Morpholo
 
 def test_build_identity_mla1():
     ident = collect_build_identity(compute_sha=False)
-    assert ident["release_phase"] == "ML-B.1d"
+    assert ident["release_phase"] == "ML-C.1b"
     assert ident.get("scientifically_validated") is False
     assert ident.get("ml_dataset_readiness_protocol_version") == READINESS_PROTOCOL_VERSION
     assert ident.get("disagreement_analysis_protocol_version")
